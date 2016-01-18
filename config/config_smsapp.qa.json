@@ -1,0 +1,8 @@
+{
+    "name": "sms-uopboh-qa",
+    "metric_store": "uopboh_qa",
+    "hub": {
+        "api_token": "test_key",
+        "url": "https://uopboh-hub.subsvc.com/"
+    }
+}
