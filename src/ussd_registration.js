@@ -1,0 +1,101 @@
+go.app = function() {
+    var vumigo = require('vumigo_v02');
+    var App = vumigo.App;
+    //var Choice = vumigo.states.Choice;
+    //var ChoiceState = vumigo.states.ChoiceState;
+    var EndState = vumigo.states.EndState;
+    var FreeText = vumigo.states.FreeText;
+
+
+    var GoUOPBMOH = App.extend(function(self) {
+        App.call(self, 'state_start');
+        var $ = self.$;
+
+        self.init = function() {};
+
+
+    // TEXT CONTENT
+
+        var questions = {
+            "state_id":
+                "Welcome to TB Connect. Please enter your id number",
+            "state_name":
+                "Please enter your name",
+            "state_site":
+                "Which site do you work at?",
+
+            "state_end_thank_you":
+                "Thank you. They will now start receiving messages.",
+        };
+
+        var errors = {
+            "state_auth_code":
+                "That code is not recognised. Please enter your 5 digit personnel code.",
+        };
+
+        get_error_text = function(name) {
+            return errors[name] || "Sorry not a valid input. " + questions[name];
+        };
+
+        // override normal state adding
+        self.add = function(name, creator) {
+            self.states.add(name, function(name, opts) {
+                return creator(name, opts);
+            });
+        };
+
+
+    // START STATE
+
+        self.add('state_start', function(name) {
+            // Reset user answers when restarting the app
+            self.im.user.answers = {};
+            return self.states.create('state_id');
+        });
+
+    // REGISTRATION STATES
+
+        // FreeText st-01
+        self.add('state_id', function(name) {
+            return new FreeText(name, {
+                question: $(questions[name]),
+                next: function(input) {
+                    return 'state_name';
+                }
+            });
+        });
+
+        // FreeText st-02
+        self.add('state_name', function(name) {
+            return new FreeText(name, {
+                question: $(questions[name]),
+                next: function(input) {
+                    return 'state_site';
+                }
+            });
+        });
+
+        // FreeText st-03
+        self.add('state_site', function(name) {
+            return new FreeText(name, {
+                question: $(questions[name]),
+                next: function(input) {
+                    return 'state_end_thank_you';
+                }
+            });
+        });
+
+        // EndState st-04
+        self.add('state_end_thank_you', function(name) {
+            return new EndState(name, {
+                text: $(questions[name]),
+                next: 'state_start'
+            });
+        });
+
+    });
+
+    return {
+        GoUOPBMOH: GoUOPBMOH
+    };
+}();
