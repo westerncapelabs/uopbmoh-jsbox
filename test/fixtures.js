@@ -136,15 +136,15 @@ return [
 
     // 4: get identity cb245673-aa41-4302-ac47-00000000222
     {
-        'request': {
-            'method': 'GET',
-            'headers': {
-                'Authorization': ['Token test_key'],
-                'Content-Type': ['application/json']
+        "request": {
+            "method": "GET",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
             },
             "url": "http://localhost:8001/api/v1/identities/cb245673-aa41-4302-ac47-00000000222/",
         },
-        'response': {
+        "response": {
             "code": 200,
             "data": {
                 "id": "cb245673-aa41-4302-ac47-000000000222",
@@ -164,14 +164,14 @@ return [
 
     // 5: patch identity cb245673-aa41-4302-ac47-000000000222
     {
-        'request': {
-            'method': 'PATCH',
-            'headers': {
-                'Authorization': ['Token test_key'],
-                'Content-Type': ['application/json']
+        "request": {
+            "method": "PATCH",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
             },
-            'url': 'http://localhost:8001/api/v1/identities/cb245673-aa41-4302-ac47-000000000222/',
-            'data':  {
+            "url": "http://localhost:8001/api/v1/identities/cb245673-aa41-4302-ac47-000000000222/",
+            "data":  {
                 "id": "cb245673-aa41-4302-ac47-000000000222",
                 "version": 1,
                 "details": {
@@ -183,7 +183,7 @@ return [
                 },
             }
         },
-        'response': {
+        "response": {
             "code": 200,
             "data": {}
         }
