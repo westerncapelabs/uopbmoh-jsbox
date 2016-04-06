@@ -496,6 +496,52 @@ go.utils = {
 "commas": "commas"
 };
 
+/*jshint -W083 */
+
+// Project utils library
+go.utils_project = {
+
+// REGISTRATION HELPERS
+
+    compile_reg_info: function(im) {
+        var reg_info = {
+            user_id: im.user.answers.user_id,
+            data: {
+                id_number: im.user.answers.state_id,
+                name: im.user.answers.state_name,
+                site: im.user.answers.state_site
+            }
+        };
+
+        return reg_info;
+    },
+
+    /*update_identities: function(im) {
+        // Saves useful data collected during registration to the relevant identities
+        return go.utils
+            .get_identity(im.user.answers.user_id, im),
+            .then(function(identity) {
+                go.utils.update_identity(im, identity),
+            })
+    },*/
+
+    finish_registration: function(im) {
+        var reg_info = go.utils_project.compile_reg_info(im);
+        return go.utils
+            .create_registration(im, reg_info)
+            .then(function() {
+                return go.utils
+                    .get_identity(im.user.answers.user_id, im)
+                    .then(function(identity) {
+                        return go.utils.update_identity(im, identity);
+                    });
+            });
+    },
+
+    "commas": "commas"
+
+};
+
 go.app = function() {
     var vumigo = require('vumigo_v02');
     var App = vumigo.App;
@@ -601,8 +647,12 @@ go.app = function() {
         self.add('state_site', function(name) {
             return new FreeText(name, {
                 question: $(questions[name]),
-                next: function(input) {
-                    return 'state_end_thank_you';
+                next: function() {
+                    return go.utils_project
+                        .finish_registration(self.im)
+                        .then(function() {
+                            return 'state_end_thank_you';
+                        });
                 }
             });
         });

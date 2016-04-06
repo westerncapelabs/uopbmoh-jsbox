@@ -1,5 +1,4 @@
 /*jshint -W083 */
-var Q = require('q');
 
 // Project utils library
 go.utils_project = {
@@ -30,10 +29,15 @@ go.utils_project = {
 
     finish_registration: function(im) {
         var reg_info = go.utils_project.compile_reg_info(im);
-        return Q.all([
-            go.utils.create_registration(im, reg_info),
-            go.utils.update_identity(im, identity)
-        ]);
+        return go.utils
+            .create_registration(im, reg_info)
+            .then(function() {
+                return go.utils
+                    .get_identity(im.user.answers.user_id, im)
+                    .then(function(identity) {
+                        return go.utils.update_identity(im, identity);
+                    });
+            });
     },
 
     "commas": "commas"

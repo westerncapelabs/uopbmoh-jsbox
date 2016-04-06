@@ -20,7 +20,7 @@ module.exports = function (grunt) {
                 ussd_registration: [
                     'src/index.js',
                     'src/utils.js',
-                    //'src/utils_project.js',
+                    'src/utils_project.js',
                     '<%= paths.src.app.ussd_registration %>',
                     'src/init.js'
                 ],
@@ -42,7 +42,7 @@ module.exports = function (grunt) {
                 ussd_registration: [
                     'test/setup.js',
                     'src/utils.js',
-                    //'src/utils_project.js',
+                    'src/utils_project.js',
                     '<%= paths.src.app.ussd_registration %>',
                     'test/ussd_registration.test.js'
                 ]

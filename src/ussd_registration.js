@@ -103,8 +103,12 @@ go.app = function() {
         self.add('state_site', function(name) {
             return new FreeText(name, {
                 question: $(questions[name]),
-                next: function(input) {
-                    return 'state_end_thank_you';
+                next: function() {
+                    return go.utils_project
+                        .finish_registration(self.im)
+                        .then(function() {
+                            return 'state_end_thank_you';
+                        });
                 }
             });
         });

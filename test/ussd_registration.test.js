@@ -117,7 +117,7 @@ describe("UoP TB registration app", function() {
                         reply: "Thank you. They will now start receiving messages."
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api, [1,2]);
+                        go.utils.check_fixtures_used(api, [1,2,3,4,5]);
                     })
                     .check.reply.ends_session()
                     .run();
