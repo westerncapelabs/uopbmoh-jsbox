@@ -565,15 +565,6 @@ go.app = function() {
                 "Thank you. They will now start receiving messages.",
         };
 
-        var errors = {
-            "state_auth_code":
-                "That code is not recognised. Please enter your 5 digit personnel code.",
-        };
-
-        get_error_text = function(name) {
-            return errors[name] || "Sorry not a valid input. " + questions[name];
-        };
-
         // override normal state adding
         self.add = function(name, creator) {
             self.states.add(name, function(name, opts) {
