@@ -3,7 +3,7 @@ var fixtures = require('./fixtures');
 var assert = require('assert');
 var AppTester = vumigo.AppTester;
 
-describe("TBconnect registration app", function() {
+describe("UoP TB registration app", function() {
     describe("for ussd use", function() {
         var app;
         var tester;
@@ -39,9 +39,25 @@ describe("TBconnect registration app", function() {
         // REGISTRATION
 
         describe("Registration testing", function() {
-            it("to state_id", function() {
+            it("to state_already_registered", function() {
                 return tester
                     .setup.user.addr("0820000111")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                    )
+                    .check.interaction({
+                        state: "state_already_registered",
+                        reply: "You are already registered for this service. Contact your administrator if you have any queries"
+                    })
+                    .check(function(api) {
+                        go.utils.check_fixtures_used(api, [0]);
+                    })
+                    .check.reply.ends_session()
+                    .run();
+            });
+            it("to state_id", function() {
+                return tester
+                    .setup.user.addr("0820000222")
                     .inputs(
                         {session_event: "new"}  // dial in
                     )
@@ -49,11 +65,14 @@ describe("TBconnect registration app", function() {
                         state: "state_id",
                         reply: "Welcome to TB Connect. Please enter your id number"
                     })
+                    .check(function(api) {
+                        go.utils.check_fixtures_used(api, [1,2]);
+                    })
                     .run();
             });
             it("to state_name", function() {
                 return tester
-                    .setup.user.addr("0820000111")
+                    .setup.user.addr("0820000222")
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "12345"  // state_id
@@ -62,11 +81,14 @@ describe("TBconnect registration app", function() {
                         state: "state_name",
                         reply: "Please enter your name"
                     })
+                    .check(function(api) {
+                        go.utils.check_fixtures_used(api, [1,2]);
+                    })
                     .run();
             });
             it("to state_site", function() {
                 return tester
-                    .setup.user.addr("0820000111")
+                    .setup.user.addr("0820000222")
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "12345"  // state_id
@@ -76,11 +98,14 @@ describe("TBconnect registration app", function() {
                         state: "state_site",
                         reply: "Which site do you work at?"
                     })
+                    .check(function(api) {
+                        go.utils.check_fixtures_used(api, [1,2]);
+                    })
                     .run();
             });
             it("to state_end_thank_you", function() {
                 return tester
-                    .setup.user.addr("0820000111")
+                    .setup.user.addr("0820000222")
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "12345"  // state_id
@@ -91,6 +116,10 @@ describe("TBconnect registration app", function() {
                         state: "state_end_thank_you",
                         reply: "Thank you. They will now start receiving messages."
                     })
+                    .check(function(api) {
+                        go.utils.check_fixtures_used(api, [1,2]);
+                    })
+                    .check.reply.ends_session()
                     .run();
             });
         });

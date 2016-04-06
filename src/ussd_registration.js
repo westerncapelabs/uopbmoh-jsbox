@@ -17,6 +17,8 @@ go.app = function() {
     // TEXT CONTENT
 
         var questions = {
+            "state_already_registered":
+                "You are already registered for this service. Contact your administrator if you have any queries",
             "state_id":
                 "Welcome to TB Connect. Please enter your id number",
             "state_name":
@@ -50,7 +52,28 @@ go.app = function() {
         self.add('state_start', function(name) {
             // Reset user answers when restarting the app
             self.im.user.answers = {};
-            return self.states.create('state_id');
+            return self.states.create('state_check_registered');
+        });
+
+        // interstitial to check registration status
+        self.add('state_check_registered', function(name) {
+            return go.utils
+                .get_or_create_identity({'msisdn': self.im.user.addr}, self.im, null)
+                .then(function(identity) {
+                    if(identity.details && !identity.details.registered) {
+                        return self.states.create('state_id');
+                    } else {
+                        return self.states.create('state_already_registered');
+                    }
+                });
+        });
+
+        // EndState
+        self.add('state_already_registered', function(name) {
+            return new EndState(name, {
+                text: $(questions[name]),
+                next: 'state_start'
+            });
         });
 
     // REGISTRATION STATES
