@@ -559,6 +559,7 @@ go.app = function() {
                 .get_or_create_identity({'msisdn': self.im.user.addr}, self.im, null)
                 .then(function(identity) {
                     if(identity.details && !identity.details.registered) {
+                        self.im.user.set_answer('user_id', identity.id);
                         return self.states.create('state_id');
                     } else {
                         return self.states.create('state_already_registered');
