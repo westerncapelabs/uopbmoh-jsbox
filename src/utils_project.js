@@ -18,15 +18,6 @@ go.utils_project = {
         return reg_info;
     },
 
-    /*update_identities: function(im) {
-        // Saves useful data collected during registration to the relevant identities
-        return go.utils
-            .get_identity(im.user.answers.user_id, im),
-            .then(function(identity) {
-                go.utils.update_identity(im, identity),
-            })
-    },*/
-
     finish_registration: function(im) {
         var reg_info = go.utils_project.compile_reg_info(im);
         return go.utils
