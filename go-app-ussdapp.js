@@ -10,7 +10,7 @@ var vumigo = require('vumigo_v02');
 var moment = require('moment');
 var assert = require('assert');
 var JsonApi = vumigo.http.api.JsonApi;
-var Choice = vumigo.states.Choice;
+// var Choice = vumigo.states.Choice;
 
 // GENERIC UTILS
 go.utils = {
@@ -218,7 +218,7 @@ go.utils = {
         var monthIterator = startDate;
         for (var i=0; i<limit; i++) {
             choices.push(new Choice(monthIterator.format(valueFormat),
-                                    $(monthIterator.format(labelFormat))));
+                                    monthIterator.format(labelFormat)));
             monthIterator.add(increment, 'months');
         }
 
@@ -553,16 +553,16 @@ go.app = function() {
 
         var questions = {
             "state_already_registered":
-                "You are already registered for this service. Contact your administrator if you have any queries",
+                $("You are already registered for this service. Contact your administrator if you have any queries"),
             "state_id":
-                "Welcome to TB Connect. Please enter your id number",
+                $("Welcome to TB Connect. Please enter your id number"),
             "state_name":
-                "Please enter your name",
+                $("Please enter your name"),
             "state_site":
-                "Which site do you work at?",
+                $("Which site do you work at?"),
 
             "state_end_thank_you":
-                "Thank you. They will now start receiving messages.",
+                $("Thank you. They will now start receiving messages."),
         };
 
         // override normal state adding
@@ -598,7 +598,7 @@ go.app = function() {
         // EndState
         self.add('state_already_registered', function(name) {
             return new EndState(name, {
-                text: $(questions[name]),
+                text: questions[name],
                 next: 'state_start'
             });
         });
@@ -608,7 +608,7 @@ go.app = function() {
         // FreeText st-01
         self.add('state_id', function(name) {
             return new FreeText(name, {
-                question: $(questions[name]),
+                question: questions[name],
                 next: function(input) {
                     return 'state_name';
                 }
@@ -618,7 +618,7 @@ go.app = function() {
         // FreeText st-02
         self.add('state_name', function(name) {
             return new FreeText(name, {
-                question: $(questions[name]),
+                question: questions[name],
                 next: function(input) {
                     return 'state_site';
                 }
@@ -628,7 +628,7 @@ go.app = function() {
         // FreeText st-03
         self.add('state_site', function(name) {
             return new FreeText(name, {
-                question: $(questions[name]),
+                question: questions[name],
                 next: function() {
                     return go.utils_project
                         .finish_registration(self.im)
@@ -642,7 +642,7 @@ go.app = function() {
         // EndState st-04
         self.add('state_end_thank_you', function(name) {
             return new EndState(name, {
-                text: $(questions[name]),
+                text: questions[name],
                 next: 'state_start'
             });
         });
