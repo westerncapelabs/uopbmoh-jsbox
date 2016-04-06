@@ -10,7 +10,7 @@ var vumigo = require('vumigo_v02');
 var moment = require('moment');
 var assert = require('assert');
 var JsonApi = vumigo.http.api.JsonApi;
-// var Choice = vumigo.states.Choice;
+var Choice = vumigo.states.Choice;
 
 // GENERIC UTILS
 go.utils = {
