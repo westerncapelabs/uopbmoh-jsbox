@@ -496,111 +496,156 @@ go.utils = {
 "commas": "commas"
 };
 
+/*jshint -W083 */
+
+// Project utils library
+go.utils_project = {
+
+// REGISTRATION HELPERS
+
+    compile_reg_info: function(im) {
+        var reg_info = {
+            user_id: im.user.answers.user_id,
+            data: {
+                id_number: im.user.answers.state_id,
+                name: im.user.answers.state_name,
+                site: im.user.answers.state_site
+            }
+        };
+
+        return reg_info;
+    },
+
+    finish_registration: function(im) {
+        var reg_info = go.utils_project.compile_reg_info(im);
+        return go.utils
+            .create_registration(im, reg_info)
+            .then(function() {
+                return go.utils
+                    .get_identity(im.user.answers.user_id, im)
+                    .then(function(identity) {
+                        return go.utils.update_identity(im, identity);
+                    });
+            });
+    },
+
+    "commas": "commas"
+
+};
+
 go.app = function() {
     var vumigo = require('vumigo_v02');
-    var MetricsHelper = require('go-jsbox-metrics-helper');
     var App = vumigo.App;
+    //var Choice = vumigo.states.Choice;
+    //var ChoiceState = vumigo.states.ChoiceState;
     var EndState = vumigo.states.EndState;
+    var FreeText = vumigo.states.FreeText;
 
 
     var GoUOPBMOH = App.extend(function(self) {
         App.call(self, 'state_start');
         var $ = self.$;
 
-        self.init = function() {
+        self.init = function() {};
 
-            // Use the metrics helper to add some metrics
-            mh = new MetricsHelper(self.im);
-            mh
-                // Total unique users
-                .add.total_unique_users('total.sms.unique_users')
 
-                // Total opt-outs
-                .add.total_state_actions(
-                    {
-                        state: 'state_opt_out',
-                        action: 'enter'
-                    },
-                    'total.optouts'
-                )
+    // TEXT CONTENT
 
-                // Total opt-ins
-                .add.total_state_actions(
-                    {
-                        state: 'state_opt_in',
-                        action: 'enter'
-                    },
-                    'total.optins'
-                )
+        var questions = {
+            "state_already_registered":
+                $("You are already registered for this service. Contact your administrator if you have any queries"),
+            "state_id":
+                $("Welcome to TB Connect. Please enter your id number"),
+            "state_name":
+                $("Please enter your name"),
+            "state_site":
+                $("Which site do you work at?"),
 
-                // Total opt-ins
-                .add.total_state_actions(
-                    {
-                        state: 'state_unrecognised',
-                        action: 'enter'
-                    },
-                    'total.unrecognised_sms'
-                );
-
-            // Load self.contact
-            return self.im.contacts
-                .for_user()
-                .then(function(user_contact) {
-                   self.contact = user_contact;
-                });
+            "state_end_thank_you":
+                $("Thank you. They will now start receiving messages."),
         };
 
-        self.states.add('state_start', function() {
-            var user_first_word = go.utils.get_clean_first_word(self.im.msg.content);
-            switch (user_first_word) {
-                case "STOP":
-                    return self.states.create("state_stop");
-                case "HELP":
-                    return self.states.create("state_help");
-                default:
-                    return self.states.create("state_unrecognised");
-            }
+        // override normal state adding
+        self.add = function(name, creator) {
+            self.states.add(name, function(name, opts) {
+                return creator(name, opts);
+            });
+        };
+
+
+    // START STATE
+
+        self.add('state_start', function(name) {
+            // Reset user answers when restarting the app
+            self.im.user.answers = {};
+            return self.states.create('state_check_registered');
         });
 
-
-        self.states.add('state_stop', function(name) {
-            return self.states.create('state_stop_completed');
+        // interstitial to check registration status
+        self.add('state_check_registered', function(name) {
+            return go.utils
+                .get_or_create_identity({'msisdn': self.im.user.addr}, self.im, null)
+                .then(function(identity) {
+                    if(identity.details && !identity.details.registered) {
+                        self.im.user.set_answer('user_id', identity.id);
+                        return self.states.create('state_id');
+                    } else {
+                        return self.states.create('state_already_registered');
+                    }
+                });
         });
 
-        self.states.add('state_stop_completed', function(name, creator_opts) {
+        // EndState
+        self.add('state_already_registered', function(name) {
             return new EndState(name, {
-                text: $('Removed! You will no longer recieve messages from us.'),
+                text: questions[name],
                 next: 'state_start'
             });
         });
 
+    // REGISTRATION STATES
 
-        // HELP
-        self.states.add('state_help', function(name) {
-            return new EndState(name, {
-                text: $(["You can send me the following commands:",
-                         "stop"
-                        ].join('\n')),
-                next: 'state_start'
+        // FreeText st-01
+        self.add('state_id', function(name) {
+            return new FreeText(name, {
+                question: questions[name],
+                next: function(input) {
+                    return 'state_name';
+                }
             });
         });
 
-        // UNRECOGNISED
-        self.states.add('state_unrecognised', function(name) {
-            return new EndState(name, {
-                text: $('Oh no! We did not recognise the command you sent us. Reply "help" to get a list.'),
-                next: 'state_start'
+        // FreeText st-02
+        self.add('state_name', function(name) {
+            return new FreeText(name, {
+                question: questions[name],
+                next: function(input) {
+                    return 'state_site';
+                }
             });
         });
 
-        // ERROR
-        self.states.add('state_error', function(name) {
-            return new EndState(name, {
-                text: $('Ooops! Something went wrong with your request. Try sending it again in a moment please.'),
-                next: 'state_start'
+        // FreeText st-03
+        self.add('state_site', function(name) {
+            return new FreeText(name, {
+                question: questions[name],
+                next: function() {
+                    return go.utils_project
+                        .finish_registration(self.im)
+                        .then(function() {
+                            return 'state_end_thank_you';
+                        });
+                }
             });
         });
 
+        // EndState st-04
+        self.add('state_end_thank_you', function(name) {
+            return new EndState(name, {
+                text: questions[name],
+                next: 'state_start'
+            });
+        });
 
     });
 

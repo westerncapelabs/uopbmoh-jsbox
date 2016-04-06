@@ -8,7 +8,8 @@ module.exports = function (grunt) {
         paths: {
             src: {
                 app: {
-                    smsapp: 'src/smsapp.js'
+                    smsapp: 'src/smsapp.js',
+                    ussdapp: 'src/ussdapp.js'
                 },
                 smsapp: [
                     'src/index.js',
@@ -16,12 +17,20 @@ module.exports = function (grunt) {
                     '<%= paths.src.app.smsapp %>',
                     'src/init.js'
                 ],
+                ussdapp: [
+                    'src/index.js',
+                    'src/utils.js',
+                    'src/utils_project.js',
+                    '<%= paths.src.app.ussdapp %>',
+                    'src/init.js'
+                ],
                 all: [
                     'src/**/*.js'
                 ]
             },
             dest: {
-                smsapp: 'go-app-sms.js'
+                smsapp: 'go-app-sms.js',
+                ussdapp: 'go-app-ussdapp.js'
             },
             test: {
                 smsapp: [
@@ -29,6 +38,13 @@ module.exports = function (grunt) {
                     'src/utils.js',
                     '<%= paths.src.app.smsapp %>',
                     'test/smsapp.test.js'
+                ],
+                ussdapp: [
+                    'test/setup.js',
+                    'src/utils.js',
+                    'src/utils_project.js',
+                    '<%= paths.src.app.ussdapp %>',
+                    'test/ussdapp.test.js'
                 ]
             }
         },
@@ -66,6 +82,10 @@ module.exports = function (grunt) {
                 src: ['<%= paths.src.smsapp %>'],
                 dest: '<%= paths.dest.smsapp %>'
             },
+            ussdapp: {
+                src: ['<%= paths.src.ussdapp %>'],
+                dest: '<%= paths.dest.ussdapp %>'
+            }
 
         },
 
@@ -75,6 +95,9 @@ module.exports = function (grunt) {
             },
             test_smsapp: {
                 src: ['<%= paths.test.smsapp %>']
+            },
+            test_ussdapp: {
+                src: ['<%= paths.test.ussdapp %>']
             }
         }
     });
