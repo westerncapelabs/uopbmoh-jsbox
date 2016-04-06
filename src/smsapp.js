@@ -5,7 +5,7 @@ go.app = function() {
     var EndState = vumigo.states.EndState;
 
 
-    var GoUOPBOH = App.extend(function(self) {
+    var GoUOPBMOH = App.extend(function(self) {
         App.call(self, 'state_start');
         var $ = self.$;
 
@@ -51,7 +51,6 @@ go.app = function() {
                    self.contact = user_contact;
                 });
         };
-
 
         self.states.add('state_start', function() {
             var user_first_word = go.utils.get_clean_first_word(self.im.msg.content);
@@ -108,6 +107,6 @@ go.app = function() {
     });
 
     return {
-        GoUOPBOH: GoUOPBOH
+        GoUOPBMOH: GoUOPBMOH
     };
 }();

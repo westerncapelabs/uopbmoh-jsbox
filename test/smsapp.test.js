@@ -12,7 +12,7 @@ describe("UoP TB app", function() {
         var tester;
 
         beforeEach(function() {
-            app = new go.app.GoUOPBOH();
+            app = new go.app.GoUOPBMOH();
 
             tester = new AppTester(app);
 
