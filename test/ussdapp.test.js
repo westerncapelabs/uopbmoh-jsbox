@@ -39,22 +39,6 @@ describe("UoP TB registration app", function() {
         // REGISTRATION TESTING
 
         describe("Registration testing", function() {
-            it("to state_already_registered", function() {
-                return tester
-                    .setup.user.addr("0820000111")
-                    .inputs(
-                        {session_event: "new"}  // dial in
-                    )
-                    .check.interaction({
-                        state: "state_already_registered",
-                        reply: "You are already registered for this service. Contact your administrator if you have any queries"
-                    })
-                    .check(function(api) {
-                        go.utils.check_fixtures_used(api, [0]);
-                    })
-                    .check.reply.ends_session()
-                    .run();
-            });
             it("to state_facility_code", function() {
                 return tester
                     .setup.user.addr("0820000222")
@@ -125,7 +109,7 @@ describe("UoP TB registration app", function() {
                     })
                     .run();
             });
-            it("to state_end_thank_you", function() {
+            it("to state_end_registration", function() {
                 return tester
                     .setup.user.addr("0820000222")
                     .inputs(
@@ -136,8 +120,8 @@ describe("UoP TB registration app", function() {
                         , "Back-office"  // state_department
                     )
                     .check.interaction({
-                        state: "state_end_thank_you",
-                        reply: "Thank you. They will now start receiving messages."
+                        state: "state_end_registration",
+                        reply: "Thank you for registering.  You'll soon be receiving quizzes."
                     })
                     .check(function(api) {
                         go.utils.check_fixtures_used(api, [1,2,3,4,5]);
@@ -150,15 +134,15 @@ describe("UoP TB registration app", function() {
         // QUIZ TESTING
 
         describe("Quiz testing", function() {
-            it.skip("to state_", function() {
+            it("to state_end_quiz_status", function() {
                 return tester
                     .setup.user.addr("0820000111")
                     .inputs(
                         {session_event: "new"}  // dial in
                     )
                     .check.interaction({
-                        state: "state_already_registered",
-                        reply: "You are already registered for this service. Contact your administrator if you have any queries"
+                        state: "state_end_quiz_status",
+                        reply: "Currently you've got not untaken quizzes."
                     })
                     .check(function(api) {
                         go.utils.check_fixtures_used(api, [0]);

@@ -28,9 +28,16 @@ go.app = function() {
                 $("Please enter your cadre"),
             "state_department":
                 $("Please enter your department name"),
+            "state_end_registration":
+                $("Thank you for registering.  You'll soon be receiving quizzes."),
+
+            "state_end_quiz":
+                $("Thank you for completing your quiz."),
+            "state_end_quiz_status":
+                $("Currently you've got not untaken quizzes."),
 
             "state_end_thank_you":
-                $("Thank you. They will now start receiving messages."),
+                $("Thank you for using our service."),
         };
 
         // override normal state adding
@@ -58,7 +65,7 @@ go.app = function() {
                         self.im.user.set_answer("user_id", identity.id);
                         return self.states.create("state_facility_code");
                     } else {
-                        return self.states.create("state_already_registered");
+                        return self.states.create("state_check_quiz_status");
                     }
                 });
         });
@@ -115,13 +122,51 @@ go.app = function() {
                     return go.utils_project
                         .finish_registration(self.im)
                         .then(function() {
-                            return "state_end_thank_you";
+                            return "state_end_registration";
                         });
                 }
             });
         });
 
         // EndState st-05
+        self.add("state_end_registration", function(name) {
+            return new EndState(name, {
+                text: questions[name],
+                next: "state_start"
+            });
+        });
+
+    // QUIZ STATES
+
+        // interstitial
+        self.add("state_check_quiz_status", function(name) {
+            if (go.utils_project.has_untaken_quizzes()) {
+                return self.states.create("state_start_quiz");
+            } else {
+                return self.states.create("state_end_quiz_status");
+            }
+        });
+
+        self.add("state_start_quiz", function(name) {
+            return self.states.create("state_end_quiz");
+        });
+
+        self.add("state_end_quiz", function(name) {
+            return new EndState(name, {
+                text: questions[name],
+                next: "state_start"
+            });
+        });
+
+        self.add("state_end_quiz_status", function(name) {
+            return new EndState(name, {
+                text: questions[name],
+                next: "state_start"
+            });
+        });
+
+    // GENERAL END STATE
+
         self.add("state_end_thank_you", function(name) {
             return new EndState(name, {
                 text: questions[name],

@@ -32,6 +32,12 @@ go.utils_project = {
             });
     },
 
+// QUIZ HELPERS
+
+    has_untaken_quizzes: function() {
+        return false;  // returning false as temporary measure
+    },
+
     "commas": "commas"
 
 };
