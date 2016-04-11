@@ -36,7 +36,7 @@ describe("UoP TB registration app", function() {
                 ;
         });
 
-        // REGISTRATION
+        // REGISTRATION TESTING
 
         describe("Registration testing", function() {
             it("to state_already_registered", function() {
@@ -55,48 +55,70 @@ describe("UoP TB registration app", function() {
                     .check.reply.ends_session()
                     .run();
             });
-            it("to state_id", function() {
+            it("to state_facility_code", function() {
                 return tester
                     .setup.user.addr("0820000222")
                     .inputs(
                         {session_event: "new"}  // dial in
                     )
                     .check.interaction({
-                        state: "state_id",
-                        reply: "Welcome to TB Connect. Please enter your id number"
+                        state: "state_facility_code",
+                        reply: "Please enter your facility code"
                     })
                     .check(function(api) {
                         go.utils.check_fixtures_used(api, [1,2]);
                     })
                     .run();
             });
-            it("to state_name", function() {
+            it("to state_gender", function() {
                 return tester
                     .setup.user.addr("0820000222")
                     .inputs(
                         {session_event: "new"}  // dial in
-                        , "12345"  // state_id
+                        , "12345"  // state_facility_code
                     )
                     .check.interaction({
-                        state: "state_name",
-                        reply: "Please enter your name"
+                        state: "state_gender",
+                        reply: [
+                            "Please enter your gender:",
+                            "1. Male",
+                            "2. Female"
+                        ].join('\n')
                     })
                     .check(function(api) {
                         go.utils.check_fixtures_used(api, [1,2]);
                     })
                     .run();
             });
-            it("to state_site", function() {
+            it("to state_cadre", function() {
                 return tester
                     .setup.user.addr("0820000222")
                     .inputs(
                         {session_event: "new"}  // dial in
-                        , "12345"  // state_id
-                        , "John Doe"  // state_name
+                        , "12345"  // state_facility_code
+                        , "1"  // state_gender - male
                     )
                     .check.interaction({
-                        state: "state_site",
-                        reply: "Which site do you work at?"
+                        state: "state_cadre",
+                        reply: "Please enter your cadre"
+                    })
+                    .check(function(api) {
+                        go.utils.check_fixtures_used(api, [1,2]);
+                    })
+                    .run();
+            });
+            it("to state_department", function() {
+                return tester
+                    .setup.user.addr("0820000222")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                        , "12345"  // state_facility_code
+                        , "1"  // state_gender - male
+                        , "Xpress"  // state_cadre
+                    )
+                    .check.interaction({
+                        state: "state_department",
+                        reply: "Please enter your department name"
                     })
                     .check(function(api) {
                         go.utils.check_fixtures_used(api, [1,2]);
@@ -108,9 +130,10 @@ describe("UoP TB registration app", function() {
                     .setup.user.addr("0820000222")
                     .inputs(
                         {session_event: "new"}  // dial in
-                        , "12345"  // state_id
-                        , "John Doe"  // state_name
-                        , "Gotham"  // state_site
+                        , "12345"  // state_facility_code
+                        , "1"  // state_gender
+                        , "Xpress"  // state_cadre
+                        , "Back-office"  // state_department
                     )
                     .check.interaction({
                         state: "state_end_thank_you",
@@ -123,6 +146,28 @@ describe("UoP TB registration app", function() {
                     .run();
             });
         });
+
+        // QUIZ TESTING
+
+        describe("Quiz testing", function() {
+            it.skip("to state_", function() {
+                return tester
+                    .setup.user.addr("0820000111")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                    )
+                    .check.interaction({
+                        state: "state_already_registered",
+                        reply: "You are already registered for this service. Contact your administrator if you have any queries"
+                    })
+                    .check(function(api) {
+                        go.utils.check_fixtures_used(api, [0]);
+                    })
+                    .check.reply.ends_session()
+                    .run();
+            });
+        });
+
     });
 
 });
