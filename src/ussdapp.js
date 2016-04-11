@@ -34,7 +34,7 @@ go.app = function() {
             "state_end_quiz":
                 $("Thank you for completing your quiz."),
             "state_end_quiz_status":
-                $("Currently you've got not untaken quizzes."),
+                $("Currently you've got no untaken quizzes."),
 
             "state_end_thank_you":
                 $("Thank you for using our service."),

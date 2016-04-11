@@ -142,7 +142,7 @@ describe("UoP TB registration app", function() {
                     )
                     .check.interaction({
                         state: "state_end_quiz_status",
-                        reply: "Currently you've got not untaken quizzes."
+                        reply: "Currently you've got no untaken quizzes."
                     })
                     .check(function(api) {
                         go.utils.check_fixtures_used(api, [0]);
