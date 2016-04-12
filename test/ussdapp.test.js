@@ -143,10 +143,6 @@ describe("UoP TB registration app", function() {
 
         describe("Quiz testing", function() {
             it("to state_end_quiz", function() {
-                var valid_fixture_possibilities = [
-                    [0,6,9], [0,6,10], [0,6,11], [0,6,12]
-                ];
-
                 return tester
                     .setup.user.addr("0820000111")
                     .inputs(
@@ -159,15 +155,11 @@ describe("UoP TB registration app", function() {
                     .check(function(api) {
                         // check the fixtures corresponding to the random
                         // selection made from possible quiz options
-                        for(var i = 0; i < valid_fixture_possibilities.length; i++) {
-                            try {
-                                go.utils.check_fixtures_used(api, valid_fixture_possibilities[i]);
-                                break;  // break if used fixtures match any of the valid_fixture_possibilities
-                            }
-                            catch(AssertionError) {
-                                //console.log(AssertionError.message);
-                            }
-                        }
+                        var valid_fixture_possibilities = [
+                            [0,6,9], [0,6,10], [0,6,11], [0,6,12]
+                        ];
+                        go.utils.check_fixtures_used(api,
+                            valid_fixture_possibilities, true);
                     })
                     .check.reply.ends_session()
                     .run();
