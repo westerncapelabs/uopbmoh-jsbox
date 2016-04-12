@@ -34,8 +34,17 @@ go.utils_project = {
 
 // QUIZ HELPERS
 
-    has_untaken_quizzes: function() {
-        return false;  // returning false as temporary measure
+    // returns an array of untaken quizzes
+    get_untaken_quizzes: function(im) {
+        var endpoint = "quiz/untaken";
+        var params = {
+            "identity": im.user.answers.user_id
+        };
+        return go.utils
+            .service_api_call("quizzes", "get", params, null, endpoint, im)
+            .then(function(json_get_response) {
+                return json_get_response.data.results;
+        });
     },
 
     "commas": "commas"

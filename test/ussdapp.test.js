@@ -28,6 +28,10 @@ describe("UoP TB registration app", function() {
                             api_token: 'test_token_registrations',
                             url: "http://localhost:8002/api/v1/"
                         },
+                        quizzes: {
+                            api_token: 'test_token_quizzes',
+                            url: "http://localhost:8003/api/v1/"
+                        },
                     },
                 })
                 .setup(function(api) {
@@ -134,7 +138,23 @@ describe("UoP TB registration app", function() {
         // QUIZ TESTING
 
         describe("Quiz testing", function() {
-            it("to state_end_quiz_status", function() {
+            it("to state_end_quiz", function() {
+                return tester
+                    .setup.user.addr("0820000111")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                    )
+                    .check.interaction({
+                        state: "state_end_quiz",
+                        reply: "Thank you for completing your quiz."
+                    })
+                    .check(function(api) {
+                        go.utils.check_fixtures_used(api, [0,6]);
+                    })
+                    .check.reply.ends_session()
+                    .run();
+            });
+            it.skip("to state_end_quiz_status", function() {
                 return tester
                     .setup.user.addr("0820000111")
                     .inputs(

@@ -61,8 +61,8 @@ go.app = function() {
             return go.utils
                 .get_or_create_identity({"msisdn": self.im.user.addr}, self.im, null)
                 .then(function(identity) {
+                    self.im.user.set_answer("user_id", identity.id);
                     if(identity.details && !identity.details.registered) {
-                        self.im.user.set_answer("user_id", identity.id);
                         return self.states.create("state_facility_code");
                     } else {
                         return self.states.create("state_check_quiz_status");
@@ -140,11 +140,16 @@ go.app = function() {
 
         // interstitial
         self.add("state_check_quiz_status", function(name) {
-            if (go.utils_project.has_untaken_quizzes()) {
-                return self.states.create("state_start_quiz");
-            } else {
-                return self.states.create("state_end_quiz_status");
-            }
+            return go.utils_project
+                .get_untaken_quizzes(self.im)
+                .then(function(untaken_quizzes) {
+                    if (untaken_quizzes.length > 0) {
+                        return self.states.create("state_start_quiz");
+                    } else {
+                        return self.states.create("state_end_quiz_status");
+                    }
+                });
+
         });
 
         self.add("state_start_quiz", function(name) {

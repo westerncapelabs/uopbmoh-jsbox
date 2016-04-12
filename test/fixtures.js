@@ -25,8 +25,8 @@ return [
                 "next": null,
                 "previous": null,
                 "results": [{
-                    "url": "http://localhost:8001/api/v1/identities/cb245673-aa41-4302-ac47-00000000111/",
-                    "id": "cb245673-aa41-4302-ac47-00000000111",
+                    "url": "http://localhost:8001/api/v1/identities/cb245673-aa41-4302-ac47-000000000111/",
+                    "id": "cb245673-aa41-4302-ac47-000000000111",
                     "version": 1,
                     "details": {
                         "id_number": "12345",
@@ -94,8 +94,8 @@ return [
         "response": {
             "code": 201,
             "data": {
-                "url": "http://localhost:8001/api/v1/identities/cb245673-aa41-4302-ac47-00000000222/",
-                "id": "cb245673-aa41-4302-ac47-00000000222",
+                "url": "http://localhost:8001/api/v1/identities/cb245673-aa41-4302-ac47-000000000222/",
+                "id": "cb245673-aa41-4302-ac47-000000000222",
                 "version": 1,
                 "details": {
                     "addresses": {
@@ -120,7 +120,7 @@ return [
             },
             "url": "http://localhost:8002/api/v1/registration/",
             "data":  {
-                "user_id": "cb245673-aa41-4302-ac47-00000000222",
+                "user_id": "cb245673-aa41-4302-ac47-000000000222",
                 "data": {
                     "facility_code": "12345",
                     "gender": "male",
@@ -143,7 +143,7 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8001/api/v1/identities/cb245673-aa41-4302-ac47-00000000222/",
+            "url": "http://localhost:8001/api/v1/identities/cb245673-aa41-4302-ac47-000000000222/",
         },
         "response": {
             "code": 200,
@@ -187,6 +187,34 @@ return [
         "response": {
             "code": 200,
             "data": {}
+        }
+    },
+
+    // 6: get untaken quizzes for identity cb245673-aa41-4302-ac47-000000000111
+    {
+        "request": {
+            "method": "GET",
+            "params": {
+                "identity": "cb245673-aa41-4302-ac47-000000000111"
+            },
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8003/api/v1/quiz/untaken",
+        },
+        "response": {
+            "code": 200,
+            "data": {
+                "count": 1,
+                "next": null,
+                "previous": null,
+                "results": [{
+                    "id": "cb245673-aa41-4302-ac47-000000000111",
+                    "created_at": "2016-04-05T06:13:29.693272Z",
+                    "updated_at": "2016-04-05T06:13:29.693298Z"
+                }]
+            }
         }
     },
 
