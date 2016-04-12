@@ -154,9 +154,9 @@ describe("UoP TB registration app", function() {
                     .check.reply.ends_session()
                     .run();
             });
-            it.skip("to state_end_quiz_status", function() {
+            it("to state_end_quiz_status", function() {
                 return tester
-                    .setup.user.addr("0820000111")
+                    .setup.user.addr("0820000333")
                     .inputs(
                         {session_event: "new"}  // dial in
                     )
@@ -165,7 +165,7 @@ describe("UoP TB registration app", function() {
                         reply: "Currently you've got no untaken quizzes."
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api, [0]);
+                        go.utils.check_fixtures_used(api, [7,8]);
                     })
                     .check.reply.ends_session()
                     .run();
