@@ -157,19 +157,64 @@ go.app = function() {
 
         self.add("state_get_quiz_questions", function(name) {
             return go.utils_project
-                .get_quiz_questions(self.im)
-                .then(function(questions) {
-                    var random_questions = go.utils.randomize_array(questions);
+                .get_quiz(self.im)
+                .then(function(quiz) {
+                    var random_questions = go.utils.randomize_array(quiz.questions);
                     self.im.user.set_answer("questions", random_questions);
-                    return self.states.create("state_start_quiz");
+                    return self.states.create("state_quiz");
                 });
         });
 
-        self.add("state_start_quiz", function(name) {
-            return self.states.create("state_end_quiz");
+        // ChoiceState
+        self.add("state_quiz", function(name) {
+            return go.utils_project
+                // get first question in random line-up
+                .get_quiz_question(self.im, 0)
+                .then(function(quiz_question) {
+                    possible_choices = go.utils_project.construct_Choices(quiz_question.answers);
+                    return new ChoiceState(name, {
+                        question: quiz_question.question,
+                        choices: possible_choices,
+                        next: function(choice) {
+                                if (go.utils_project.is_answer_to_question_correct(self.im, choice.value)) {
+                                    return {
+                                        name: 'state_response',
+                                        creator_opts: quiz_question.response_correct
+                                    };
+                                } else {
+                                    return {
+                                        name: 'state_response',
+                                        creator_opts: quiz_question.response_incorrect
+                                    };
+                                }
+                        }
+                    });
+                });
+        });
+
+        // ChoiceState
+        self.add("state_response", function(name, response_text) {
+            return new ChoiceState(name, {
+                question: response_text,
+                choices: [
+                    new Choice('state_quiz', 'Proceed?'),
+                    new Choice('state_end_quiz', 'Exit and continue another time')
+                ],
+                next: function(choice) {
+                    /*return go.utils_project
+                    .shift_quiz_questions(self.im)
+                    .then(function() {
+
+                    });*/
+                    // remove first item of question array as question has been answered
+                    self.im.user.answers.questions.shift();
+                    return choice.value; // if questions left loop back to state_quiz (after popping covered question)
+                }
+            });
         });
 
         self.add("state_end_quiz", function(name) {
+            console.log(" --> state_end_quiz");
             return new EndState(name, {
                 text: questions[name],
                 next: "state_start"

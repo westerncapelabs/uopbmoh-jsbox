@@ -47,13 +47,69 @@ go.utils_project = {
         });
     },
 
-    get_quiz_questions: function(im) {
+    get_quiz: function(im) {
         var endpoint = "quiz/"+im.user.answers.quiz.id+"/";
         return go.utils
             .service_api_call("quizzes", "get", {}, null, endpoint, im)
             .then(function(json_get_response) {
-                return json_get_response.data.questions;
+                return json_get_response.data;
         });
+    },
+
+    get_quiz_question: function(im) {
+        var endpoint = "question/"+im.user.answers.questions[0]+"/";
+        return go.utils
+            .service_api_call("questions", "get", {}, null, endpoint, im)
+            .then(function(json_get_response) {
+                return json_get_response.data;
+        });
+    },
+
+    /* parameter to construct_Choices function is an array of objects
+       e.g. [
+                {
+                    "value": "mike",
+                    "text": "Mike",
+                    "correct": false
+                },
+                {
+                    "value": "nicki",
+                    "text": "Nicki",
+                    "correct": true
+                }
+            ],
+        where value/text to be used accordingly in ChoiceState and 'correct'
+        indicates correct quiz answer
+     returns an array of Choice objects representing answers for ChoiceState*/
+    construct_Choices: function(possible_answers) {
+        var vumigo = require("vumigo_v02");
+        var Choice = vumigo.states.Choice;
+        var choices = [];
+
+        for (var i = 0; i < possible_answers.length; i++) {
+            choices.push(new Choice(possible_answers[i].value, possible_answers[i].text));
+        }
+        return choices;
+    },
+
+    shift_quiz_questions: function() {
+        // update untaken quizzes
+
+    },
+
+    is_answer_to_question_correct: function(im, answer) {
+        return go.utils_project
+            .get_quiz_question(im)
+            .then(function(quiz_question) {
+                for (var i = 0; i < quiz_question.answers.length; i++) {
+                    if ((quiz_question.answers[i].value === answer) && quiz_question.answers[i].correct) {
+                        console.log("correct answer -> "+quiz_question.answers[i].value);
+                        return true;
+                    }
+                }
+                console.log("FALSE!!!");
+                return false;
+            });
     },
 
     "commas": "commas"

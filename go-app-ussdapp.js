@@ -570,13 +570,69 @@ go.utils_project = {
         });
     },
 
-    get_quiz_questions: function(im) {
+    get_quiz: function(im) {
         var endpoint = "quiz/"+im.user.answers.quiz.id+"/";
         return go.utils
             .service_api_call("quizzes", "get", {}, null, endpoint, im)
             .then(function(json_get_response) {
-                return json_get_response.data.questions;
+                return json_get_response.data;
         });
+    },
+
+    get_quiz_question: function(im) {
+        var endpoint = "question/"+im.user.answers.questions[0]+"/";
+        return go.utils
+            .service_api_call("questions", "get", {}, null, endpoint, im)
+            .then(function(json_get_response) {
+                return json_get_response.data;
+        });
+    },
+
+    /* parameter to construct_Choices function is an array of objects
+       e.g. [
+                {
+                    "value": "mike",
+                    "text": "Mike",
+                    "correct": false
+                },
+                {
+                    "value": "nicki",
+                    "text": "Nicki",
+                    "correct": true
+                }
+            ],
+        where value/text to be used accordingly in ChoiceState and 'correct'
+        indicates correct quiz answer
+     returns an array of Choice objects representing answers for ChoiceState*/
+    construct_Choices: function(possible_answers) {
+        var vumigo = require("vumigo_v02");
+        var Choice = vumigo.states.Choice;
+        var choices = [];
+
+        for (var i = 0; i < possible_answers.length; i++) {
+            choices.push(new Choice(possible_answers[i].value, possible_answers[i].text));
+        }
+        return choices;
+    },
+
+    shift_quiz_questions: function() {
+        // update untaken quizzes
+
+    },
+
+    is_answer_to_question_correct: function(im, answer) {
+        return go.utils_project
+            .get_quiz_question(im)
+            .then(function(quiz_question) {
+                for (var i = 0; i < quiz_question.answers.length; i++) {
+                    if ((quiz_question.answers[i].value === answer) && quiz_question.answers[i].correct) {
+                        console.log("correct answer -> "+quiz_question.answers[i].value);
+                        return true;
+                    }
+                }
+                console.log("FALSE!!!");
+                return false;
+            });
     },
 
     "commas": "commas"
@@ -742,19 +798,64 @@ go.app = function() {
 
         self.add("state_get_quiz_questions", function(name) {
             return go.utils_project
-                .get_quiz_questions(self.im)
-                .then(function(questions) {
-                    var random_questions = go.utils.randomize_array(questions);
+                .get_quiz(self.im)
+                .then(function(quiz) {
+                    var random_questions = go.utils.randomize_array(quiz.questions);
                     self.im.user.set_answer("questions", random_questions);
-                    return self.states.create("state_start_quiz");
+                    return self.states.create("state_quiz");
                 });
         });
 
-        self.add("state_start_quiz", function(name) {
-            return self.states.create("state_end_quiz");
+        // ChoiceState
+        self.add("state_quiz", function(name) {
+            return go.utils_project
+                // get first question in random line-up
+                .get_quiz_question(self.im, 0)
+                .then(function(quiz_question) {
+                    possible_choices = go.utils_project.construct_Choices(quiz_question.answers);
+                    return new ChoiceState(name, {
+                        question: quiz_question.question,
+                        choices: possible_choices,
+                        next: function(choice) {
+                                if (go.utils_project.is_answer_to_question_correct(self.im, choice.value)) {
+                                    return {
+                                        name: 'state_response',
+                                        creator_opts: quiz_question.response_correct
+                                    };
+                                } else {
+                                    return {
+                                        name: 'state_response',
+                                        creator_opts: quiz_question.response_incorrect
+                                    };
+                                }
+                        }
+                    });
+                });
+        });
+
+        // ChoiceState
+        self.add("state_response", function(name, response_text) {
+            return new ChoiceState(name, {
+                question: response_text,
+                choices: [
+                    new Choice('state_quiz', 'Proceed?'),
+                    new Choice('state_end_quiz', 'Exit and continue another time')
+                ],
+                next: function(choice) {
+                    /*return go.utils_project
+                    .shift_quiz_questions(self.im)
+                    .then(function() {
+
+                    });*/
+                    // remove first item of question array as question has been answered
+                    self.im.user.answers.questions.shift();
+                    return choice.value; // if questions left loop back to state_quiz (after popping covered question)
+                }
+            });
         });
 
         self.add("state_end_quiz", function(name) {
+            console.log(" --> state_end_quiz");
             return new EndState(name, {
                 text: questions[name],
                 next: "state_start"

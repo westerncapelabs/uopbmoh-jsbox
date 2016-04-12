@@ -391,5 +391,95 @@ return [
         }
     },
 
+    // 13: get questions for quiz cb245673-aa41-4302-ac47-qq000000001
+    {
+        "repeatable": true,
+        "request": {
+            "method": "GET",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000001/",
+        },
+        "response": {
+            "code": 200,
+            "data": {
+                "id": "cb245673-aa41-4302-ac47-qq000000001",
+                "version": 1,
+                "question_type": "multiplechoice",
+                "question": "Who is tallest?",
+                "answers": [
+                    {
+                        "value": "mike",
+                        "text": "Mike",
+                        "correct": false
+                    },
+                    {
+                        "value": "nicki",
+                        "text": "Nicki",
+                        "correct": true
+                    },
+                    {
+                        "value": "george",
+                        "text": "George",
+                        "correct": false
+                    }
+                ],
+                "response_correct": "Correct! That's why only he bangs his head on the lamp!",
+                "response_incorrect": "Incorrect! You need to open your eyes and see it's Nicki!",
+                "created_by": "2",
+                "created_at": "2016-05-10T06:13:29.693272Z",
+                "updated_by": "2",
+                "updated_at": "2016-05-10T06:13:29.693298Z"
+            }
+        }
+    },
+
+    // 13: get questions for quiz cb245673-aa41-4302-ac47-qq000000002
+    {
+        "repeatable": true,
+        "request": {
+            "method": "GET",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000002/",
+        },
+        "response": {
+            "code": 200,
+            "data": {
+                "id": "cb245673-aa41-4302-ac47-qq000000002",
+                "version": 1,
+                "question_type": "multiplechoice",
+                "question": "Who is tallest?",
+                "answers": [
+                    {
+                        "value": "mike",
+                        "text": "Mike",
+                        "correct": false
+                    },
+                    {
+                        "value": "nicki",
+                        "text": "Nicki",
+                        "correct": true
+                    },
+                    {
+                        "value": "george",
+                        "text": "George",
+                        "correct": false
+                    }
+                ],
+                "response_correct": "Correct! That's why only he bangs his head on the lamp!",
+                "response_incorrect": "Incorrect! You need to open your eyes and see it's Nicki!",
+                "created_by": "2",
+                "created_at": "2016-05-10T06:13:29.693272Z",
+                "updated_by": "2",
+                "updated_at": "2016-05-10T06:13:29.693298Z"
+            }
+        }
+    },
+
 ];
 };
