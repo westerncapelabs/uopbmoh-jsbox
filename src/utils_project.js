@@ -47,6 +47,15 @@ go.utils_project = {
         });
     },
 
+    get_quiz_questions: function(im) {
+        var endpoint = "quiz/"+im.user.answers.quiz.id+"/";
+        return go.utils
+            .service_api_call("quizzes", "get", {}, null, endpoint, im)
+            .then(function(json_get_response) {
+                return json_get_response.data.questions;
+        });
+    },
+
     "commas": "commas"
 
 };

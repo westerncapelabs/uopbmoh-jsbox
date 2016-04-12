@@ -207,16 +207,33 @@ return [
                 "count": 1,
                 "next": null,
                 "previous": null,
-                "results": [{
-                    "id": "cb245673-aa41-4302-ac47-000000000111",
-                    "created_at": "2016-04-05T06:13:29.693272Z",
-                    "updated_at": "2016-04-05T06:13:29.693298Z"
-                }]
+                "results": [
+                    {
+                        "id": "cb245673-aa41-4302-ac47-q00000000111",
+                        "created_at": "2016-04-05T06:13:29.693272Z",
+                        "updated_at": "2016-04-05T06:13:29.693298Z"
+                    },
+                    {
+                        "id": "cb245673-aa41-4302-ac47-q00000000112",
+                        "created_at": "2016-04-05T06:13:29.693272Z",
+                        "updated_at": "2016-04-05T06:13:29.693298Z"
+                    },
+                    {
+                        "id": "cb245673-aa41-4302-ac47-q00000000113",
+                        "created_at": "2016-04-05T06:13:29.693272Z",
+                        "updated_at": "2016-04-05T06:13:29.693298Z"
+                    },
+                    {
+                        "id": "cb245673-aa41-4302-ac47-q00000000114",
+                        "created_at": "2016-04-05T06:13:29.693272Z",
+                        "updated_at": "2016-04-05T06:13:29.693298Z"
+                    },
+                ]
             }
         }
     },
 
-    // 0: get identity 0820000333 by msisdn (to validate registered check)
+    // 7: get identity 0820000333 by msisdn (to validate registered check)
     {
         "request": {
             "method": "GET",
@@ -254,7 +271,7 @@ return [
         }
     },
 
-    // 6: get untaken quizzes for identity cb245673-aa41-4302-ac47-000000000333
+    // 8: get untaken quizzes for identity cb245673-aa41-4302-ac47-000000000333
     {
         "request": {
             "method": "GET",
@@ -274,6 +291,102 @@ return [
                 "next": null,
                 "previous": null,
                 "results": []
+            }
+        }
+    },
+
+    // 9: get questions for quiz cb245673-aa41-4302-ac47-q00000000111
+    {
+        "request": {
+            "method": "GET",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8003/api/v1/quiz/cb245673-aa41-4302-ac47-q00000000111/",
+        },
+        "response": {
+            "code": 200,
+            "data": {
+                "id": "cb245673-aa41-4302-ac47-q0000000111",
+                "description": "Primary quiz on heights",
+                "questions": ["cb245673-aa41-4302-ac47-qq000000001", "cb245673-aa41-4302-ac47-qq000000002"],
+                "created_by": "2",
+                "created_at": "2016-05-10T06:13:29.693272Z",
+                "updated_by": "2",
+                "updated_at": "2016-05-10T06:13:29.693298Z"
+            }
+        }
+    },
+
+    // 10: get questions for quiz cb245673-aa41-4302-ac47-q00000000112
+    {
+        "request": {
+            "method": "GET",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8003/api/v1/quiz/cb245673-aa41-4302-ac47-q00000000112/",
+        },
+        "response": {
+            "code": 200,
+            "data": {
+                "id": "cb245673-aa41-4302-ac47-q0000000112",
+                "description": "Primary quiz on heights",
+                "questions": ["cb245673-aa41-4302-ac47-qq000000001", "cb245673-aa41-4302-ac47-qq000000002"],
+                "created_by": "2",
+                "created_at": "2016-05-10T06:13:29.693272Z",
+                "updated_by": "2",
+                "updated_at": "2016-05-10T06:13:29.693298Z"
+            }
+        }
+    },
+
+    // 11: get questions for quiz cb245673-aa41-4302-ac47-q00000000113
+    {
+        "request": {
+            "method": "GET",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8003/api/v1/quiz/cb245673-aa41-4302-ac47-q00000000113/",
+        },
+        "response": {
+            "code": 200,
+            "data": {
+                "id": "cb245673-aa41-4302-ac47-q0000000113",
+                "description": "Primary quiz on heights",
+                "questions": ["cb245673-aa41-4302-ac47-qq000000001", "cb245673-aa41-4302-ac47-qq000000002"],
+                "created_by": "2",
+                "created_at": "2016-05-10T06:13:29.693272Z",
+                "updated_by": "2",
+                "updated_at": "2016-05-10T06:13:29.693298Z"
+            }
+        }
+    },
+
+    // 11: get questions for quiz cb245673-aa41-4302-ac47-q00000000114
+    {
+        "request": {
+            "method": "GET",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8003/api/v1/quiz/cb245673-aa41-4302-ac47-q00000000114/",
+        },
+        "response": {
+            "code": 200,
+            "data": {
+                "id": "cb245673-aa41-4302-ac47-q0000000114",
+                "description": "Primary quiz on heights",
+                "questions": ["cb245673-aa41-4302-ac47-qq000000001", "cb245673-aa41-4302-ac47-qq000000002"],
+                "created_by": "2",
+                "created_at": "2016-05-10T06:13:29.693272Z",
+                "updated_by": "2",
+                "updated_at": "2016-05-10T06:13:29.693298Z"
             }
         }
     },

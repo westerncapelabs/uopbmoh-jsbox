@@ -144,12 +144,25 @@ go.app = function() {
                 .get_untaken_quizzes(self.im)
                 .then(function(untaken_quizzes) {
                     if (untaken_quizzes.length > 0) {
-                        return self.states.create("state_start_quiz");
+                        // get random quiz to take
+                        var quiz_to_take = untaken_quizzes[Math.floor(Math.random() * untaken_quizzes.length)];
+                        self.im.user.set_answer("quiz", quiz_to_take);
+                        return self.states.create("state_get_quiz_questions");
                     } else {
                         return self.states.create("state_end_quiz_status");
                     }
                 });
 
+        });
+
+        self.add("state_get_quiz_questions", function(name) {
+            return go.utils_project
+                .get_quiz_questions(self.im)
+                .then(function(questions) {
+                    var random_questions = go.utils.randomize_array(questions);
+                    self.im.user.set_answer("questions", random_questions);
+                    return self.states.create("state_start_quiz");
+                });
         });
 
         self.add("state_start_quiz", function(name) {

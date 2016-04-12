@@ -9,6 +9,7 @@ go;
 var vumigo = require('vumigo_v02');
 var moment = require('moment');
 var assert = require('assert');
+var _ = require('lodash');
 var JsonApi = vumigo.http.api.JsonApi;
 var Choice = vumigo.states.Choice;
 
@@ -209,6 +210,13 @@ go.utils = {
             .toUpperCase();         // capitalise
     },
 
+// ARRAY HELPERS
+
+    // creates a randomized array of shuffled values using Fisher-Yates shuffle
+    // ex. _.shuffle([1, 2, 3, 4]); → [4, 1, 3, 2]
+    randomize_array: function(array) {
+        return _.shuffle(array);
+    },
 
 // CHOICE HELPERS
 
@@ -545,6 +553,15 @@ go.utils_project = {
         });
     },
 
+    get_quiz_questions: function(im) {
+        var endpoint = "quiz/"+im.user.answers.quiz.id+"/";
+        return go.utils
+            .service_api_call("quizzes", "get", {}, null, endpoint, im)
+            .then(function(json_get_response) {
+                return json_get_response.data.questions;
+        });
+    },
+
     "commas": "commas"
 
 };
@@ -695,12 +712,25 @@ go.app = function() {
                 .get_untaken_quizzes(self.im)
                 .then(function(untaken_quizzes) {
                     if (untaken_quizzes.length > 0) {
-                        return self.states.create("state_start_quiz");
+                        // get random quiz to take
+                        var quiz_to_take = untaken_quizzes[Math.floor(Math.random() * untaken_quizzes.length)];
+                        self.im.user.set_answer("quiz", quiz_to_take);
+                        return self.states.create("state_get_quiz_questions");
                     } else {
                         return self.states.create("state_end_quiz_status");
                     }
                 });
 
+        });
+
+        self.add("state_get_quiz_questions", function(name) {
+            return go.utils_project
+                .get_quiz_questions(self.im)
+                .then(function(questions) {
+                    var random_questions = go.utils.randomize_array(questions);
+                    self.im.user.set_answer("questions", random_questions);
+                    return self.states.create("state_start_quiz");
+                });
         });
 
         self.add("state_start_quiz", function(name) {
