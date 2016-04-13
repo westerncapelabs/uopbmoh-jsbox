@@ -334,7 +334,7 @@ return [
             "data": {
                 "id": "cb245673-aa41-4302-ac47-q0000000112",
                 "description": "Quiz on TB treatment",
-                "questions": ["cb245673-aa41-4302-ac47-qq000000011", "cb245673-aa41-4302-ac47-qq000000022", "cb245673-aa41-4302-ac47-qq000000033"],
+                "questions": ["cb245673-aa41-4302-ac47-qq000000004", "cb245673-aa41-4302-ac47-qq000000005", "cb245673-aa41-4302-ac47-qq000000006"],
                 "created_by": "2",
                 "created_at": "2016-05-10T06:13:29.693272Z",
                 "updated_by": "2",
@@ -358,7 +358,7 @@ return [
             "data": {
                 "id": "cb245673-aa41-4302-ac47-q0000000113",
                 "description": "Quiz on TB signs and symptoms",
-                "questions": ["cb245673-aa41-4302-ac47-qq000000111", "cb245673-aa41-4302-ac47-qq000000222", "cb245673-aa41-4302-ac47-qq000000333"],
+                "questions": ["cb245673-aa41-4302-ac47-qq000000007", "cb245673-aa41-4302-ac47-qq000000008", "cb245673-aa41-4302-ac47-qq000000009"],
                 "created_by": "2",
                 "created_at": "2016-05-10T06:13:29.693272Z",
                 "updated_by": "2",
@@ -382,7 +382,7 @@ return [
             "data": {
                 "id": "cb245673-aa41-4302-ac47-q0000000114",
                 "description": "Quiz on TB diagnosis",
-                "questions": ["cb245673-aa41-4302-ac47-qq000001111", "cb245673-aa41-4302-ac47-qq000002222", "cb245673-aa41-4302-ac47-qq000003333"],
+                "questions": ["cb245673-aa41-4302-ac47-qq000000011", "cb245673-aa41-4302-ac47-qq000000012", "cb245673-aa41-4302-ac47-qq000000013"],
                 "created_by": "2",
                 "created_at": "2016-05-10T06:13:29.693272Z",
                 "updated_by": "2",
@@ -526,7 +526,7 @@ return [
         }
     },
 
-    // 16: get questions for quiz cb245673-aa41-4302-ac47-qq000000011
+    // 16: get questions for quiz cb245673-aa41-4302-ac47-qq000000004
     {
         "repeatable": true,
         "request": {
@@ -535,12 +535,12 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000011/",
+            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000004/",
         },
         "response": {
             "code": 200,
             "data": {
-                "id": "cb245673-aa41-4302-ac47-qq000000011",
+                "id": "cb245673-aa41-4302-ac47-qq000000004",
                 "version": 1,
                 "question_type": "multiplechoice",
                 "question": "Which of these are medications used to treat latent TB infection?",
@@ -571,7 +571,7 @@ return [
         }
     },
 
-    // 17: get questions for quiz cb245673-aa41-4302-ac47-qq000000022
+    // 17: get questions for quiz cb245673-aa41-4302-ac47-qq000000005
     {
         "repeatable": true,
         "request": {
@@ -580,12 +580,12 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000022/",
+            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000005/",
         },
         "response": {
             "code": 200,
             "data": {
-                "id": "cb245673-aa41-4302-ac47-qq000000022",
+                "id": "cb245673-aa41-4302-ac47-qq000000005",
                 "version": 1,
                 "question_type": "multiplechoice",
                 "question": "Treatment modification should be made in which of the following cases?",
@@ -616,7 +616,7 @@ return [
         }
     },
 
-    // 18: get questions for quiz cb245673-aa41-4302-ac47-qq000000033
+    // 18: get questions for quiz cb245673-aa41-4302-ac47-qq000000006
     {
         "repeatable": true,
         "request": {
@@ -625,12 +625,12 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000033/",
+            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000006/",
         },
         "response": {
             "code": 200,
             "data": {
-                "id": "cb245673-aa41-4302-ac47-qq000000033",
+                "id": "cb245673-aa41-4302-ac47-qq000000006",
                 "version": 1,
                 "question_type": "multiplechoice",
                 "question": "TB disease can be treated by taking several drugs for how long?",
@@ -661,7 +661,7 @@ return [
         }
     },
 
-    // 19: get questions for quiz cb245673-aa41-4302-ac47-qq000000111
+    // 19: get questions for quiz cb245673-aa41-4302-ac47-qq000000007
     {
         "repeatable": true,
         "request": {
@@ -670,12 +670,12 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000111/",
+            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000007/",
         },
         "response": {
             "code": 200,
             "data": {
-                "id": "cb245673-aa41-4302-ac47-qq000000111",
+                "id": "cb245673-aa41-4302-ac47-qq000000007",
                 "version": 1,
                 "question_type": "multiplechoice",
                 "question": "Through what is TB spread?",
@@ -706,7 +706,7 @@ return [
         }
     },
 
-    // 20: get questions for quiz cb245673-aa41-4302-ac47-qq000000222
+    // 20: get questions for quiz cb245673-aa41-4302-ac47-qq000000008
     {
         "repeatable": true,
         "request": {
@@ -715,12 +715,12 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000222/",
+            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000008/",
         },
         "response": {
             "code": 200,
             "data": {
-                "id": "cb245673-aa41-4302-ac47-qq000000222",
+                "id": "cb245673-aa41-4302-ac47-qq000000008",
                 "version": 1,
                 "question_type": "multiplechoice",
                 "question": "Which of these are TB symptoms?",
@@ -751,7 +751,7 @@ return [
         }
     },
 
-    // 21: get questions for quiz cb245673-aa41-4302-ac47-qq000000333
+    // 21: get questions for quiz cb245673-aa41-4302-ac47-qq000000009
     {
         "repeatable": true,
         "request": {
@@ -760,12 +760,12 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000333/",
+            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000009/",
         },
         "response": {
             "code": 200,
             "data": {
-                "id": "cb245673-aa41-4302-ac47-qq000000333",
+                "id": "cb245673-aa41-4302-ac47-qq000000009",
                 "version": 1,
                 "question_type": "multiplechoice",
                 "question": "Which of the following is NOT a TB disease risk factor:",
@@ -796,7 +796,7 @@ return [
         }
     },
 
-    // 22: get questions for quiz cb245673-aa41-4302-ac47-qq000001111
+    // 22: get questions for quiz cb245673-aa41-4302-ac47-qq000000011
     {
         "repeatable": true,
         "request": {
@@ -805,12 +805,12 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000001111/",
+            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000011/",
         },
         "response": {
             "code": 200,
             "data": {
-                "id": "cb245673-aa41-4302-ac47-qq000001111",
+                "id": "cb245673-aa41-4302-ac47-qq000000011",
                 "version": 1,
                 "question_type": "multiplechoice",
                 "question": "What is not a test used to determine if someone has TB infection?",
@@ -841,7 +841,7 @@ return [
         }
     },
 
-    // 23: get questions for quiz cb245673-aa41-4302-ac47-qq000002222
+    // 23: get questions for quiz cb245673-aa41-4302-ac47-qq000000012
     {
         "repeatable": true,
         "request": {
@@ -850,12 +850,12 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000002222/",
+            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000012/",
         },
         "response": {
             "code": 200,
             "data": {
-                "id": "cb245673-aa41-4302-ac47-qq000002222",
+                "id": "cb245673-aa41-4302-ac47-qq000000012",
                 "version": 1,
                 "question_type": "multiplechoice",
                 "question": "What is needed to see whether a person has TB disease?",
@@ -886,7 +886,7 @@ return [
         }
     },
 
-    // 24: get questions for quiz cb245673-aa41-4302-ac47-qq000003333
+    // 24: get questions for quiz cb245673-aa41-4302-ac47-qq000000013
     {
         "repeatable": true,
         "request": {
@@ -895,12 +895,12 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000003333/",
+            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000013/",
         },
         "response": {
             "code": 200,
             "data": {
-                "id": "cb245673-aa41-4302-ac47-qq000003333",
+                "id": "cb245673-aa41-4302-ac47-qq000000013",
                 "version": 1,
                 "question_type": "multiplechoice",
                 "question": "What does a TB blood test measure?",
@@ -928,6 +928,61 @@ return [
                 "updated_by": "2",
                 "updated_at": "2016-05-10T06:13:29.693298Z"
             }
+        }
+    },
+
+    // 25: get identity cb245673-aa41-4302-ac47-00000000111
+    {
+        "request": {
+            "method": "GET",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8001/api/v1/identities/cb245673-aa41-4302-ac47-000000000111/",
+        },
+        "response": {
+            "code": 200,
+            "data": {
+                "id": "cb245673-aa41-4302-ac47-000000000111",
+                "version": 1,
+                "details": {
+                    "addresses": {
+                        "msisdn": {
+                            "+267820000111": {}
+                        }
+                    }
+                },
+                "created_at": "2016-04-05T06:13:29.693272Z",
+                "updated_at": "2016-04-05T06:13:29.693298Z"
+            }
+        }
+    },
+
+    // 26: patch identity cb245673-aa41-4302-ac47-00000000111
+    {
+        "request": {
+            "method": "PATCH",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8001/api/v1/identities/cb245673-aa41-4302-ac47-000000000111/",
+            "data":  {
+                "id": "cb245673-aa41-4302-ac47-000000000111",
+                "version": 1,
+                "details": {
+                    "addresses": {
+                        "msisdn": {
+                            "+267820000111": {}
+                        }
+                    },
+                },
+            }
+        },
+        "response": {
+            "code": 200,
+            "data": {}
         }
     },
 

@@ -192,17 +192,19 @@ describe("UoP TB registration app", function() {
                     })
                     .run();
             });
-            it("to state_end_quiz (from state_response)", function() {
+            // intentional skip of next test
+            it.skip("to state_quiz (after closed session)", function() {
                 return tester
                     .setup.user.addr("0820000111")
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "1"  // state_quiz
-                        , "2"  // state_response - exit
+                        , {session_event: "close"}
+                        , {session_event: "new"}
                     )
                     .check.interaction({
-                        state: "state_end_quiz",
-                        reply: "Thank you for completing your quiz."
+                        state: "state_quiz",
+                        //reply: "Thank you for completing your quiz."
                     })
                     .check(function(api) {
                         var valid_fixture_possibilities = [

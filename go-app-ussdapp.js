@@ -580,7 +580,7 @@ go.utils_project = {
     },
 
     get_quiz_question: function(im) {
-        var endpoint = "question/"+im.user.answers.questions[0]+"/";
+        var endpoint = "question/"+im.user.answers.questions_remaining[0]+"/";
         return go.utils
             .service_api_call("questions", "get", {}, null, endpoint, im)
             .then(function(json_get_response) {
@@ -624,15 +624,36 @@ go.utils_project = {
         return go.utils_project
             .get_quiz_question(im)
             .then(function(quiz_question) {
-                console.log("QUESTION: "+quiz_question.question);
+                //console.log("QUESTION: "+quiz_question.question);
                 for (var i = 0; i < quiz_question.answers.length; i++) {
                     if ((quiz_question.answers[i].value === answer) && quiz_question.answers[i].correct) {
-                        console.log("correct answer -> "+answer);
+                        //console.log("correct answer -> "+answer);
                         return true;
                     }
                 }
-                console.log("incorrect answer --> "+answer);
+                //console.log("incorrect answer --> "+answer);
                 return false;
+            });
+    },
+
+    // initializes object of arrays necessary to keep track of user's quiz status
+    init_quiz_status: function(im, quiz) {
+        im.user.set_answer("quiz_status", { "quiz": [], "question": [], "correct": []});
+        im.user.answers.quiz_status.quiz.push(quiz);
+    },
+
+    // update the questions and answer part of user's quiz status
+    update_quiz_status: function(im, question, correct) {
+        im.user.answers.quiz_status.question.push(question);
+        im.user.answers.quiz_status.correct.push(correct);
+    },
+
+    // update the questions and answer part of user's quiz status
+    save_quiz_status: function(im) {
+        return go.utils
+            .get_identity(im.user.answers.user_id, im)
+            .then(function(identity) {
+                return go.utils.update_identity(im, identity);
             });
     },
 
@@ -822,7 +843,8 @@ go.app = function() {
                 .then(function(quiz) {
                     // creates a random line-up of questions
                     var random_questions = go.utils.randomize_array(quiz.questions);
-                    self.im.user.set_answer("questions", random_questions);
+                    go.utils_project.init_quiz_status(self.im, quiz.id);
+                    self.im.user.set_answer("questions_remaining", random_questions);
                     return self.states.create("state_quiz");
                 });
         });
@@ -839,11 +861,13 @@ go.app = function() {
                         choices: possible_choices,
                         next: function(choice) {
                                 if (go.utils_project.is_answer_to_question_correct(self.im, choice.value)) {
+                                    go.utils_project.update_quiz_status(self.im, quiz_question.question, true);
                                     return {
                                         name: 'state_response',
                                         creator_opts: quiz_question.response_correct
                                     };
                                 } else {
+                                    go.utils_project.update_quiz_status(self.im, quiz_question.question, false);
                                     return {
                                         name: 'state_response',
                                         creator_opts: quiz_question.response_incorrect
@@ -859,28 +883,29 @@ go.app = function() {
             return new ChoiceState(name, {
                 question: response_text,
                 choices: [
-                    new Choice('proceed', 'Proceed?'),
-                    new Choice('exit', 'Exit and continue another time')
+                    new Choice('proceed', 'Proceed?')
                 ],
                 next: function(choice) {
-                    /*return go.utils_project
-                    .shift_quiz_questions(self.im)
-                    .then(function() {
-
-                    });*/
                     // remove first item of question array as question has been answered
-                    //   after removal user.answers.questions will contain remaining
-                    //   questions of specific quiz to be asked
-                    self.im.user.answers.questions.shift();
-                    console.log(" ----->> question left: "+self.im.user.answers.questions);
-                    if (self.im.user.answers.questions.length !== 0 && choice.value !== 'exit') {
+                    //   after removal user.answers.questions_remaining will contain
+                    //   remaining questions of specific quiz to be asked
+                    self.im.user.answers.questions_remaining.shift();
+                    if (self.im.user.answers.questions_remaining.length !== 0) {
                         return 'state_quiz';
                     } else {
-                        return 'state_end_quiz';
+                        return 'state_save_quiz_status';
                     }
 
                 }
             });
+        });
+
+        self.add("state_save_quiz_status", function(name) {
+            return go.utils_project
+                .save_quiz_status(self.im)
+                .then(function() {
+                    return self.states.create("state_end_quiz");
+                });
         });
 
         self.add("state_end_quiz", function(name) {

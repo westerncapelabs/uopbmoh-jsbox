@@ -57,7 +57,7 @@ go.utils_project = {
     },
 
     get_quiz_question: function(im) {
-        var endpoint = "question/"+im.user.answers.questions[0]+"/";
+        var endpoint = "question/"+im.user.answers.questions_remaining[0]+"/";
         return go.utils
             .service_api_call("questions", "get", {}, null, endpoint, im)
             .then(function(json_get_response) {
@@ -101,15 +101,36 @@ go.utils_project = {
         return go.utils_project
             .get_quiz_question(im)
             .then(function(quiz_question) {
-                console.log("QUESTION: "+quiz_question.question);
+                //console.log("QUESTION: "+quiz_question.question);
                 for (var i = 0; i < quiz_question.answers.length; i++) {
                     if ((quiz_question.answers[i].value === answer) && quiz_question.answers[i].correct) {
-                        console.log("correct answer -> "+answer);
+                        //console.log("correct answer -> "+answer);
                         return true;
                     }
                 }
-                console.log("incorrect answer --> "+answer);
+                //console.log("incorrect answer --> "+answer);
                 return false;
+            });
+    },
+
+    // initializes object of arrays necessary to keep track of user's quiz status
+    init_quiz_status: function(im, quiz) {
+        im.user.set_answer("quiz_status", { "quiz": [], "question": [], "correct": []});
+        im.user.answers.quiz_status.quiz.push(quiz);
+    },
+
+    // update the questions and answer part of user's quiz status
+    update_quiz_status: function(im, question, correct) {
+        im.user.answers.quiz_status.question.push(question);
+        im.user.answers.quiz_status.correct.push(correct);
+    },
+
+    // update the questions and answer part of user's quiz status
+    save_quiz_status: function(im) {
+        return go.utils
+            .get_identity(im.user.answers.user_id, im)
+            .then(function(identity) {
+                return go.utils.update_identity(im, identity);
             });
     },
 
