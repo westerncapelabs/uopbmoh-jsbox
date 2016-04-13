@@ -47,6 +47,20 @@ go.utils_project = {
         });
     },
 
+    /*update_untaken_quizzes: function(im, quiz) {
+        var endpoint = "quiz/untaken";
+
+        var quizzes = {
+
+        }
+
+        return go.utils
+            .service_api_call("quizzes", "patch", {}, quizzes, endpoint, im)
+            .then(function(json_get_response) {
+                return json_get_response.data.results;
+        });
+    }*/
+
     get_quiz: function(im) {
         var endpoint = "quiz/"+im.user.answers.quiz.id+"/";
         return go.utils
