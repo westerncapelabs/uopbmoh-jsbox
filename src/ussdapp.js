@@ -29,7 +29,7 @@ go.app = function() {
             "state_department":
                 $("Please enter your department name"),
             "state_end_registration":
-                $("Thank you for registering.  You'll soon be receiving quizzes."),
+                $("Thank you for registering. You'll soon be receiving quizzes."),
 
             "state_end_quiz":
                 $("Thank you for completing your quiz."),
@@ -84,9 +84,7 @@ go.app = function() {
         self.add("state_facility_code", function(name) {
             return new FreeText(name, {
                 question: questions[name],
-                next: function(input) {
-                    return "state_gender";
-                }
+                next: "state_gender"
             });
         });
 
@@ -98,9 +96,7 @@ go.app = function() {
                     new Choice("male", $("Male")),
                     new Choice("female", $("Female"))
                 ],
-                next: function(input) {
-                    return "state_cadre";
-                }
+                next: "state_cadre"
             });
         });
 
@@ -108,9 +104,7 @@ go.app = function() {
         self.add("state_cadre", function(name) {
             return new FreeText(name, {
                 question: questions[name],
-                next: function(input) {
-                    return "state_department";
-                }
+                next: "state_department"
             });
         });
 
