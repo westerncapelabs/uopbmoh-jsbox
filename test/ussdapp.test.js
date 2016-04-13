@@ -150,12 +150,12 @@ describe("UoP TB registration app", function() {
                     )
                     .check.interaction({
                         state: "state_quiz",
-                        reply: [
+                        /*reply: [
                             "Who is tallest?",
                             "1. Mike",
                             "2. Nicki",
                             "3. George"
-                        ].join('\n')
+                        ].join('\n')*/
                     })
                     .check(function(api) {
                         // check the fixtures corresponding to the random
@@ -168,24 +168,22 @@ describe("UoP TB registration app", function() {
                     })
                     .run();
             });
-            it.skip("to state_response (after having answered one question wrong)", function() {
+            it("to state_response (after having answered one question)", function() {
                 return tester
                     .setup.user.addr("0820000111")
                     .inputs(
                         {session_event: "new"}  // dial in
-                        , "1"  // state_quiz - wrong answer
+                        , "1"  // state_quiz
                     )
                     .check.interaction({
                         state: "state_response",
-                        reply: [
+                        /*reply: [
                             "Incorrect! You need to open your eyes and see it's Nicki!",
                             "1. Proceed?",
                             "2. Exit and continue another time"
-                        ].join('\n')
+                        ].join('\n')*/
                     })
                     .check(function(api) {
-                        // check the fixtures corresponding to the random
-                        // selection made from possible quiz options
                         var valid_fixture_possibilities = [
                             [0,6,9], [0,6,10], [0,6,11], [0,6,12]
                         ];
@@ -194,7 +192,28 @@ describe("UoP TB registration app", function() {
                     })
                     .run();
             });
-            it("to state_response (after having answered one question right)", function() {
+            it("to state_end_quiz (from state_response)", function() {
+                return tester
+                    .setup.user.addr("0820000111")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                        , "1"  // state_quiz
+                        , "2"  // state_response - exit
+                    )
+                    .check.interaction({
+                        state: "state_end_quiz",
+                        reply: "Thank you for completing your quiz."
+                    })
+                    .check(function(api) {
+                        var valid_fixture_possibilities = [
+                            [0,6,9], [0,6,10], [0,6,11], [0,6,12]
+                        ];
+                        go.utils.check_fixtures_used(api,
+                            valid_fixture_possibilities, true);
+                    })
+                    .run();
+            });
+            it("to state_response (after having answered one question)", function() {
                 return tester
                     .setup.user.addr("0820000111")
                     .inputs(
@@ -203,15 +222,148 @@ describe("UoP TB registration app", function() {
                     )
                     .check.interaction({
                         state: "state_response",
-                        reply: [
+                        /*reply: [
                             "Correct! That's why only he bangs his head on the lamp!",
                             "1. Proceed?",
                             "2. Exit and continue another time"
-                        ].join('\n')
+                        ].join('\n')*/
                     })
                     .check(function(api) {
-                        // check the fixtures corresponding to the random
-                        // selection made from possible quiz options
+                        var valid_fixture_possibilities = [
+                            [0,6,9], [0,6,10], [0,6,11], [0,6,12]
+                        ];
+                        go.utils.check_fixtures_used(api,
+                            valid_fixture_possibilities, true);
+                    })
+                    .run();
+            });
+            it("to state_quiz (after having answered one question)", function() {
+                return tester
+                    .setup.user.addr("0820000111")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                        , "2"  // state_quiz
+                        , "1"  // state_response - proceed
+                    )
+                    .check.interaction({
+                        state: "state_quiz",
+                        /*reply: [
+                            "Who is tallest?",
+                            "1. Mike",
+                            "2. Nicki",
+                            "3. George"
+                        ].join('\n')*/
+                    })
+                    .check(function(api) {
+                        var valid_fixture_possibilities = [
+                            [0,6,9], [0,6,10], [0,6,11], [0,6,12]
+                        ];
+                        go.utils.check_fixtures_used(api,
+                            valid_fixture_possibilities, true);
+                    })
+                    .run();
+            });
+            it("to state_response (after having answered two questions)", function() {
+                return tester
+                    .setup.user.addr("0820000111")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                        , "2"  // state_quiz - right answer
+                        , "1"  // state_response - proceed
+                        , "3"  // state_quiz
+                    )
+                    .check.interaction({
+                        state: "state_response",
+                        /*reply: [
+                            "Who is tallest?",
+                            "1. Mike",
+                            "2. Nicki",
+                            "3. George"
+                        ].join('\n')*/
+                    })
+                    .check(function(api) {
+                        var valid_fixture_possibilities = [
+                            [0,6,9], [0,6,10], [0,6,11], [0,6,12]
+                        ];
+                        go.utils.check_fixtures_used(api,
+                            valid_fixture_possibilities, true);
+                    })
+                    .run();
+            });
+            it("to state_quiz (after having answered two questions)", function() {
+                return tester
+                    .setup.user.addr("0820000111")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                        , "2"  // state_quiz
+                        , "1"  // state_response - proceed
+                        , "3"  // state_quiz
+                        , "1"  // state_response - proceed
+                    )
+                    .check.interaction({
+                        state: "state_quiz",
+                        /*reply: [
+                            "Who is tallest?",
+                            "1. Mike",
+                            "2. Nicki",
+                            "3. George"
+                        ].join('\n')*/
+                    })
+                    .check(function(api) {
+                        var valid_fixture_possibilities = [
+                            [0,6,9], [0,6,10], [0,6,11], [0,6,12]
+                        ];
+                        go.utils.check_fixtures_used(api,
+                            valid_fixture_possibilities, true);
+                    })
+                    .run();
+            });
+            it("to state_response (after having answered three questions)", function() {
+                return tester
+                    .setup.user.addr("0820000111")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                        , "2"  // state_quiz
+                        , "1"  // state_response - proceed
+                        , "3"  // state_quiz
+                        , "1"  // state_response - proceed
+                        , "1"  // state_quiz
+                    )
+                    .check.interaction({
+                        state: "state_response",
+                        /*reply: [
+                            "Who is tallest?",
+                            "1. Mike",
+                            "2. Nicki",
+                            "3. George"
+                        ].join('\n')*/
+                    })
+                    .check(function(api) {
+                        var valid_fixture_possibilities = [
+                            [0,6,9], [0,6,10], [0,6,11], [0,6,12]
+                        ];
+                        go.utils.check_fixtures_used(api,
+                            valid_fixture_possibilities, true);
+                    })
+                    .run();
+            });
+            it("to state_quiz (after having answered three questions)", function() {
+                return tester
+                    .setup.user.addr("0820000111")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                        , "2"  // state_quiz
+                        , "1"  // state_response - proceed
+                        , "3"  // state_quiz
+                        , "1"  // state_response - proceed
+                        , "1"  // state_quiz
+                        , "1"  // state_response - proceed
+                    )
+                    .check.interaction({
+                        state: "state_end_quiz",
+                        reply: "Thank you for completing your quiz."
+                    })
+                    .check(function(api) {
                         var valid_fixture_possibilities = [
                             [0,6,9], [0,6,10], [0,6,11], [0,6,12]
                         ];

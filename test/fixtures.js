@@ -309,8 +309,8 @@ return [
             "code": 200,
             "data": {
                 "id": "cb245673-aa41-4302-ac47-q0000000111",
-                "description": "Primary quiz on heights",
-                "questions": ["cb245673-aa41-4302-ac47-qq000000001", "cb245673-aa41-4302-ac47-qq000000002"],
+                "description": "Primary quiz on WC staff",
+                "questions": ["cb245673-aa41-4302-ac47-qq000000001", "cb245673-aa41-4302-ac47-qq000000002", "cb245673-aa41-4302-ac47-qq000000003"],
                 "created_by": "2",
                 "created_at": "2016-05-10T06:13:29.693272Z",
                 "updated_by": "2",
@@ -333,8 +333,8 @@ return [
             "code": 200,
             "data": {
                 "id": "cb245673-aa41-4302-ac47-q0000000112",
-                "description": "Primary quiz on heights",
-                "questions": ["cb245673-aa41-4302-ac47-qq000000001", "cb245673-aa41-4302-ac47-qq000000002"],
+                "description": "Quiz on TB treatment",
+                "questions": ["cb245673-aa41-4302-ac47-qq000000011", "cb245673-aa41-4302-ac47-qq000000022", "cb245673-aa41-4302-ac47-qq000000033"],
                 "created_by": "2",
                 "created_at": "2016-05-10T06:13:29.693272Z",
                 "updated_by": "2",
@@ -357,8 +357,8 @@ return [
             "code": 200,
             "data": {
                 "id": "cb245673-aa41-4302-ac47-q0000000113",
-                "description": "Primary quiz on heights",
-                "questions": ["cb245673-aa41-4302-ac47-qq000000001", "cb245673-aa41-4302-ac47-qq000000002"],
+                "description": "Quiz on TB signs and symptoms",
+                "questions": ["cb245673-aa41-4302-ac47-qq000000111", "cb245673-aa41-4302-ac47-qq000000222", "cb245673-aa41-4302-ac47-qq000000333"],
                 "created_by": "2",
                 "created_at": "2016-05-10T06:13:29.693272Z",
                 "updated_by": "2",
@@ -381,8 +381,8 @@ return [
             "code": 200,
             "data": {
                 "id": "cb245673-aa41-4302-ac47-q0000000114",
-                "description": "Primary quiz on heights",
-                "questions": ["cb245673-aa41-4302-ac47-qq000000001", "cb245673-aa41-4302-ac47-qq000000002"],
+                "description": "Quiz on TB diagnosis",
+                "questions": ["cb245673-aa41-4302-ac47-qq000001111", "cb245673-aa41-4302-ac47-qq000002222", "cb245673-aa41-4302-ac47-qq000003333"],
                 "created_by": "2",
                 "created_at": "2016-05-10T06:13:29.693272Z",
                 "updated_by": "2",
@@ -436,7 +436,7 @@ return [
         }
     },
 
-    // 13: get questions for quiz cb245673-aa41-4302-ac47-qq000000002
+    // 14: get questions for quiz cb245673-aa41-4302-ac47-qq000000002
     {
         "repeatable": true,
         "request": {
@@ -453,7 +453,7 @@ return [
                 "id": "cb245673-aa41-4302-ac47-qq000000002",
                 "version": 1,
                 "question_type": "multiplechoice",
-                "question": "Who is tallest?",
+                "question": "Who is fittest?",
                 "answers": [
                     {
                         "value": "mike",
@@ -463,7 +463,52 @@ return [
                     {
                         "value": "nicki",
                         "text": "Nicki",
+                        "correct": false
+                    },
+                    {
+                        "value": "george",
+                        "text": "George",
                         "correct": true
+                    }
+                ],
+                "response_correct": "Correct! He goes to the gym often!",
+                "response_incorrect": "Incorrect! You need to open your eyes and see it's George!",
+                "created_by": "2",
+                "created_at": "2016-05-10T06:13:29.693272Z",
+                "updated_by": "2",
+                "updated_at": "2016-05-10T06:13:29.693298Z"
+            }
+        }
+    },
+
+    // 15: get questions for quiz cb245673-aa41-4302-ac47-qq000000003
+    {
+        "repeatable": true,
+        "request": {
+            "method": "GET",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000003/",
+        },
+        "response": {
+            "code": 200,
+            "data": {
+                "id": "cb245673-aa41-4302-ac47-qq000000003",
+                "version": 1,
+                "question_type": "multiplechoice",
+                "question": "Who is the boss?",
+                "answers": [
+                    {
+                        "value": "mike",
+                        "text": "Mike",
+                        "correct": true
+                    },
+                    {
+                        "value": "nicki",
+                        "text": "Nicki",
+                        "correct": false
                     },
                     {
                         "value": "george",
@@ -471,8 +516,413 @@ return [
                         "correct": false
                     }
                 ],
-                "response_correct": "Correct! That's why only he bangs his head on the lamp!",
-                "response_incorrect": "Incorrect! You need to open your eyes and see it's Nicki!",
+                "response_correct": "Correct! That's why he's got the final say!",
+                "response_incorrect": "Incorrect! You need to open your eyes and see it's Mike!",
+                "created_by": "2",
+                "created_at": "2016-05-10T06:13:29.693272Z",
+                "updated_by": "2",
+                "updated_at": "2016-05-10T06:13:29.693298Z"
+            }
+        }
+    },
+
+    // 16: get questions for quiz cb245673-aa41-4302-ac47-qq000000011
+    {
+        "repeatable": true,
+        "request": {
+            "method": "GET",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000011/",
+        },
+        "response": {
+            "code": 200,
+            "data": {
+                "id": "cb245673-aa41-4302-ac47-qq000000011",
+                "version": 1,
+                "question_type": "multiplechoice",
+                "question": "Which of these are medications used to treat latent TB infection?",
+                "answers": [
+                    {
+                        "value": "ethambutol",
+                        "text": "Ethambutol",
+                        "correct": false
+                    },
+                    {
+                        "value": "paracetamol",
+                        "text": "Paracetamol",
+                        "correct": false
+                    },
+                    {
+                        "value": "rifapentine",
+                        "text": "Rifapentine",
+                        "correct": true
+                    }
+                ],
+                "response_correct": "Correct!",
+                "response_incorrect": "Incorrect!",
+                "created_by": "2",
+                "created_at": "2016-05-10T06:13:29.693272Z",
+                "updated_by": "2",
+                "updated_at": "2016-05-10T06:13:29.693298Z"
+            }
+        }
+    },
+
+    // 17: get questions for quiz cb245673-aa41-4302-ac47-qq000000022
+    {
+        "repeatable": true,
+        "request": {
+            "method": "GET",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000022/",
+        },
+        "response": {
+            "code": 200,
+            "data": {
+                "id": "cb245673-aa41-4302-ac47-qq000000022",
+                "version": 1,
+                "question_type": "multiplechoice",
+                "question": "Treatment modification should be made in which of the following cases?",
+                "answers": [
+                    {
+                        "value": "fever",
+                        "text": "Fever",
+                        "correct": false
+                    },
+                    {
+                        "value": "pregnancy",
+                        "text": "Pregnancy",
+                        "correct": true
+                    },
+                    {
+                        "value": "diarrhea",
+                        "text": "Diarrhea",
+                        "correct": false
+                    }
+                ],
+                "response_correct": "Correct!",
+                "response_incorrect": "Incorrect!",
+                "created_by": "2",
+                "created_at": "2016-05-10T06:13:29.693272Z",
+                "updated_by": "2",
+                "updated_at": "2016-05-10T06:13:29.693298Z"
+            }
+        }
+    },
+
+    // 18: get questions for quiz cb245673-aa41-4302-ac47-qq000000033
+    {
+        "repeatable": true,
+        "request": {
+            "method": "GET",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000033/",
+        },
+        "response": {
+            "code": 200,
+            "data": {
+                "id": "cb245673-aa41-4302-ac47-qq000000033",
+                "version": 1,
+                "question_type": "multiplechoice",
+                "question": "TB disease can be treated by taking several drugs for how long?",
+                "answers": [
+                    {
+                        "value": "6_to_9_months",
+                        "text": "6 to 9 months",
+                        "correct": true
+                    },
+                    {
+                        "value": "1_month",
+                        "text": "1 month",
+                        "correct": false
+                    },
+                    {
+                        "value": "2_to_3_months",
+                        "text": "2 to 3 months",
+                        "correct": false
+                    }
+                ],
+                "response_correct": "Correct!",
+                "response_incorrect": "Incorrect!",
+                "created_by": "2",
+                "created_at": "2016-05-10T06:13:29.693272Z",
+                "updated_by": "2",
+                "updated_at": "2016-05-10T06:13:29.693298Z"
+            }
+        }
+    },
+
+    // 19: get questions for quiz cb245673-aa41-4302-ac47-qq000000111
+    {
+        "repeatable": true,
+        "request": {
+            "method": "GET",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000111/",
+        },
+        "response": {
+            "code": 200,
+            "data": {
+                "id": "cb245673-aa41-4302-ac47-qq000000111",
+                "version": 1,
+                "question_type": "multiplechoice",
+                "question": "Through what is TB spread?",
+                "answers": [
+                    {
+                        "value": "sharing_toothbrushes",
+                        "text": "Sharing toothbrushes",
+                        "correct": false
+                    },
+                    {
+                        "value": "kissing",
+                        "text": "Kissing",
+                        "correct": false
+                    },
+                    {
+                        "value": "air",
+                        "text": "Air",
+                        "correct": true
+                    }
+                ],
+                "response_correct": "Correct!",
+                "response_incorrect": "Incorrect!",
+                "created_by": "2",
+                "created_at": "2016-05-10T06:13:29.693272Z",
+                "updated_by": "2",
+                "updated_at": "2016-05-10T06:13:29.693298Z"
+            }
+        }
+    },
+
+    // 20: get questions for quiz cb245673-aa41-4302-ac47-qq000000222
+    {
+        "repeatable": true,
+        "request": {
+            "method": "GET",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000222/",
+        },
+        "response": {
+            "code": 200,
+            "data": {
+                "id": "cb245673-aa41-4302-ac47-qq000000222",
+                "version": 1,
+                "question_type": "multiplechoice",
+                "question": "Which of these are TB symptoms?",
+                "answers": [
+                    {
+                        "value": "cough_lasting_1_week",
+                        "text": "Cough lasting 1 week",
+                        "correct": false
+                    },
+                    {
+                        "value": "chest_pain",
+                        "text": "Chest pain",
+                        "correct": true
+                    },
+                    {
+                        "value": "slow_speech",
+                        "text": "Slow speech",
+                        "correct": true
+                    }
+                ],
+                "response_correct": "Correct!",
+                "response_incorrect": "Incorrect!",
+                "created_by": "2",
+                "created_at": "2016-05-10T06:13:29.693272Z",
+                "updated_by": "2",
+                "updated_at": "2016-05-10T06:13:29.693298Z"
+            }
+        }
+    },
+
+    // 21: get questions for quiz cb245673-aa41-4302-ac47-qq000000333
+    {
+        "repeatable": true,
+        "request": {
+            "method": "GET",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000333/",
+        },
+        "response": {
+            "code": 200,
+            "data": {
+                "id": "cb245673-aa41-4302-ac47-qq000000333",
+                "version": 1,
+                "question_type": "multiplechoice",
+                "question": "Which of the following is NOT a TB disease risk factor:",
+                "answers": [
+                    {
+                        "value": "was_correctly_treated_for_TB_before",
+                        "text": "Was correctly treated for TB before",
+                        "correct": true
+                    },
+                    {
+                        "value": "has_HIV_infection",
+                        "text": "Has HIV infection",
+                        "correct": false
+                    },
+                    {
+                        "value": "has_diabetes",
+                        "text": "Has diabetes",
+                        "correct": false
+                    }
+                ],
+                "response_correct": "Correct!",
+                "response_incorrect": "Incorrect!",
+                "created_by": "2",
+                "created_at": "2016-05-10T06:13:29.693272Z",
+                "updated_by": "2",
+                "updated_at": "2016-05-10T06:13:29.693298Z"
+            }
+        }
+    },
+
+    // 22: get questions for quiz cb245673-aa41-4302-ac47-qq000001111
+    {
+        "repeatable": true,
+        "request": {
+            "method": "GET",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000001111/",
+        },
+        "response": {
+            "code": 200,
+            "data": {
+                "id": "cb245673-aa41-4302-ac47-qq000001111",
+                "version": 1,
+                "question_type": "multiplechoice",
+                "question": "What is not a test used to determine if someone has TB infection?",
+                "answers": [
+                    {
+                        "value": "TB_blood_tests",
+                        "text": "TB blood tests",
+                        "correct": false
+                    },
+                    {
+                        "value": "tuberculin_skin_test",
+                        "text": "Tuberculin skin test",
+                        "correct": false
+                    },
+                    {
+                        "value": "cardiovascular_assessment",
+                        "text": "Cardiovascular assessment",
+                        "correct": true
+                    }
+                ],
+                "response_correct": "Correct!",
+                "response_incorrect": "Incorrect!",
+                "created_by": "2",
+                "created_at": "2016-05-10T06:13:29.693272Z",
+                "updated_by": "2",
+                "updated_at": "2016-05-10T06:13:29.693298Z"
+            }
+        }
+    },
+
+    // 23: get questions for quiz cb245673-aa41-4302-ac47-qq000002222
+    {
+        "repeatable": true,
+        "request": {
+            "method": "GET",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000002222/",
+        },
+        "response": {
+            "code": 200,
+            "data": {
+                "id": "cb245673-aa41-4302-ac47-qq000002222",
+                "version": 1,
+                "question_type": "multiplechoice",
+                "question": "What is needed to see whether a person has TB disease?",
+                "answers": [
+                    {
+                        "value": "blood_pressure_test",
+                        "text": "Blood pressure test",
+                        "correct": false
+                    },
+                    {
+                        "value": "chest_x-ray",
+                        "text": "Chest x-ray",
+                        "correct": true
+                    },
+                    {
+                        "value": "oral_examination",
+                        "text": "Oral examination",
+                        "correct": false
+                    }
+                ],
+                "response_correct": "Correct!",
+                "response_incorrect": "Incorrect!",
+                "created_by": "2",
+                "created_at": "2016-05-10T06:13:29.693272Z",
+                "updated_by": "2",
+                "updated_at": "2016-05-10T06:13:29.693298Z"
+            }
+        }
+    },
+
+    // 24: get questions for quiz cb245673-aa41-4302-ac47-qq000003333
+    {
+        "repeatable": true,
+        "request": {
+            "method": "GET",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000003333/",
+        },
+        "response": {
+            "code": 200,
+            "data": {
+                "id": "cb245673-aa41-4302-ac47-qq000003333",
+                "version": 1,
+                "question_type": "multiplechoice",
+                "question": "What does a TB blood test measure?",
+                "answers": [
+                    {
+                        "value": "how_the_immune_system_reacts_to_TB_bacteria",
+                        "text": "How the immune system reacts to TB bacteria",
+                        "correct": true
+                    },
+                    {
+                        "value": "the_number_of_TB_causing_parasites_in_the_blood",
+                        "text": "The number of TB causing parasites in the blood",
+                        "correct": false
+                    },
+                    {
+                        "value": "blood_supply_in_the_body",
+                        "text": "Blood supply in the body",
+                        "correct": false
+                    }
+                ],
+                "response_correct": "Correct!",
+                "response_incorrect": "Incorrect!",
                 "created_by": "2",
                 "created_at": "2016-05-10T06:13:29.693272Z",
                 "updated_by": "2",

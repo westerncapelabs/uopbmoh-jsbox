@@ -101,16 +101,42 @@ go.utils_project = {
         return go.utils_project
             .get_quiz_question(im)
             .then(function(quiz_question) {
+                console.log("QUESTION: "+quiz_question.question);
                 for (var i = 0; i < quiz_question.answers.length; i++) {
                     if ((quiz_question.answers[i].value === answer) && quiz_question.answers[i].correct) {
-                        console.log("correct answer -> "+quiz_question.answers[i].value);
+                        console.log("correct answer -> "+answer);
                         return true;
                     }
                 }
-                console.log("FALSE!!!");
+                console.log("incorrect answer --> "+answer);
                 return false;
             });
     },
+
+    // FIXTURES HELPERS
+
+        // function checks fixtures used against fixture expected
+        // if multiple_possibilities is true, expected_used can be an array of arrays
+        // representing possible valid combinations of fixtures
+    /*    get_question_from_fixtures_used: function(api, expected_used, multiple_possibilities) {
+            var fixts = api.http.fixtures.fixtures;
+            var fixts_used = [];
+            fixts.forEach(function(f, i) {
+                f.uses > 0 ? fixts_used.push(i) : null;
+            });
+
+            return ...
+        },
+
+        get_answers_from_fixtures_used: function(api, expected_used, multiple_possibilities) {
+            var fixts = api.http.fixtures.fixtures;
+            var fixts_used = [];
+            fixts.forEach(function(f, i) {
+                f.uses > 0 ? fixts_used.push(i) : null;
+            });
+
+            return ...
+        },*/
 
     "commas": "commas"
 
