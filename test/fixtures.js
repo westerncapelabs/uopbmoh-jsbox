@@ -122,9 +122,10 @@ return [
             "data":  {
                 "user_id": "cb245673-aa41-4302-ac47-00000000222",
                 "data": {
-                    "id_number": "12345",
-                    "name": "John Doe",
-                    "site": "Gotham"
+                    "facility_code": "12345",
+                    "gender": "male",
+                    "cadre": "Xpress",
+                    "department": "Back-office"
                 }
             }
         },
