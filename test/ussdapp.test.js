@@ -129,7 +129,7 @@ describe("UoP TB registration app", function() {
                     )
                     .check.interaction({
                         state: "state_end_registration",
-                        reply: "Thank you for registering.  You'll soon be receiving quizzes."
+                        reply: "Thank you for registering. You'll soon be receiving quizzes."
                     })
                     .check(function(api) {
                         go.utils.check_fixtures_used(api, [1,2,3,4,5]);
