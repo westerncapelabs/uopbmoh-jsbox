@@ -388,6 +388,25 @@ describe("UoP TB registration/quiz app", function() {
             });
         });
 
+        describe("Utils functions testing", function() {
+            describe("utils.randomize_array", function() {
+                it('should return elements in random order', function() {
+                    // test data
+                    var initial_array = [0,1,2,3,4,5,6,7,8,9];
+
+                    // function call
+                    var randomized_array = go.utils
+                        .randomize_array(initial_array);
+
+                // validate results
+                    // check length
+                    assert.equal(initial_array.length, randomized_array.length);
+                    // check that all the original elements matches those in new
+                    assert.deepEqual(initial_array, randomized_array.sort());
+                });
+            });
+        });
+
     });
 
 });
