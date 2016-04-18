@@ -139,7 +139,9 @@ go.app = function() {
                 .then(function(untaken_quizzes) {
                     if (untaken_quizzes.length > 0) {
                         // get random quiz to take
-                        var quiz_to_take = untaken_quizzes[Math.floor(Math.random() * untaken_quizzes.length)];
+                        var quiz_to_take = go.utils_project.to_randomize_quizzes(self.im)
+                            ? untaken_quizzes[Math.floor(Math.random() * untaken_quizzes.length)]
+                            : untaken_quizzes[0];
                         self.im.user.set_answer("quiz", quiz_to_take);
                         return self.states.create("state_get_quiz_questions");
                     } else {
@@ -154,7 +156,9 @@ go.app = function() {
                 .get_quiz(self.im)
                 .then(function(quiz) {
                     // creates a random line-up of questions
-                    var random_questions = go.utils.randomize_array(quiz.questions);
+                    var random_questions = go.utils_project.to_randomize_questions(self.im)
+                        ? go.utils.randomize_array(quiz.questions)
+                        : quiz.questions;
                     go.utils_project.init_quiz_status(self.im, quiz.id);
                     self.im.user.set_answer("questions_remaining", random_questions);
                     return self.states.create("state_quiz");
@@ -172,19 +176,18 @@ go.app = function() {
                         question: quiz_question.question,
                         choices: possible_choices,
                         next: function(choice) {
-                                if (go.utils_project.is_answer_to_question_correct(self.im, choice.value)) {
-                                    go.utils_project.update_quiz_status(self.im, quiz_question.question, true);
-                                    return {
-                                        name: 'state_response',
-                                        creator_opts: quiz_question.response_correct
-                                    };
-                                } else {
-                                    go.utils_project.update_quiz_status(self.im, quiz_question.question, false);
-                                    return {
-                                        name: 'state_response',
-                                        creator_opts: quiz_question.response_incorrect
-                                    };
-                                }
+                                return go.utils_project
+                                    .is_answer_to_question_correct(self.im, choice.value)
+                                    .then(function(answer_correct) {
+                                        var response_text = answer_correct
+                                            ? quiz_question.response_correct
+                                            : quiz_question.response_incorrect;
+
+                                        return  {
+                                            name: 'state_response',
+                                            creator_opts: response_text
+                                        };
+                                    });
                         }
                     });
                 });

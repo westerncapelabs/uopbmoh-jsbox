@@ -570,6 +570,20 @@ go.utils_project = {
         });
     },
 
+    /*update_untaken_quizzes: function(im, quiz) {
+        var endpoint = "quiz/untaken";
+
+        var quizzes = {
+
+        }
+
+        return go.utils
+            .service_api_call("quizzes", "patch", {}, quizzes, endpoint, im)
+            .then(function(json_get_response) {
+                return json_get_response.data.results;
+        });
+    }*/
+
     get_quiz: function(im) {
         var endpoint = "quiz/"+im.user.answers.quiz.id+"/";
         return go.utils
@@ -624,14 +638,14 @@ go.utils_project = {
         return go.utils_project
             .get_quiz_question(im)
             .then(function(quiz_question) {
-                //console.log("QUESTION: "+quiz_question.question);
+                console.log("QUESTION: "+quiz_question.question);
                 for (var i = 0; i < quiz_question.answers.length; i++) {
                     if ((quiz_question.answers[i].value === answer) && quiz_question.answers[i].correct) {
-                        //console.log("correct answer -> "+answer);
+                        console.log("correct answer -> "+answer);
                         return true;
                     }
                 }
-                //console.log("incorrect answer --> "+answer);
+                console.log("incorrect answer --> "+answer);
                 return false;
             });
     },
@@ -655,6 +669,24 @@ go.utils_project = {
             .then(function(identity) {
                 return go.utils.update_identity(im, identity);
             });
+    },
+
+    // controls whether quizzes get randomized
+    to_randomize_quizzes: function(im) {
+        if (!im.config.randomize_quizzes) {
+            return false;
+        } else {
+            return true;
+        }
+    },
+
+    // controls whether quiz questions get randomized
+    to_randomize_questions: function(im) {
+        if (!im.config.randomize_questions) {
+            return false;
+        } else {
+            return true;
+        }
     },
 
     // FIXTURES HELPERS
@@ -827,7 +859,9 @@ go.app = function() {
                 .then(function(untaken_quizzes) {
                     if (untaken_quizzes.length > 0) {
                         // get random quiz to take
-                        var quiz_to_take = untaken_quizzes[Math.floor(Math.random() * untaken_quizzes.length)];
+                        var quiz_to_take = go.utils_project.to_randomize_quizzes(self.im)
+                            ? untaken_quizzes[Math.floor(Math.random() * untaken_quizzes.length)]
+                            : untaken_quizzes[0];
                         self.im.user.set_answer("quiz", quiz_to_take);
                         return self.states.create("state_get_quiz_questions");
                     } else {
@@ -842,7 +876,9 @@ go.app = function() {
                 .get_quiz(self.im)
                 .then(function(quiz) {
                     // creates a random line-up of questions
-                    var random_questions = go.utils.randomize_array(quiz.questions);
+                    var random_questions = go.utils_project.to_randomize_questions(self.im)
+                        ? go.utils.randomize_array(quiz.questions)
+                        : quiz.questions;
                     go.utils_project.init_quiz_status(self.im, quiz.id);
                     self.im.user.set_answer("questions_remaining", random_questions);
                     return self.states.create("state_quiz");
@@ -860,19 +896,18 @@ go.app = function() {
                         question: quiz_question.question,
                         choices: possible_choices,
                         next: function(choice) {
-                                if (go.utils_project.is_answer_to_question_correct(self.im, choice.value)) {
-                                    go.utils_project.update_quiz_status(self.im, quiz_question.question, true);
-                                    return {
-                                        name: 'state_response',
-                                        creator_opts: quiz_question.response_correct
-                                    };
-                                } else {
-                                    go.utils_project.update_quiz_status(self.im, quiz_question.question, false);
-                                    return {
-                                        name: 'state_response',
-                                        creator_opts: quiz_question.response_incorrect
-                                    };
-                                }
+                                return go.utils_project
+                                    .is_answer_to_question_correct(self.im, choice.value)
+                                    .then(function(answer_correct) {
+                                        var response_text = answer_correct
+                                            ? quiz_question.response_correct
+                                            : quiz_question.response_incorrect;
+
+                                        return  {
+                                            name: 'state_response',
+                                            creator_opts: response_text
+                                        };
+                                    });
                         }
                     });
                 });

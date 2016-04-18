@@ -115,14 +115,14 @@ go.utils_project = {
         return go.utils_project
             .get_quiz_question(im)
             .then(function(quiz_question) {
-                //console.log("QUESTION: "+quiz_question.question);
+                console.log("QUESTION: "+quiz_question.question);
                 for (var i = 0; i < quiz_question.answers.length; i++) {
                     if ((quiz_question.answers[i].value === answer) && quiz_question.answers[i].correct) {
-                        //console.log("correct answer -> "+answer);
+                        console.log("correct answer -> "+answer);
                         return true;
                     }
                 }
-                //console.log("incorrect answer --> "+answer);
+                console.log("incorrect answer --> "+answer);
                 return false;
             });
     },
@@ -146,6 +146,24 @@ go.utils_project = {
             .then(function(identity) {
                 return go.utils.update_identity(im, identity);
             });
+    },
+
+    // controls whether quizzes get randomized
+    to_randomize_quizzes: function(im) {
+        if (!im.config.randomize_quizzes) {
+            return false;
+        } else {
+            return true;
+        }
+    },
+
+    // controls whether quiz questions get randomized
+    to_randomize_questions: function(im) {
+        if (!im.config.randomize_questions) {
+            return false;
+        } else {
+            return true;
+        }
     },
 
     // FIXTURES HELPERS

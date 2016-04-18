@@ -3,7 +3,7 @@ var fixtures = require('./fixtures');
 var assert = require('assert');
 var AppTester = vumigo.AppTester;
 
-describe("UoP TB registration app", function() {
+describe("UoP TB registration/quiz app", function() {
     describe("for ussd use", function() {
         var app;
         var tester;
@@ -15,10 +15,12 @@ describe("UoP TB registration app", function() {
             tester
                 .setup.char_limit(182)
                 .setup.config.app({
-                    name: 'ussd-registration-test',
+                    name: 'ussd-app-test',
                     country_code: '267',  // botswana
                     channel: '*120*8864*0000#',
                     testing_today: '2016-04-05',
+                    randomize_quizzes: false,
+                    randomize_questions: false,
                     services: {
                         identities: {
                             api_token: 'test_token_identities',
@@ -150,12 +152,12 @@ describe("UoP TB registration app", function() {
                     )
                     .check.interaction({
                         state: "state_quiz",
-                        /*reply: [
+                        reply: [
                             "Who is tallest?",
                             "1. Mike",
                             "2. Nicki",
                             "3. George"
-                        ].join('\n')*/
+                        ].join('\n')
                     })
                     .check(function(api) {
                         // check the fixtures corresponding to the random
@@ -177,11 +179,10 @@ describe("UoP TB registration app", function() {
                     )
                     .check.interaction({
                         state: "state_response",
-                        /*reply: [
+                        reply: [
                             "Incorrect! You need to open your eyes and see it's Nicki!",
-                            "1. Proceed?",
-                            "2. Exit and continue another time"
-                        ].join('\n')*/
+                            "1. Proceed?"
+                        ].join('\n')
                     })
                     .check(function(api) {
                         var valid_fixture_possibilities = [
@@ -204,7 +205,7 @@ describe("UoP TB registration app", function() {
                     )
                     .check.interaction({
                         state: "state_quiz",
-                        //reply: "Thank you for completing your quiz."
+                        reply: "Thank you for completing your quiz."
                     })
                     .check(function(api) {
                         var valid_fixture_possibilities = [
@@ -224,11 +225,10 @@ describe("UoP TB registration app", function() {
                     )
                     .check.interaction({
                         state: "state_response",
-                        /*reply: [
+                        reply: [
                             "Correct! That's why only he bangs his head on the lamp!",
-                            "1. Proceed?",
-                            "2. Exit and continue another time"
-                        ].join('\n')*/
+                            "1. Proceed?"
+                        ].join('\n')
                     })
                     .check(function(api) {
                         var valid_fixture_possibilities = [
@@ -249,12 +249,12 @@ describe("UoP TB registration app", function() {
                     )
                     .check.interaction({
                         state: "state_quiz",
-                        /*reply: [
-                            "Who is tallest?",
+                        reply: [
+                            "Who is fittest?",
                             "1. Mike",
                             "2. Nicki",
                             "3. George"
-                        ].join('\n')*/
+                        ].join('\n')
                     })
                     .check(function(api) {
                         var valid_fixture_possibilities = [
@@ -276,12 +276,10 @@ describe("UoP TB registration app", function() {
                     )
                     .check.interaction({
                         state: "state_response",
-                        /*reply: [
-                            "Who is tallest?",
-                            "1. Mike",
-                            "2. Nicki",
-                            "3. George"
-                        ].join('\n')*/
+                        reply: [
+                            "Correct! He goes to the gym often!",
+                            "1. Proceed?"
+                        ].join('\n')
                     })
                     .check(function(api) {
                         var valid_fixture_possibilities = [
@@ -304,12 +302,12 @@ describe("UoP TB registration app", function() {
                     )
                     .check.interaction({
                         state: "state_quiz",
-                        /*reply: [
-                            "Who is tallest?",
+                        reply: [
+                            "Who is the boss?",
                             "1. Mike",
                             "2. Nicki",
                             "3. George"
-                        ].join('\n')*/
+                        ].join('\n')
                     })
                     .check(function(api) {
                         var valid_fixture_possibilities = [
@@ -333,12 +331,10 @@ describe("UoP TB registration app", function() {
                     )
                     .check.interaction({
                         state: "state_response",
-                        /*reply: [
-                            "Who is tallest?",
-                            "1. Mike",
-                            "2. Nicki",
-                            "3. George"
-                        ].join('\n')*/
+                        reply: [
+                            "Correct! That's why he's got the final say!",
+                            "1. Proceed?"
+                        ].join('\n')
                     })
                     .check(function(api) {
                         var valid_fixture_possibilities = [
