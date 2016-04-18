@@ -570,22 +570,8 @@ go.utils_project = {
         });
     },
 
-    /*update_untaken_quizzes: function(im, quiz) {
-        var endpoint = "quiz/untaken";
-
-        var quizzes = {
-
-        }
-
-        return go.utils
-            .service_api_call("quizzes", "patch", {}, quizzes, endpoint, im)
-            .then(function(json_get_response) {
-                return json_get_response.data.results;
-        });
-    }*/
-
     get_quiz: function(im) {
-        var endpoint = "quiz/"+im.user.answers.quiz.id+"/";
+        var endpoint = "quiz/"+im.user.answers.quiz_status.quiz+"/";
         return go.utils
             .service_api_call("quizzes", "get", {}, null, endpoint, im)
             .then(function(json_get_response) {
@@ -649,8 +635,7 @@ go.utils_project = {
 
     // initializes object of arrays necessary to keep track of user's quiz status
     init_quiz_status: function(im, quiz) {
-        im.user.set_answer("quiz_status", {"quiz": [], "questions_answered": [], "completed": false});
-        im.user.answers.quiz_status.quiz.push(quiz);
+        im.user.set_answer("quiz_status", {"quiz": quiz, "questions_answered": [], "completed": false});
     },
 
     // update the questions and answer part of user's quiz status
@@ -660,8 +645,24 @@ go.utils_project = {
         im.user.answers.quiz_status.questions_answered.push({"question": question, "correct": correct});
     },
 
+    is_quiz_completed: function(im) {
+        return im.user.answers.quiz_status.completed;
+    },
+
     set_quiz_completed: function(im) {
         im.user.answers.quiz_status.completed = true;
+
+        var endpoint = "completed/";
+        var payload = {
+            "identity": im.user.answers.user_id,
+            "quiz": im.user.answers.quiz_status.quiz
+        };
+
+        return go.utils
+            .service_api_call("completions", "post", {}, payload, endpoint, im)
+            .then(function(json_get_response) {
+                return json_get_response.data;
+        });
     },
 
     // update the questions and answer part of user's quiz status
@@ -839,7 +840,7 @@ go.app = function() {
                         var quiz_to_take = go.utils_project.to_randomize_quizzes(self.im)
                             ? untaken_quizzes[Math.floor(Math.random() * untaken_quizzes.length)]
                             : untaken_quizzes[0];
-                        self.im.user.set_answer("quiz", quiz_to_take);
+
                         go.utils_project.init_quiz_status(self.im, quiz_to_take.id);
 
                         return self.states.create("state_get_quiz_questions");
@@ -906,13 +907,16 @@ go.app = function() {
                     //  -- remaining questions of specific quiz to be asked
                     self.im.user.answers.questions_remaining.shift();
                     if (self.im.user.answers.questions_remaining.length !== 0) {
-                        return 'state_quiz';
+                        return 'state_save_quiz_status';
                     } else {
-                        go.utils_project.set_quiz_completed(self.im);
                         // delete questions_remaining from answers object as it
                         // has outlived its scope of use
                         delete self.im.user.answers.questions_remaining;
-                        return 'state_save_quiz_status';
+                        return go.utils_project
+                            .set_quiz_completed(self.im)
+                            .then(function() {
+                                return 'state_save_quiz_status';
+                            });
                     }
 
                 }
@@ -923,7 +927,12 @@ go.app = function() {
             return go.utils_project
                 .save_quiz_status(self.im)
                 .then(function() {
-                    return self.states.create("state_end_quiz");
+                    if (go.utils_project.is_quiz_completed(self.im)) {
+                        return self.states.create("state_end_quiz");
+                    } else {
+                        return self.states.create("state_quiz");
+                    }
+
                 });
         });
 

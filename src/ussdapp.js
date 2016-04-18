@@ -142,7 +142,7 @@ go.app = function() {
                         var quiz_to_take = go.utils_project.to_randomize_quizzes(self.im)
                             ? untaken_quizzes[Math.floor(Math.random() * untaken_quizzes.length)]
                             : untaken_quizzes[0];
-                        self.im.user.set_answer("quiz", quiz_to_take);
+
                         go.utils_project.init_quiz_status(self.im, quiz_to_take.id);
 
                         return self.states.create("state_get_quiz_questions");
@@ -209,13 +209,16 @@ go.app = function() {
                     //  -- remaining questions of specific quiz to be asked
                     self.im.user.answers.questions_remaining.shift();
                     if (self.im.user.answers.questions_remaining.length !== 0) {
-                        return 'state_quiz';
+                        return 'state_save_quiz_status';
                     } else {
-                        go.utils_project.set_quiz_completed(self.im);
                         // delete questions_remaining from answers object as it
                         // has outlived its scope of use
                         delete self.im.user.answers.questions_remaining;
-                        return 'state_save_quiz_status';
+                        return go.utils_project
+                            .set_quiz_completed(self.im)
+                            .then(function() {
+                                return 'state_save_quiz_status';
+                            });
                     }
 
                 }
@@ -226,7 +229,12 @@ go.app = function() {
             return go.utils_project
                 .save_quiz_status(self.im)
                 .then(function() {
-                    return self.states.create("state_end_quiz");
+                    if (go.utils_project.is_quiz_completed(self.im)) {
+                        return self.states.create("state_end_quiz");
+                    } else {
+                        return self.states.create("state_quiz");
+                    }
+
                 });
         });
 

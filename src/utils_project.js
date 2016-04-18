@@ -47,22 +47,8 @@ go.utils_project = {
         });
     },
 
-    /*update_untaken_quizzes: function(im, quiz) {
-        var endpoint = "quiz/untaken";
-
-        var quizzes = {
-
-        }
-
-        return go.utils
-            .service_api_call("quizzes", "patch", {}, quizzes, endpoint, im)
-            .then(function(json_get_response) {
-                return json_get_response.data.results;
-        });
-    }*/
-
     get_quiz: function(im) {
-        var endpoint = "quiz/"+im.user.answers.quiz.id+"/";
+        var endpoint = "quiz/"+im.user.answers.quiz_status.quiz+"/";
         return go.utils
             .service_api_call("quizzes", "get", {}, null, endpoint, im)
             .then(function(json_get_response) {
@@ -126,8 +112,7 @@ go.utils_project = {
 
     // initializes object of arrays necessary to keep track of user's quiz status
     init_quiz_status: function(im, quiz) {
-        im.user.set_answer("quiz_status", {"quiz": [], "questions_answered": [], "completed": false});
-        im.user.answers.quiz_status.quiz.push(quiz);
+        im.user.set_answer("quiz_status", {"quiz": quiz, "questions_answered": [], "completed": false});
     },
 
     // update the questions and answer part of user's quiz status
@@ -137,8 +122,24 @@ go.utils_project = {
         im.user.answers.quiz_status.questions_answered.push({"question": question, "correct": correct});
     },
 
+    is_quiz_completed: function(im) {
+        return im.user.answers.quiz_status.completed;
+    },
+
     set_quiz_completed: function(im) {
         im.user.answers.quiz_status.completed = true;
+
+        var endpoint = "completed/";
+        var payload = {
+            "identity": im.user.answers.user_id,
+            "quiz": im.user.answers.quiz_status.quiz
+        };
+
+        return go.utils
+            .service_api_call("completions", "post", {}, payload, endpoint, im)
+            .then(function(json_get_response) {
+                return json_get_response.data;
+        });
     },
 
     // update the questions and answer part of user's quiz status

@@ -38,6 +38,10 @@ describe("UoP TB registration/quiz app", function() {
                             api_token: 'test_token_questions',
                             url: "http://localhost:8004/api/v1/"
                         },
+                        completions: {
+                            api_token: 'test_token_completed',
+                            url: "http://localhost:8005/api/v1/"
+                        },
                     },
                 })
                 .setup(function(api) {
@@ -220,7 +224,7 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,25,26]);
                     })
                     .run();
             });
@@ -241,7 +245,7 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,25,26]);
                     })
                     .run();
             });
@@ -265,7 +269,7 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26]);
                     })
                     .run();
             });
@@ -288,7 +292,7 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26]);
                     })
                     .run();
             });
@@ -309,7 +313,7 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Thank you for completing your quiz."
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27]);
                     })
                     .run();
             });
@@ -349,7 +353,7 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Thank you for completing your quiz."
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27]);
                     })
                     .run();
             });
@@ -370,7 +374,7 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Thank you for completing your quiz."
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27]);
                     })
                     .run();
             });
@@ -389,6 +393,21 @@ describe("UoP TB registration/quiz app", function() {
                 // validate results
                     // check length
                     assert.equal(initial_array.length, randomized_array.length);
+                    // check that array has been randomized
+                    var changes_counter = 0;
+                    for (var i = 0; i < initial_array.length; i++) {
+                        // if the index of an initial array value is equ
+                        if (randomized_array.indexOf(initial_array[i]) == i) {
+
+                        } else {
+                            changes_counter++;
+                        }
+                    }
+                    // check that the number of changes between initial and
+                    // randomized arrays are at least a half of the initial
+                    // array's length
+                    assert(changes_counter > initial_array.length / 2);
+
                     // check that all the original elements still exist in new
                     assert.deepEqual(initial_array, randomized_array.sort());
                 });

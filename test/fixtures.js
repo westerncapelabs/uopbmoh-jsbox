@@ -933,6 +933,7 @@ return [
 
     // 25: get identity cb245673-aa41-4302-ac47-00000000111
     {
+        "repeatable": true,
         "request": {
             "method": "GET",
             "headers": {
@@ -961,6 +962,7 @@ return [
 
     // 26: patch identity cb245673-aa41-4302-ac47-00000000111
     {
+        "repeatable": true,
         "request": {
             "method": "PATCH",
             "headers": {
@@ -982,6 +984,27 @@ return [
         },
         "response": {
             "code": 200,
+            "data": {}
+        }
+    },
+
+    // 27: mark quiz cb245673-aa41-4302-ac47-q0000000111 as completed
+    //         for identity cb245673-aa41-4302-ac47-00000000111
+    {
+        "request": {
+            "method": "POST",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8005/api/v1/completed/",
+            "data":  {
+                "identity": "cb245673-aa41-4302-ac47-000000000111",
+                "quiz": "cb245673-aa41-4302-ac47-q00000000111"
+            }
+        },
+        "response": {
+            "code": 201,
             "data": {}
         }
     },
