@@ -126,14 +126,19 @@ go.utils_project = {
 
     // initializes object of arrays necessary to keep track of user's quiz status
     init_quiz_status: function(im, quiz) {
-        im.user.set_answer("quiz_status", { "quiz": [], "question": [], "correct": []});
+        im.user.set_answer("quiz_status", {"quiz": [], "questions_answered": [], "completed": false});
         im.user.answers.quiz_status.quiz.push(quiz);
     },
 
     // update the questions and answer part of user's quiz status
+    //  -- questions_answered will contain the question id against true/false
+    //  -- depending on whether that specific answer was correct/incorrect
     update_quiz_status: function(im, question, correct) {
-        im.user.answers.quiz_status.question.push(question);
-        im.user.answers.quiz_status.correct.push(correct);
+        im.user.answers.quiz_status.questions_answered.push({"question": question, "correct": correct});
+    },
+
+    set_quiz_completed: function(im) {
+        im.user.answers.quiz_status.completed = true;
     },
 
     // update the questions and answer part of user's quiz status

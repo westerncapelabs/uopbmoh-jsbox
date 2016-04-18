@@ -160,36 +160,7 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        // check the fixtures corresponding to the random
-                        // selection made from possible quiz options
-                        var valid_fixture_possibilities = [
-                            [0,6,9], [0,6,10], [0,6,11], [0,6,12]
-                        ];
-                        go.utils.check_fixtures_used(api,
-                            valid_fixture_possibilities, true);
-                    })
-                    .run();
-            });
-            it("to state_response (after having answered one question)", function() {
-                return tester
-                    .setup.user.addr("0820000111")
-                    .inputs(
-                        {session_event: "new"}  // dial in
-                        , "1"  // state_quiz
-                    )
-                    .check.interaction({
-                        state: "state_response",
-                        reply: [
-                            "Incorrect! You need to open your eyes and see it's Nicki!",
-                            "1. Proceed?"
-                        ].join('\n')
-                    })
-                    .check(function(api) {
-                        var valid_fixture_possibilities = [
-                            [0,6,9], [0,6,10], [0,6,11], [0,6,12]
-                        ];
-                        go.utils.check_fixtures_used(api,
-                            valid_fixture_possibilities, true);
+                        go.utils.check_fixtures_used(api,[0,6,9,13]);
                     })
                     .run();
             });
@@ -208,11 +179,7 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Thank you for completing your quiz."
                     })
                     .check(function(api) {
-                        var valid_fixture_possibilities = [
-                            [0,6,9], [0,6,10], [0,6,11], [0,6,12]
-                        ];
-                        go.utils.check_fixtures_used(api,
-                            valid_fixture_possibilities, true);
+                        go.utils.check_fixtures_used(api,[0,6,9,13]);
                     })
                     .run();
             });
@@ -231,11 +198,7 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        var valid_fixture_possibilities = [
-                            [0,6,9], [0,6,10], [0,6,11], [0,6,12]
-                        ];
-                        go.utils.check_fixtures_used(api,
-                            valid_fixture_possibilities, true);
+                        go.utils.check_fixtures_used(api,[0,6,9,13]);
                     })
                     .run();
             });
@@ -257,11 +220,7 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        var valid_fixture_possibilities = [
-                            [0,6,9], [0,6,10], [0,6,11], [0,6,12]
-                        ];
-                        go.utils.check_fixtures_used(api,
-                            valid_fixture_possibilities, true);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14]);
                     })
                     .run();
             });
@@ -282,11 +241,7 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        var valid_fixture_possibilities = [
-                            [0,6,9], [0,6,10], [0,6,11], [0,6,12]
-                        ];
-                        go.utils.check_fixtures_used(api,
-                            valid_fixture_possibilities, true);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14]);
                     })
                     .run();
             });
@@ -310,11 +265,7 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        var valid_fixture_possibilities = [
-                            [0,6,9], [0,6,10], [0,6,11], [0,6,12]
-                        ];
-                        go.utils.check_fixtures_used(api,
-                            valid_fixture_possibilities, true);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15]);
                     })
                     .run();
             });
@@ -337,11 +288,7 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        var valid_fixture_possibilities = [
-                            [0,6,9], [0,6,10], [0,6,11], [0,6,12]
-                        ];
-                        go.utils.check_fixtures_used(api,
-                            valid_fixture_possibilities, true);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15]);
                     })
                     .run();
             });
@@ -362,11 +309,7 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Thank you for completing your quiz."
                     })
                     .check(function(api) {
-                        var valid_fixture_possibilities = [
-                            [0,6,9], [0,6,10], [0,6,11], [0,6,12]
-                        ];
-                        go.utils.check_fixtures_used(api,
-                            valid_fixture_possibilities, true);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26]);
                     })
                     .run();
             });
@@ -388,8 +331,53 @@ describe("UoP TB registration/quiz app", function() {
             });
         });
 
+        describe("Complete flows - more combinations", function() {
+            it(" incorrect, correct, incorrect", function() {
+                return tester
+                    .setup.user.addr("0820000111")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                        , "1"  // state_quiz - incorrect
+                        , "1"  // state_response - proceed
+                        , "3"  // state_quiz - correct
+                        , "1"  // state_response - proceed
+                        , "2"  // state_quiz - incorrect
+                        , "1"  // state_response - proceed
+                    )
+                    .check.interaction({
+                        state: "state_end_quiz",
+                        reply: "Thank you for completing your quiz."
+                    })
+                    .check(function(api) {
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26]);
+                    })
+                    .run();
+            });
+            it(" incorrect, incorrect, correct", function() {
+                return tester
+                    .setup.user.addr("0820000111")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                        , "1"  // state_quiz - incorrect
+                        , "1"  // state_response - proceed
+                        , "2"  // state_quiz - incorrect
+                        , "1"  // state_response - proceed
+                        , "1"  // state_quiz - correct
+                        , "1"  // state_response - proceed
+                    )
+                    .check.interaction({
+                        state: "state_end_quiz",
+                        reply: "Thank you for completing your quiz."
+                    })
+                    .check(function(api) {
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26]);
+                    })
+                    .run();
+            });
+        });
+
         describe("Utils functions testing", function() {
-            describe("utils.randomize_array", function() {
+            describe(" -> utils.randomize_array", function() {
                 it('should return elements in random order', function() {
                     // test data
                     var initial_array = [0,1,2,3,4,5,6,7,8,9];
@@ -401,7 +389,7 @@ describe("UoP TB registration/quiz app", function() {
                 // validate results
                     // check length
                     assert.equal(initial_array.length, randomized_array.length);
-                    // check that all the original elements matches those in new
+                    // check that all the original elements still exist in new
                     assert.deepEqual(initial_array, randomized_array.sort());
                 });
             });

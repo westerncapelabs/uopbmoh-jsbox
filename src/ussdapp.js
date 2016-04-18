@@ -143,6 +143,8 @@ go.app = function() {
                             ? untaken_quizzes[Math.floor(Math.random() * untaken_quizzes.length)]
                             : untaken_quizzes[0];
                         self.im.user.set_answer("quiz", quiz_to_take);
+                        go.utils_project.init_quiz_status(self.im, quiz_to_take.id);
+
                         return self.states.create("state_get_quiz_questions");
                     } else {
                         return self.states.create("state_end_quiz_status");
@@ -159,7 +161,6 @@ go.app = function() {
                     var random_questions = go.utils_project.to_randomize_questions(self.im)
                         ? go.utils.randomize_array(quiz.questions)
                         : quiz.questions;
-                    go.utils_project.init_quiz_status(self.im, quiz.id);
                     self.im.user.set_answer("questions_remaining", random_questions);
                     return self.states.create("state_quiz");
                 });
@@ -183,6 +184,8 @@ go.app = function() {
                                             ? quiz_question.response_correct
                                             : quiz_question.response_incorrect;
 
+                                        go.utils_project.update_quiz_status(self.im, quiz_question.id, answer_correct);
+
                                         return  {
                                             name: 'state_response',
                                             creator_opts: response_text
@@ -202,12 +205,16 @@ go.app = function() {
                 ],
                 next: function(choice) {
                     // remove first item of question array as question has been answered
-                    //   after removal user.answers.questions_remaining will contain
-                    //   remaining questions of specific quiz to be asked
+                    //  -- after removal user.answers.questions_remaining will contain
+                    //  -- remaining questions of specific quiz to be asked
                     self.im.user.answers.questions_remaining.shift();
                     if (self.im.user.answers.questions_remaining.length !== 0) {
                         return 'state_quiz';
                     } else {
+                        go.utils_project.set_quiz_completed(self.im);
+                        // delete questions_remaining from answers object as it
+                        // has outlived its scope of use
+                        delete self.im.user.answers.questions_remaining;
                         return 'state_save_quiz_status';
                     }
 
