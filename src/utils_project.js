@@ -92,11 +92,6 @@ go.utils_project = {
         return choices;
     },
 
-    shift_quiz_questions: function() {
-        // update untaken quizzes
-
-    },
-
     is_answer_to_question_correct: function(im, answer) {
         return go.utils_project
             .get_quiz_question(im)
