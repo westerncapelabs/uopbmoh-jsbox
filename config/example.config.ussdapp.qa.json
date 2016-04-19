@@ -1,16 +1,29 @@
 {
     "name": "ussdapp-qa",
     "country_code": "267",
+    "channel": "*366*8#",
     "randomize_quizzes": false,
     "randomize_questions": false,
-    "control": {
-        "username": "test_user",
-        "api_key": "test_key",
-        "url": ""
-    },
-    "endpoints": {
-        "sms": {
-            "delivery_class": "sms"
-        }
+    "services": {
+        "identities": {
+            "api_token": "uuid",
+            "url": "http://identity-store.example.org/api/v1/"
+        },
+        "registrations": {
+            "api_token": "uuid",
+            "url": "http://registration-store.example.org/api/v1/"
+        },
+        "quizzes": {
+            "api_token": "uuid",
+            "url": "http://quiz-store.example.org/api/v1/"
+        },
+        "questions": {
+            "api_token": "uuid",
+            "url": "http://question-store.example.org/api/v1/"
+        },
+        "completions": {
+            "api_token": "uuid",
+            "url": "http://completion-store.example.org/api/v1/"
+        },
     }
 }
