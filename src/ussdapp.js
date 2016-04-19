@@ -32,7 +32,7 @@ go.app = function() {
                 $("Thank you for registering. You'll soon be receiving quizzes."),
 
             "state_end_quiz":
-                $("Thank you for completing your quiz."),
+                $("Thank you for completing your quiz. You correctly answered {{correct_answers}} of {{total_questions}} questions. Your score is {{score_percentage}}%"),
             "state_end_quiz_status":
                 $("Currently you've got no untaken quizzes."),
 
@@ -239,8 +239,13 @@ go.app = function() {
         });
 
         self.add("state_end_quiz", function(name) {
+            var score_array = go.utils_project.get_quiz_score(self.im);
+
             return new EndState(name, {
-                text: questions[name],
+                text: questions[name].context({
+                    correct_answers: score_array[0],
+                    total_questions: score_array[1],
+                    score_percentage: (score_array[0]/score_array[1]).toFixed(2)*100}),
                 next: "state_start"
             });
         });

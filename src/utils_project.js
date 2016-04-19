@@ -164,6 +164,20 @@ go.utils_project = {
         }
     },
 
+    // returns a 2-element array; first value represents the number of correct
+    // answers, and second value the total number of questions asked
+    get_quiz_score: function(im) {
+        var total_questions = im.user.answers.quiz_status.questions_answered.length;
+        var correct_answers = 0;
+
+        var obj = im.user.answers.quiz_status.questions_answered;
+        for (var x in obj) {
+            if (obj[x].correct) correct_answers++;
+        }
+
+        return [correct_answers, total_questions];
+    },
+
     "commas": "commas"
 
 };

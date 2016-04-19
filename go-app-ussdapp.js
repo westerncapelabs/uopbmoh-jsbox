@@ -687,6 +687,20 @@ go.utils_project = {
         }
     },
 
+    // returns a 2-element array; first value represents the number of correct
+    // answers, and second value the total number of questions asked
+    get_quiz_score: function(im) {
+        var total_questions = im.user.answers.quiz_status.questions_answered.length;
+        var correct_answers = 0;
+
+        var obj = im.user.answers.quiz_status.questions_answered;
+        for (var x in obj) {
+            if (obj[x].correct) correct_answers++;
+        }
+
+        return [correct_answers, total_questions];
+    },
+
     "commas": "commas"
 
 };
@@ -725,7 +739,7 @@ go.app = function() {
                 $("Thank you for registering. You'll soon be receiving quizzes."),
 
             "state_end_quiz":
-                $("Thank you for completing your quiz."),
+                $("Thank you for completing your quiz. You correctly answered {{correct_answers}} of {{total_questions}} questions. Your score is {{score_percentage}}%"),
             "state_end_quiz_status":
                 $("Currently you've got no untaken quizzes."),
 
@@ -932,8 +946,13 @@ go.app = function() {
         });
 
         self.add("state_end_quiz", function(name) {
+            var score_array = go.utils_project.get_quiz_score(self.im);
+
             return new EndState(name, {
-                text: questions[name],
+                text: questions[name].context({
+                    correct_answers: score_array[0],
+                    total_questions: score_array[1],
+                    score_percentage: (score_array[0]/score_array[1]).toFixed(2)*100}),
                 next: "state_start"
             });
         });
