@@ -521,6 +521,14 @@ go.utils_project = {
 
 // REGISTRATION HELPERS
 
+    create_registration: function(im, reg_info) {
+        return go.utils
+            .service_api_call("hub", "post", null, reg_info, "registration/", im)
+            .then(function(result) {
+                return result.id;
+            });
+    },
+
     compile_reg_info: function(im) {
         var reg_info = {
             user_id: im.user.answers.user_id,
@@ -537,7 +545,7 @@ go.utils_project = {
 
     finish_registration: function(im) {
         var reg_info = go.utils_project.compile_reg_info(im);
-        return go.utils
+        return go.utils_project
             .create_registration(im, reg_info)
             .then(function() {
                 return go.utils
