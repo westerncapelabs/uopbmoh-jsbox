@@ -145,7 +145,7 @@ go.app = function() {
 
                         go.utils_project.init_quiz_status(self.im, quiz_to_take.id);
 
-                        return self.states.create("state_get_quiz_questions");
+                        return self.states.create("state_get_quiz_questions", quiz_to_take.id);
                     } else {
                         return self.states.create("state_end_quiz_status");
                     }
@@ -153,9 +153,9 @@ go.app = function() {
 
         });
 
-        self.add("state_get_quiz_questions", function(name) {
+        self.add("state_get_quiz_questions", function(name, quiz_id) {
             return go.utils_project
-                .get_quiz(self.im, self.im.user.answers.quiz_status.quiz)
+                .get_quiz(self.im, quiz_id)
                 .then(function(quiz) {
                     // creates a random line-up of questions
                     var random_questions = go.utils_project.to_randomize_questions(self.im)
@@ -187,7 +187,7 @@ go.app = function() {
                                         go.utils_project.update_quiz_status(self.im, quiz_question.id, answer_correct);
 
                                         return  {
-                                            name: 'state_response',
+                                            name: "state_response",
                                             creator_opts: response_text
                                         };
                                     });
