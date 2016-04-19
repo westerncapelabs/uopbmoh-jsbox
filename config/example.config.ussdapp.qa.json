@@ -15,7 +15,7 @@
         },
         "continuous-learning": {
             "api_token": "uuid",
-            "url": "http://quiz-store.example.org/api/v1/"
+            "url": "http://continuous-learning-store.example.org/api/v1/"
         },
     }
 }
