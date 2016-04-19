@@ -570,8 +570,8 @@ go.utils_project = {
         });
     },
 
-    get_quiz: function(im) {
-        var endpoint = "quiz/"+im.user.answers.quiz_status.quiz+"/";
+    get_quiz: function(im, quiz_id) {
+        var endpoint = "quiz/"+quiz_id+"/";
         return go.utils
             .service_api_call("quizzes", "get", {}, null, endpoint, im)
             .then(function(json_get_response) {
@@ -848,7 +848,7 @@ go.app = function() {
 
         self.add("state_get_quiz_questions", function(name) {
             return go.utils_project
-                .get_quiz(self.im)
+                .get_quiz(self.im, self.im.user.answers.quiz_status.quiz)
                 .then(function(quiz) {
                     // creates a random line-up of questions
                     var random_questions = go.utils_project.to_randomize_questions(self.im)

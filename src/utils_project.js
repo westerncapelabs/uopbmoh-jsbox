@@ -47,8 +47,8 @@ go.utils_project = {
         });
     },
 
-    get_quiz: function(im) {
-        var endpoint = "quiz/"+im.user.answers.quiz_status.quiz+"/";
+    get_quiz: function(im, quiz_id) {
+        var endpoint = "quiz/"+quiz_id+"/";
         return go.utils
             .service_api_call("quizzes", "get", {}, null, endpoint, im)
             .then(function(json_get_response) {
