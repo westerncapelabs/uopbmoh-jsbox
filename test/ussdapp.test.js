@@ -198,7 +198,7 @@ describe("UoP TB registration/quiz app", function() {
                         state: "state_response",
                         reply: [
                             "Correct! That's why only he bangs his head on the lamp!",
-                            "1. Proceed?"
+                            "1. Continue"
                         ].join('\n')
                     })
                     .check(function(api) {
@@ -212,7 +212,7 @@ describe("UoP TB registration/quiz app", function() {
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "2"  // state_quiz
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                     )
                     .check.interaction({
                         state: "state_quiz",
@@ -234,14 +234,14 @@ describe("UoP TB registration/quiz app", function() {
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "2"  // state_quiz - right answer
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                         , "3"  // state_quiz
                     )
                     .check.interaction({
                         state: "state_response",
                         reply: [
                             "Correct! He goes to the gym often!",
-                            "1. Proceed?"
+                            "1. Continue"
                         ].join('\n')
                     })
                     .check(function(api) {
@@ -255,9 +255,9 @@ describe("UoP TB registration/quiz app", function() {
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "2"  // state_quiz
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                         , "3"  // state_quiz
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                     )
                     .check.interaction({
                         state: "state_quiz",
@@ -279,16 +279,16 @@ describe("UoP TB registration/quiz app", function() {
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "2"  // state_quiz
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                         , "3"  // state_quiz
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                         , "1"  // state_quiz
                     )
                     .check.interaction({
                         state: "state_response",
                         reply: [
                             "Correct! That's why he's got the final say!",
-                            "1. Proceed?"
+                            "1. Continue"
                         ].join('\n')
                     })
                     .check(function(api) {
@@ -302,11 +302,11 @@ describe("UoP TB registration/quiz app", function() {
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "2"  // state_quiz
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                         , "3"  // state_quiz
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                         , "1"  // state_quiz
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                     )
                     .check.interaction({
                         state: "state_end_quiz",
@@ -342,11 +342,11 @@ describe("UoP TB registration/quiz app", function() {
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "1"  // state_quiz - incorrect
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                         , "3"  // state_quiz - correct
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                         , "2"  // state_quiz - incorrect
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                     )
                     .check.interaction({
                         state: "state_end_quiz",
@@ -363,11 +363,11 @@ describe("UoP TB registration/quiz app", function() {
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "1"  // state_quiz - incorrect
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                         , "2"  // state_quiz - incorrect
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                         , "1"  // state_quiz - correct
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                     )
                     .check.interaction({
                         state: "state_end_quiz",

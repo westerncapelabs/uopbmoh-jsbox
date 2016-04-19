@@ -200,7 +200,7 @@ go.app = function() {
             return new ChoiceState(name, {
                 question: response_text,
                 choices: [
-                    new Choice('proceed', 'Proceed?')
+                    new Choice('continue', 'Continue')
                 ],
                 next: function(choice) {
                     // remove first item of question array as question has been answered
