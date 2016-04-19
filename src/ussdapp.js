@@ -172,10 +172,9 @@ go.app = function() {
                 // get first question in the now random line-up
                 .get_quiz_question(self.im, 0)
                 .then(function(quiz_question) {
-                    possible_choices = go.utils_project.construct_choices(quiz_question.answers);
                     return new ChoiceState(name, {
                         question: quiz_question.question,
-                        choices: possible_choices,
+                        choices: go.utils_project.construct_choices(quiz_question.answers),
                         next: function(choice) {
                                 return go.utils_project
                                     .is_answer_to_question_correct(self.im, choice.value)
