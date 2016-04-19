@@ -9,7 +9,6 @@ go;
 var vumigo = require('vumigo_v02');
 var moment = require('moment');
 var assert = require('assert');
-var _ = require('lodash');
 var JsonApi = vumigo.http.api.JsonApi;
 var Choice = vumigo.states.Choice;
 
@@ -225,14 +224,6 @@ go.utils = {
             .split(" ")[0]          // split off first word
             .replace(/\W/g, '')     // remove non letters
             .toUpperCase();         // capitalise
-    },
-
-// ARRAY HELPERS
-
-    // creates a randomized array of shuffled values using Fisher-Yates shuffle
-    // ex. _.shuffle([1, 2, 3, 4]); → [4, 1, 3, 2]
-    randomize_array: function(array) {
-        return _.shuffle(array);
     },
 
 // CHOICE HELPERS
@@ -698,6 +689,7 @@ go.app = function() {
     var ChoiceState = vumigo.states.ChoiceState;
     var EndState = vumigo.states.EndState;
     var FreeText = vumigo.states.FreeText;
+    var _ = require('lodash');
 
 
     var GoUOPBMOH = App.extend(function(self) {
@@ -852,7 +844,7 @@ go.app = function() {
                 .then(function(quiz) {
                     // creates a random line-up of questions
                     var random_questions = go.utils_project.to_randomize_questions(self.im)
-                        ? go.utils.randomize_array(quiz.questions)
+                        ? _.shuffle(quiz.questions)
                         : quiz.questions;
                     self.im.user.set_answer("questions_remaining", random_questions);
                     return self.states.create("state_quiz");

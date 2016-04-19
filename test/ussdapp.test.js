@@ -380,39 +380,9 @@ describe("UoP TB registration/quiz app", function() {
             });
         });
 
-        describe("Utils functions testing", function() {
-            describe(" -> utils.randomize_array", function() {
-                it('should return elements in random order', function() {
-                    // test data
-                    var initial_array = [0,1,2,3,4,5,6,7,8,9];
+        /*describe("Utils functions testing", function() {
 
-                    // function call
-                    var randomized_array = go.utils
-                        .randomize_array(initial_array);
-
-                // validate results
-                    // check length
-                    assert.equal(initial_array.length, randomized_array.length);
-                    // check that array has been randomized
-                    var changes_counter = 0;
-                    for (var i = 0; i < initial_array.length; i++) {
-                        // if the index of an initial array value is equ
-                        if (randomized_array.indexOf(initial_array[i]) == i) {
-
-                        } else {
-                            changes_counter++;
-                        }
-                    }
-                    // check that the number of changes between initial and
-                    // randomized arrays are at least a half of the initial
-                    // array's length
-                    assert(changes_counter > initial_array.length / 2);
-
-                    // check that all the original elements still exist in new
-                    assert.deepEqual(initial_array, randomized_array.sort());
-                });
-            });
-        });
+        });*/
 
     });
 

@@ -5,6 +5,7 @@ go.app = function() {
     var ChoiceState = vumigo.states.ChoiceState;
     var EndState = vumigo.states.EndState;
     var FreeText = vumigo.states.FreeText;
+    var _ = require('lodash');
 
 
     var GoUOPBMOH = App.extend(function(self) {
@@ -159,7 +160,7 @@ go.app = function() {
                 .then(function(quiz) {
                     // creates a random line-up of questions
                     var random_questions = go.utils_project.to_randomize_questions(self.im)
-                        ? go.utils.randomize_array(quiz.questions)
+                        ? _.shuffle(quiz.questions)
                         : quiz.questions;
                     self.im.user.set_answer("questions_remaining", random_questions);
                     return self.states.create("state_quiz");
