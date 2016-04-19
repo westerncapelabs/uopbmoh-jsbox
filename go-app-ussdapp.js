@@ -855,7 +855,7 @@ go.app = function() {
         self.add("state_quiz", function(name) {
             return go.utils_project
                 // get first question in the now random line-up
-                .get_quiz_question(self.im, 0)
+                .get_quiz_question(self.im)
                 .then(function(quiz_question) {
                     return new ChoiceState(name, {
                         question: quiz_question.question,
