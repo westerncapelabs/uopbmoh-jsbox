@@ -1,4 +1,6 @@
 /*jshint -W083 */
+var vumigo = require("vumigo_v02");
+var Choice = vumigo.states.Choice;
 
 // Project utils library
 go.utils_project = {
@@ -82,8 +84,6 @@ go.utils_project = {
         indicates correct quiz answer
      returns an array of Choice objects representing answers for ChoiceState*/
     construct_choices: function(possible_answers) {
-        var vumigo = require("vumigo_v02");
-        var Choice = vumigo.states.Choice;
         var choices = [];
 
         for (var i = 0; i < possible_answers.length; i++) {
