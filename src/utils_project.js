@@ -146,24 +146,6 @@ go.utils_project = {
             });
     },
 
-    // controls whether quizzes get randomized
-    to_randomize_quizzes: function(im) {
-        if (!im.config.randomize_quizzes) {
-            return false;
-        } else {
-            return true;
-        }
-    },
-
-    // controls whether quiz questions get randomized
-    to_randomize_questions: function(im) {
-        if (!im.config.randomize_questions) {
-            return false;
-        } else {
-            return true;
-        }
-    },
-
     "commas": "commas"
 
 };

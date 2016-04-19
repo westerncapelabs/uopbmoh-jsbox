@@ -140,7 +140,7 @@ go.app = function() {
                 .then(function(untaken_quizzes) {
                     if (untaken_quizzes.length > 0) {
                         // get random quiz to take
-                        var quiz_to_take = go.utils_project.to_randomize_quizzes(self.im)
+                        var quiz_to_take = self.im.config.randomize_quizzes
                             ? untaken_quizzes[Math.floor(Math.random() * untaken_quizzes.length)]
                             : untaken_quizzes[0];
 
@@ -159,7 +159,7 @@ go.app = function() {
                 .get_quiz(self.im, quiz_id)
                 .then(function(quiz) {
                     // creates a random line-up of questions
-                    var random_questions = go.utils_project.to_randomize_questions(self.im)
+                    var random_questions = self.im.config.randomize_questions
                         ? _.shuffle(quiz.questions)
                         : quiz.questions;
                     self.im.user.set_answer("questions_remaining", random_questions);
