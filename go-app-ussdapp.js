@@ -588,7 +588,7 @@ go.utils_project = {
         });
     },
 
-    /* parameter to construct_Choices function is an array of objects
+    /* parameter to construct_choices function is an array of objects
        e.g. [
                 {
                     "value": "mike",
@@ -604,7 +604,7 @@ go.utils_project = {
         where value/text to be used accordingly in ChoiceState and 'correct'
         indicates correct quiz answer
      returns an array of Choice objects representing answers for ChoiceState*/
-    construct_Choices: function(possible_answers) {
+    construct_choices: function(possible_answers) {
         var vumigo = require("vumigo_v02");
         var Choice = vumigo.states.Choice;
         var choices = [];
@@ -865,7 +865,7 @@ go.app = function() {
                 // get first question in the now random line-up
                 .get_quiz_question(self.im, 0)
                 .then(function(quiz_question) {
-                    possible_choices = go.utils_project.construct_Choices(quiz_question.answers);
+                    possible_choices = go.utils_project.construct_choices(quiz_question.answers);
                     return new ChoiceState(name, {
                         question: quiz_question.question,
                         choices: possible_choices,

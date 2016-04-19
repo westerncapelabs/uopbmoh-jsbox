@@ -65,7 +65,7 @@ go.utils_project = {
         });
     },
 
-    /* parameter to construct_Choices function is an array of objects
+    /* parameter to construct_choices function is an array of objects
        e.g. [
                 {
                     "value": "mike",
@@ -81,7 +81,7 @@ go.utils_project = {
         where value/text to be used accordingly in ChoiceState and 'correct'
         indicates correct quiz answer
      returns an array of Choice objects representing answers for ChoiceState*/
-    construct_Choices: function(possible_answers) {
+    construct_choices: function(possible_answers) {
         var vumigo = require("vumigo_v02");
         var Choice = vumigo.states.Choice;
         var choices = [];
