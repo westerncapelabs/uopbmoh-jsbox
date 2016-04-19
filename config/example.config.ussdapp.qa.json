@@ -1,0 +1,16 @@
+{
+    "name": "ussdapp-qa",
+    "country_code": "267",
+    "randomize_quizzes": false,
+    "randomize_questions": false,
+    "control": {
+        "username": "test_user",
+        "api_key": "test_key",
+        "url": ""
+    },
+    "endpoints": {
+        "sms": {
+            "delivery_class": "sms"
+        }
+    }
+}
