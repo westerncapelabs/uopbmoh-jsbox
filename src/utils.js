@@ -2,7 +2,6 @@
 var vumigo = require('vumigo_v02');
 var moment = require('moment');
 var assert = require('assert');
-var _ = require('lodash');
 var JsonApi = vumigo.http.api.JsonApi;
 var Choice = vumigo.states.Choice;
 
@@ -218,14 +217,6 @@ go.utils = {
             .split(" ")[0]          // split off first word
             .replace(/\W/g, '')     // remove non letters
             .toUpperCase();         // capitalise
-    },
-
-// ARRAY HELPERS
-
-    // creates a randomized array of shuffled values using Fisher-Yates shuffle
-    // ex. _.shuffle([1, 2, 3, 4]); → [4, 1, 3, 2]
-    randomize_array: function(array) {
-        return _.shuffle(array);
     },
 
 // CHOICE HELPERS

@@ -1,9 +1,19 @@
 /*jshint -W083 */
+var vumigo = require("vumigo_v02");
+var Choice = vumigo.states.Choice;
 
 // Project utils library
 go.utils_project = {
 
 // REGISTRATION HELPERS
+
+    create_registration: function(im, reg_info) {
+        return go.utils
+            .service_api_call("hub", "post", null, reg_info, "registration/", im)
+            .then(function(result) {
+                return result.id;
+            });
+    },
 
     compile_reg_info: function(im) {
         var reg_info = {
@@ -21,7 +31,7 @@ go.utils_project = {
 
     finish_registration: function(im) {
         var reg_info = go.utils_project.compile_reg_info(im);
-        return go.utils
+        return go.utils_project
             .create_registration(im, reg_info)
             .then(function() {
                 return go.utils
@@ -41,7 +51,7 @@ go.utils_project = {
             "identity": im.user.answers.user_id
         };
         return go.utils
-            .service_api_call("quizzes", "get", params, null, endpoint, im)
+            .service_api_call("continuous-learning", "get", params, null, endpoint, im)
             .then(function(json_get_response) {
                 return json_get_response.data.results;
         });
@@ -50,7 +60,7 @@ go.utils_project = {
     get_quiz: function(im, quiz_id) {
         var endpoint = "quiz/"+quiz_id+"/";
         return go.utils
-            .service_api_call("quizzes", "get", {}, null, endpoint, im)
+            .service_api_call("continuous-learning", "get", {}, null, endpoint, im)
             .then(function(json_get_response) {
                 return json_get_response.data;
         });
@@ -59,13 +69,13 @@ go.utils_project = {
     get_quiz_question: function(im) {
         var endpoint = "question/"+im.user.answers.questions_remaining[0]+"/";
         return go.utils
-            .service_api_call("questions", "get", {}, null, endpoint, im)
+            .service_api_call("continuous-learning", "get", {}, null, endpoint, im)
             .then(function(json_get_response) {
                 return json_get_response.data;
         });
     },
 
-    /* parameter to construct_Choices function is an array of objects
+    /* parameter to construct_choices function is an array of objects
        e.g. [
                 {
                     "value": "mike",
@@ -81,9 +91,7 @@ go.utils_project = {
         where value/text to be used accordingly in ChoiceState and 'correct'
         indicates correct quiz answer
      returns an array of Choice objects representing answers for ChoiceState*/
-    construct_Choices: function(possible_answers) {
-        var vumigo = require("vumigo_v02");
-        var Choice = vumigo.states.Choice;
+    construct_choices: function(possible_answers) {
         var choices = [];
 
         for (var i = 0; i < possible_answers.length; i++) {
@@ -131,7 +139,7 @@ go.utils_project = {
         };
 
         return go.utils
-            .service_api_call("completions", "post", {}, payload, endpoint, im)
+            .service_api_call("continuous-learning", "post", {}, payload, endpoint, im)
             .then(function(json_get_response) {
                 return json_get_response.data;
         });
@@ -144,24 +152,6 @@ go.utils_project = {
             .then(function(identity) {
                 return go.utils.update_identity(im, identity);
             });
-    },
-
-    // controls whether quizzes get randomized
-    to_randomize_quizzes: function(im) {
-        if (!im.config.randomize_quizzes) {
-            return false;
-        } else {
-            return true;
-        }
-    },
-
-    // controls whether quiz questions get randomized
-    to_randomize_questions: function(im) {
-        if (!im.config.randomize_questions) {
-            return false;
-        } else {
-            return true;
-        }
     },
 
     // returns a 2-element array; first value represents the number of correct

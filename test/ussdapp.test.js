@@ -22,25 +22,17 @@ describe("UoP TB registration/quiz app", function() {
                     randomize_quizzes: false,
                     randomize_questions: false,
                     services: {
-                        identities: {
+                        "identities": {
                             api_token: 'test_token_identities',
                             url: "http://localhost:8001/api/v1/"
                         },
-                        registrations: {
+                        "hub": {
                             api_token: 'test_token_registrations',
                             url: "http://localhost:8002/api/v1/"
                         },
-                        quizzes: {
+                        "continuous-learning": {
                             api_token: 'test_token_quizzes',
                             url: "http://localhost:8003/api/v1/"
-                        },
-                        questions: {
-                            api_token: 'test_token_questions',
-                            url: "http://localhost:8004/api/v1/"
-                        },
-                        completions: {
-                            api_token: 'test_token_completed',
-                            url: "http://localhost:8005/api/v1/"
                         },
                     },
                 })
@@ -198,7 +190,7 @@ describe("UoP TB registration/quiz app", function() {
                         state: "state_response",
                         reply: [
                             "Correct! That's why only he bangs his head on the lamp!",
-                            "1. Proceed?"
+                            "1. Continue"
                         ].join('\n')
                     })
                     .check(function(api) {
@@ -212,7 +204,7 @@ describe("UoP TB registration/quiz app", function() {
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "2"  // state_quiz
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                     )
                     .check.interaction({
                         state: "state_quiz",
@@ -234,14 +226,14 @@ describe("UoP TB registration/quiz app", function() {
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "2"  // state_quiz - right answer
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                         , "3"  // state_quiz
                     )
                     .check.interaction({
                         state: "state_response",
                         reply: [
                             "Correct! He goes to the gym often!",
-                            "1. Proceed?"
+                            "1. Continue"
                         ].join('\n')
                     })
                     .check(function(api) {
@@ -255,9 +247,9 @@ describe("UoP TB registration/quiz app", function() {
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "2"  // state_quiz
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                         , "3"  // state_quiz
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                     )
                     .check.interaction({
                         state: "state_quiz",
@@ -279,16 +271,16 @@ describe("UoP TB registration/quiz app", function() {
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "2"  // state_quiz
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                         , "3"  // state_quiz
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                         , "1"  // state_quiz
                     )
                     .check.interaction({
                         state: "state_response",
                         reply: [
                             "Correct! That's why he's got the final say!",
-                            "1. Proceed?"
+                            "1. Continue"
                         ].join('\n')
                     })
                     .check(function(api) {
@@ -302,11 +294,11 @@ describe("UoP TB registration/quiz app", function() {
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "2"  // state_quiz
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                         , "3"  // state_quiz
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                         , "1"  // state_quiz
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                     )
                     .check.interaction({
                         state: "state_end_quiz",
@@ -342,11 +334,11 @@ describe("UoP TB registration/quiz app", function() {
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "1"  // state_quiz - incorrect
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                         , "3"  // state_quiz - correct
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                         , "2"  // state_quiz - incorrect
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                     )
                     .check.interaction({
                         state: "state_end_quiz",
@@ -363,11 +355,11 @@ describe("UoP TB registration/quiz app", function() {
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "1"  // state_quiz - incorrect
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                         , "2"  // state_quiz - incorrect
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                         , "1"  // state_quiz - correct
-                        , "1"  // state_response - proceed
+                        , "1"  // state_response - continue
                     )
                     .check.interaction({
                         state: "state_end_quiz",
@@ -380,39 +372,9 @@ describe("UoP TB registration/quiz app", function() {
             });
         });
 
-        describe("Utils functions testing", function() {
-            describe(" -> utils.randomize_array", function() {
-                it('should return elements in random order', function() {
-                    // test data
-                    var initial_array = [0,1,2,3,4,5,6,7,8,9];
+        /*describe("Utils functions testing", function() {
 
-                    // function call
-                    var randomized_array = go.utils
-                        .randomize_array(initial_array);
-
-                // validate results
-                    // check length
-                    assert.equal(initial_array.length, randomized_array.length);
-                    // check that array has been randomized
-                    var changes_counter = 0;
-                    for (var i = 0; i < initial_array.length; i++) {
-                        // if the index of an initial array value is equ
-                        if (randomized_array.indexOf(initial_array[i]) == i) {
-
-                        } else {
-                            changes_counter++;
-                        }
-                    }
-                    // check that the number of changes between initial and
-                    // randomized arrays are at least a half of the initial
-                    // array's length
-                    assert(changes_counter > initial_array.length / 2);
-
-                    // check that all the original elements still exist in new
-                    assert.deepEqual(initial_array, randomized_array.sort());
-                });
-            });
-        });
+        });*/
 
     });
 

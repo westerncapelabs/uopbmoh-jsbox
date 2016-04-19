@@ -5,6 +5,7 @@ go.app = function() {
     var ChoiceState = vumigo.states.ChoiceState;
     var EndState = vumigo.states.EndState;
     var FreeText = vumigo.states.FreeText;
+    var _ = require('lodash');
 
 
     var GoUOPBMOH = App.extend(function(self) {
@@ -139,7 +140,7 @@ go.app = function() {
                 .then(function(untaken_quizzes) {
                     if (untaken_quizzes.length > 0) {
                         // get random quiz to take
-                        var quiz_to_take = go.utils_project.to_randomize_quizzes(self.im)
+                        var quiz_to_take = self.im.config.randomize_quizzes
                             ? untaken_quizzes[Math.floor(Math.random() * untaken_quizzes.length)]
                             : untaken_quizzes[0];
 
@@ -158,8 +159,8 @@ go.app = function() {
                 .get_quiz(self.im, quiz_id)
                 .then(function(quiz) {
                     // creates a random line-up of questions
-                    var random_questions = go.utils_project.to_randomize_questions(self.im)
-                        ? go.utils.randomize_array(quiz.questions)
+                    var random_questions = self.im.config.randomize_questions
+                        ? _.shuffle(quiz.questions)
                         : quiz.questions;
                     self.im.user.set_answer("questions_remaining", random_questions);
                     return self.states.create("state_quiz");
@@ -170,12 +171,11 @@ go.app = function() {
         self.add("state_quiz", function(name) {
             return go.utils_project
                 // get first question in the now random line-up
-                .get_quiz_question(self.im, 0)
+                .get_quiz_question(self.im)
                 .then(function(quiz_question) {
-                    possible_choices = go.utils_project.construct_Choices(quiz_question.answers);
                     return new ChoiceState(name, {
                         question: quiz_question.question,
-                        choices: possible_choices,
+                        choices: go.utils_project.construct_choices(quiz_question.answers),
                         next: function(choice) {
                                 return go.utils_project
                                     .is_answer_to_question_correct(self.im, choice.value)
@@ -201,7 +201,7 @@ go.app = function() {
             return new ChoiceState(name, {
                 question: response_text,
                 choices: [
-                    new Choice('proceed', 'Proceed?')
+                    new Choice('continue', 'Continue')
                 ],
                 next: function(choice) {
                     // remove first item of question array as question has been answered
