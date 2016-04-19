@@ -5,6 +5,7 @@ go.app = function() {
     var ChoiceState = vumigo.states.ChoiceState;
     var EndState = vumigo.states.EndState;
     var FreeText = vumigo.states.FreeText;
+    var _ = require('lodash');
 
 
     var GoUOPBMOH = App.extend(function(self) {
@@ -61,8 +62,8 @@ go.app = function() {
             return go.utils
                 .get_or_create_identity({"msisdn": self.im.user.addr}, self.im, null)
                 .then(function(identity) {
+                    self.im.user.set_answer("user_id", identity.id);
                     if(identity.details && !identity.details.registered) {
-                        self.im.user.set_answer("user_id", identity.id);
                         return self.states.create("state_facility_code");
                     } else {
                         return self.states.create("state_check_quiz_status");
@@ -134,15 +135,107 @@ go.app = function() {
 
         // interstitial
         self.add("state_check_quiz_status", function(name) {
-            if (go.utils_project.has_untaken_quizzes()) {
-                return self.states.create("state_start_quiz");
-            } else {
-                return self.states.create("state_end_quiz_status");
-            }
+            return go.utils_project
+                .get_untaken_quizzes(self.im)
+                .then(function(untaken_quizzes) {
+                    if (untaken_quizzes.length > 0) {
+                        // get random quiz to take
+                        var quiz_to_take = self.im.config.randomize_quizzes
+                            ? untaken_quizzes[Math.floor(Math.random() * untaken_quizzes.length)]
+                            : untaken_quizzes[0];
+
+                        go.utils_project.init_quiz_status(self.im, quiz_to_take.id);
+
+                        return self.states.create("state_get_quiz_questions", quiz_to_take.id);
+                    } else {
+                        return self.states.create("state_end_quiz_status");
+                    }
+                });
+
         });
 
-        self.add("state_start_quiz", function(name) {
-            return self.states.create("state_end_quiz");
+        self.add("state_get_quiz_questions", function(name, quiz_id) {
+            return go.utils_project
+                .get_quiz(self.im, quiz_id)
+                .then(function(quiz) {
+                    // creates a random line-up of questions
+                    var random_questions = self.im.config.randomize_questions
+                        ? _.shuffle(quiz.questions)
+                        : quiz.questions;
+                    self.im.user.set_answer("questions_remaining", random_questions);
+                    return self.states.create("state_quiz");
+                });
+        });
+
+        // ChoiceState
+        self.add("state_quiz", function(name) {
+            return go.utils_project
+                // get first question in the now random line-up
+                .get_quiz_question(self.im)
+                .then(function(quiz_question) {
+                    return new ChoiceState(name, {
+                        question: quiz_question.question,
+                        choices: go.utils_project.construct_choices(quiz_question.answers),
+                        next: function(choice) {
+                                return go.utils_project
+                                    .is_answer_to_question_correct(self.im, choice.value)
+                                    .then(function(answer_correct) {
+                                        var response_text = answer_correct
+                                            ? quiz_question.response_correct
+                                            : quiz_question.response_incorrect;
+
+                                        go.utils_project.update_quiz_status(self.im, quiz_question.id, answer_correct);
+
+                                        return  {
+                                            name: "state_response",
+                                            creator_opts: response_text
+                                        };
+                                    });
+                        }
+                    });
+                });
+        });
+
+        // ChoiceState
+        self.add("state_response", function(name, response_text) {
+            return new ChoiceState(name, {
+                question: response_text,
+                choices: [
+                    new Choice('continue', 'Continue')
+                ],
+                next: function(choice) {
+                    // remove first item of question array as question has been answered
+                    //  -- after removal user.answers.questions_remaining will contain
+                    //  -- remaining questions of specific quiz to be asked
+                    self.im.user.answers.questions_remaining.shift();
+                    if (self.im.user.answers.questions_remaining.length !== 0) {
+                        return 'state_save_quiz_status';
+                    } else {
+                        // delete questions_remaining from answers object as it
+                        // has outlived its scope of use
+                        delete self.im.user.answers.questions_remaining;
+                        return go.utils_project
+                            .set_quiz_completed(self.im)
+                            .then(function() {
+                                return 'state_save_quiz_status';
+                            });
+                    }
+
+                }
+            });
+        });
+
+        self.add("state_save_quiz_status", function(name) {
+            return go.utils_project
+                .save_quiz_status(self.im)
+                .then(function() {
+                    if (go.utils_project.is_quiz_completed(self.im)) {
+                        return self.states.create("state_end_quiz");
+                    } else {
+                        return self.states.create("state_quiz");
+                    }
+
+                });
         });
 
         self.add("state_end_quiz", function(name) {

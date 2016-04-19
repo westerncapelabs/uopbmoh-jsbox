@@ -3,7 +3,7 @@ var fixtures = require('./fixtures');
 var assert = require('assert');
 var AppTester = vumigo.AppTester;
 
-describe("UoP TB registration app", function() {
+describe("UoP TB registration/quiz app", function() {
     describe("for ussd use", function() {
         var app;
         var tester;
@@ -15,18 +15,24 @@ describe("UoP TB registration app", function() {
             tester
                 .setup.char_limit(182)
                 .setup.config.app({
-                    name: 'ussd-registration-test',
+                    name: 'ussd-app-test',
                     country_code: '267',  // botswana
                     channel: '*120*8864*0000#',
                     testing_today: '2016-04-05',
+                    randomize_quizzes: false,
+                    randomize_questions: false,
                     services: {
-                        identities: {
+                        "identities": {
                             api_token: 'test_token_identities',
                             url: "http://localhost:8001/api/v1/"
                         },
-                        registrations: {
+                        "hub": {
                             api_token: 'test_token_registrations',
                             url: "http://localhost:8002/api/v1/"
+                        },
+                        "continuous-learning": {
+                            api_token: 'test_token_quizzes',
+                            url: "http://localhost:8003/api/v1/"
                         },
                     },
                 })
@@ -134,9 +140,178 @@ describe("UoP TB registration app", function() {
         // QUIZ TESTING
 
         describe("Quiz testing", function() {
-            it("to state_end_quiz_status", function() {
+            it("to state_quiz", function() {
                 return tester
                     .setup.user.addr("0820000111")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                    )
+                    .check.interaction({
+                        state: "state_quiz",
+                        reply: [
+                            "Who is tallest?",
+                            "1. Mike",
+                            "2. Nicki",
+                            "3. George"
+                        ].join('\n')
+                    })
+                    .check(function(api) {
+                        go.utils.check_fixtures_used(api,[0,6,9,13]);
+                    })
+                    .run();
+            });
+            // intentional skip of next test
+            it.skip("to state_quiz (after closed session)", function() {
+                return tester
+                    .setup.user.addr("0820000111")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                        , "1"  // state_quiz
+                        , {session_event: "close"}
+                        , {session_event: "new"}
+                    )
+                    .check.interaction({
+                        state: "state_quiz",
+                        reply: "Thank you for completing your quiz."
+                    })
+                    .check(function(api) {
+                        go.utils.check_fixtures_used(api,[0,6,9,13]);
+                    })
+                    .run();
+            });
+            it("to state_response (after having answered one question)", function() {
+                return tester
+                    .setup.user.addr("0820000111")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                        , "2"  // state_quiz - right answer
+                    )
+                    .check.interaction({
+                        state: "state_response",
+                        reply: [
+                            "Correct! That's why only he bangs his head on the lamp!",
+                            "1. Continue"
+                        ].join('\n')
+                    })
+                    .check(function(api) {
+                        go.utils.check_fixtures_used(api,[0,6,9,13]);
+                    })
+                    .run();
+            });
+            it("to state_quiz (after having answered one question)", function() {
+                return tester
+                    .setup.user.addr("0820000111")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                        , "2"  // state_quiz
+                        , "1"  // state_response - continue
+                    )
+                    .check.interaction({
+                        state: "state_quiz",
+                        reply: [
+                            "Who is fittest?",
+                            "1. Mike",
+                            "2. Nicki",
+                            "3. George"
+                        ].join('\n')
+                    })
+                    .check(function(api) {
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,25,26]);
+                    })
+                    .run();
+            });
+            it("to state_response (after having answered two questions)", function() {
+                return tester
+                    .setup.user.addr("0820000111")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                        , "2"  // state_quiz - right answer
+                        , "1"  // state_response - continue
+                        , "3"  // state_quiz
+                    )
+                    .check.interaction({
+                        state: "state_response",
+                        reply: [
+                            "Correct! He goes to the gym often!",
+                            "1. Continue"
+                        ].join('\n')
+                    })
+                    .check(function(api) {
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,25,26]);
+                    })
+                    .run();
+            });
+            it("to state_quiz (after having answered two questions)", function() {
+                return tester
+                    .setup.user.addr("0820000111")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                        , "2"  // state_quiz
+                        , "1"  // state_response - continue
+                        , "3"  // state_quiz
+                        , "1"  // state_response - continue
+                    )
+                    .check.interaction({
+                        state: "state_quiz",
+                        reply: [
+                            "Who is the boss?",
+                            "1. Mike",
+                            "2. Nicki",
+                            "3. George"
+                        ].join('\n')
+                    })
+                    .check(function(api) {
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26]);
+                    })
+                    .run();
+            });
+            it("to state_response (after having answered three questions)", function() {
+                return tester
+                    .setup.user.addr("0820000111")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                        , "2"  // state_quiz
+                        , "1"  // state_response - continue
+                        , "3"  // state_quiz
+                        , "1"  // state_response - continue
+                        , "1"  // state_quiz
+                    )
+                    .check.interaction({
+                        state: "state_response",
+                        reply: [
+                            "Correct! That's why he's got the final say!",
+                            "1. Continue"
+                        ].join('\n')
+                    })
+                    .check(function(api) {
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26]);
+                    })
+                    .run();
+            });
+            it("to state_quiz (after having answered three questions)", function() {
+                return tester
+                    .setup.user.addr("0820000111")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                        , "2"  // state_quiz
+                        , "1"  // state_response - continue
+                        , "3"  // state_quiz
+                        , "1"  // state_response - continue
+                        , "1"  // state_quiz
+                        , "1"  // state_response - continue
+                    )
+                    .check.interaction({
+                        state: "state_end_quiz",
+                        reply: "Thank you for completing your quiz."
+                    })
+                    .check(function(api) {
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27]);
+                    })
+                    .run();
+            });
+            it("to state_end_quiz_status", function() {
+                return tester
+                    .setup.user.addr("0820000333")
                     .inputs(
                         {session_event: "new"}  // dial in
                     )
@@ -145,12 +320,61 @@ describe("UoP TB registration app", function() {
                         reply: "Currently you've got no untaken quizzes."
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api, [0]);
+                        go.utils.check_fixtures_used(api, [7,8]);
                     })
                     .check.reply.ends_session()
                     .run();
             });
         });
+
+        describe("Complete flows - more combinations", function() {
+            it(" incorrect, correct, incorrect", function() {
+                return tester
+                    .setup.user.addr("0820000111")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                        , "1"  // state_quiz - incorrect
+                        , "1"  // state_response - continue
+                        , "3"  // state_quiz - correct
+                        , "1"  // state_response - continue
+                        , "2"  // state_quiz - incorrect
+                        , "1"  // state_response - continue
+                    )
+                    .check.interaction({
+                        state: "state_end_quiz",
+                        reply: "Thank you for completing your quiz."
+                    })
+                    .check(function(api) {
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27]);
+                    })
+                    .run();
+            });
+            it(" incorrect, incorrect, correct", function() {
+                return tester
+                    .setup.user.addr("0820000111")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                        , "1"  // state_quiz - incorrect
+                        , "1"  // state_response - continue
+                        , "2"  // state_quiz - incorrect
+                        , "1"  // state_response - continue
+                        , "1"  // state_quiz - correct
+                        , "1"  // state_response - continue
+                    )
+                    .check.interaction({
+                        state: "state_end_quiz",
+                        reply: "Thank you for completing your quiz."
+                    })
+                    .check(function(api) {
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27]);
+                    })
+                    .run();
+            });
+        });
+
+        /*describe("Utils functions testing", function() {
+
+        });*/
 
     });
 

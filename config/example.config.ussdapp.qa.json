@@ -1,0 +1,21 @@
+{
+    "name": "ussdapp-qa",
+    "country_code": "267",
+    "channel": "*366*8#",
+    "randomize_quizzes": false,
+    "randomize_questions": false,
+    "services": {
+        "identities": {
+            "api_token": "uuid",
+            "url": "http://identity-store.example.org/api/v1/"
+        },
+        "hub": {
+            "api_token": "uuid",
+            "url": "http://registration-store.example.org/api/v1/"
+        },
+        "continuous-learning": {
+            "api_token": "uuid",
+            "url": "http://continuous-learning-store.example.org/api/v1/"
+        },
+    }
+}

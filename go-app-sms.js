@@ -17,13 +17,30 @@ go.utils = {
 
 // FIXTURES HELPERS
 
-    check_fixtures_used: function(api, expected_used) {
+    // function checks fixtures used against fixture expected
+    // if multiple_possibilities is true, expected_used can be an array of arrays
+    // representing possible valid combinations of fixtures
+    check_fixtures_used: function(api, expected_used, multiple_possibilities) {
         var fixts = api.http.fixtures.fixtures;
         var fixts_used = [];
         fixts.forEach(function(f, i) {
             f.uses > 0 ? fixts_used.push(i) : null;
         });
-        assert.deepEqual(fixts_used, expected_used);
+
+        if (multiple_possibilities) {
+            for(var i = 0; i < expected_used.length; i++) {
+                try {
+                    assert.deepEqual(fixts_used, expected_used[i]);
+                    break;  // break if used fixtures match any of the valid_fixture_possibilities
+                }
+                catch(AssertionError) {
+                    //console.log(AssertionError.message);
+                }
+            }
+        }
+        else {
+            assert.deepEqual(fixts_used, expected_used);
+        }
     },
 
 // TIMEOUT HELPERS
@@ -208,7 +225,6 @@ go.utils = {
             .replace(/\W/g, '')     // remove non letters
             .toUpperCase();         // capitalise
     },
-
 
 // CHOICE HELPERS
 
