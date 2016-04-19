@@ -22,25 +22,17 @@ describe("UoP TB registration/quiz app", function() {
                     randomize_quizzes: false,
                     randomize_questions: false,
                     services: {
-                        identities: {
+                        "identities": {
                             api_token: 'test_token_identities',
                             url: "http://localhost:8001/api/v1/"
                         },
-                        registrations: {
+                        "registrations": {
                             api_token: 'test_token_registrations',
                             url: "http://localhost:8002/api/v1/"
                         },
-                        quizzes: {
+                        "continuous-learning": {
                             api_token: 'test_token_quizzes',
                             url: "http://localhost:8003/api/v1/"
-                        },
-                        questions: {
-                            api_token: 'test_token_questions',
-                            url: "http://localhost:8004/api/v1/"
-                        },
-                        completions: {
-                            api_token: 'test_token_completed',
-                            url: "http://localhost:8005/api/v1/"
                         },
                     },
                 })

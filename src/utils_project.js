@@ -43,7 +43,7 @@ go.utils_project = {
             "identity": im.user.answers.user_id
         };
         return go.utils
-            .service_api_call("quizzes", "get", params, null, endpoint, im)
+            .service_api_call("continuous-learning", "get", params, null, endpoint, im)
             .then(function(json_get_response) {
                 return json_get_response.data.results;
         });
@@ -52,7 +52,7 @@ go.utils_project = {
     get_quiz: function(im, quiz_id) {
         var endpoint = "quiz/"+quiz_id+"/";
         return go.utils
-            .service_api_call("quizzes", "get", {}, null, endpoint, im)
+            .service_api_call("continuous-learning", "get", {}, null, endpoint, im)
             .then(function(json_get_response) {
                 return json_get_response.data;
         });
@@ -61,7 +61,7 @@ go.utils_project = {
     get_quiz_question: function(im) {
         var endpoint = "question/"+im.user.answers.questions_remaining[0]+"/";
         return go.utils
-            .service_api_call("questions", "get", {}, null, endpoint, im)
+            .service_api_call("continuous-learning", "get", {}, null, endpoint, im)
             .then(function(json_get_response) {
                 return json_get_response.data;
         });
@@ -131,7 +131,7 @@ go.utils_project = {
         };
 
         return go.utils
-            .service_api_call("completions", "post", {}, payload, endpoint, im)
+            .service_api_call("continuous-learning", "post", {}, payload, endpoint, im)
             .then(function(json_get_response) {
                 return json_get_response.data;
         });

@@ -9,21 +9,13 @@
             "api_token": "uuid",
             "url": "http://identity-store.example.org/api/v1/"
         },
-        "registrations": {
+        "hub": {
             "api_token": "uuid",
             "url": "http://registration-store.example.org/api/v1/"
         },
-        "quizzes": {
+        "continuous-learning": {
             "api_token": "uuid",
             "url": "http://quiz-store.example.org/api/v1/"
-        },
-        "questions": {
-            "api_token": "uuid",
-            "url": "http://question-store.example.org/api/v1/"
-        },
-        "completions": {
-            "api_token": "uuid",
-            "url": "http://completion-store.example.org/api/v1/"
         },
     }
 }

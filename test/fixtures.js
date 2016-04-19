@@ -400,7 +400,7 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000001/",
+            "url": "http://localhost:8003/api/v1/question/cb245673-aa41-4302-ac47-qq000000001/",
         },
         "response": {
             "code": 200,
@@ -445,7 +445,7 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000002/",
+            "url": "http://localhost:8003/api/v1/question/cb245673-aa41-4302-ac47-qq000000002/",
         },
         "response": {
             "code": 200,
@@ -490,7 +490,7 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000003/",
+            "url": "http://localhost:8003/api/v1/question/cb245673-aa41-4302-ac47-qq000000003/",
         },
         "response": {
             "code": 200,
@@ -535,7 +535,7 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000004/",
+            "url": "http://localhost:8003/api/v1/question/cb245673-aa41-4302-ac47-qq000000004/",
         },
         "response": {
             "code": 200,
@@ -580,7 +580,7 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000005/",
+            "url": "http://localhost:8003/api/v1/question/cb245673-aa41-4302-ac47-qq000000005/",
         },
         "response": {
             "code": 200,
@@ -625,7 +625,7 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000006/",
+            "url": "http://localhost:8003/api/v1/question/cb245673-aa41-4302-ac47-qq000000006/",
         },
         "response": {
             "code": 200,
@@ -670,7 +670,7 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000007/",
+            "url": "http://localhost:8003/api/v1/question/cb245673-aa41-4302-ac47-qq000000007/",
         },
         "response": {
             "code": 200,
@@ -715,7 +715,7 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000008/",
+            "url": "http://localhost:8003/api/v1/question/cb245673-aa41-4302-ac47-qq000000008/",
         },
         "response": {
             "code": 200,
@@ -760,7 +760,7 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000009/",
+            "url": "http://localhost:8003/api/v1/question/cb245673-aa41-4302-ac47-qq000000009/",
         },
         "response": {
             "code": 200,
@@ -805,7 +805,7 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000011/",
+            "url": "http://localhost:8003/api/v1/question/cb245673-aa41-4302-ac47-qq000000011/",
         },
         "response": {
             "code": 200,
@@ -850,7 +850,7 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000012/",
+            "url": "http://localhost:8003/api/v1/question/cb245673-aa41-4302-ac47-qq000000012/",
         },
         "response": {
             "code": 200,
@@ -895,7 +895,7 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8004/api/v1/question/cb245673-aa41-4302-ac47-qq000000013/",
+            "url": "http://localhost:8003/api/v1/question/cb245673-aa41-4302-ac47-qq000000013/",
         },
         "response": {
             "code": 200,
@@ -997,7 +997,7 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8005/api/v1/completed/",
+            "url": "http://localhost:8003/api/v1/completed/",
             "data":  {
                 "identity": "cb245673-aa41-4302-ac47-000000000111",
                 "quiz": "cb245673-aa41-4302-ac47-q00000000111"
