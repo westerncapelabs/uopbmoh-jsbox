@@ -16,10 +16,6 @@
         "continuous-learning": {
             "api_token": "uuid",
             "url": "http://continuous-learning-store.example.org/api/v1/"
-        },
-        "message_sender": {
-            "api_token": "uuid",
-            "url": "http://message_sender-store.example.org/api/v1/"
         }
     }
 }

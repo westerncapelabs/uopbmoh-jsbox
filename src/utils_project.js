@@ -156,7 +156,7 @@ go.utils_project = {
 
     // SMS HELPERS
 
-    send_text: function(im, user_id, sms_content) {
+    send_completion_text: function(im, user_id, sms_content) {
         var payload = {
             "identity": user_id,
             "content": sms_content

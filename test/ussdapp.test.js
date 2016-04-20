@@ -309,7 +309,7 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Thank you for completing your quiz."
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27,28]);
                     })
                     .run();
             });
@@ -349,7 +349,7 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Thank you for completing your quiz."
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27,28]);
                     })
                     .run();
             });
@@ -370,7 +370,7 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Thank you for completing your quiz."
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27,28]);
                     })
                     .run();
             });

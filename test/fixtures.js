@@ -1009,5 +1009,25 @@ return [
         }
     },
 
+    // 28: send sms for identity cb245673-aa41-4302-ac47-00000000111
+    {
+        "request": {
+            "method": "POST",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8004/api/v1/outbound/",
+            "data":  {
+                "identity": "cb245673-aa41-4302-ac47-000000000111",
+                "content": "abcdefg..."
+            }
+        },
+        "response": {
+            "code": 201,
+            "data": {}
+        }
+    },
+
 ];
 };

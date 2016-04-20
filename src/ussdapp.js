@@ -239,10 +239,14 @@ go.app = function() {
         });
 
         self.add("state_end_quiz", function(name) {
-            return new EndState(name, {
-                text: questions[name],
-                next: "state_start"
-            });
+            return go.utils_project
+                .send_completion_text(self.im, self.im.user.answers.user_id, "abcdefg...")
+                .then(function() {
+                    return new EndState(name, {
+                        text: questions[name],
+                        next: "state_start"
+                    });
+                });
         });
 
         self.add("state_end_quiz_status", function(name) {

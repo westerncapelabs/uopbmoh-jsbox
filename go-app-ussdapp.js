@@ -670,7 +670,7 @@ go.utils_project = {
 
     // SMS HELPERS
 
-    send_text: function(im, user_id, sms_content) {
+    send_completion_text: function(im, user_id, sms_content) {
         var payload = {
             "identity": user_id,
             "content": sms_content
@@ -929,10 +929,14 @@ go.app = function() {
         });
 
         self.add("state_end_quiz", function(name) {
-            return new EndState(name, {
-                text: questions[name],
-                next: "state_start"
-            });
+            return go.utils_project
+                .send_completion_text(self.im, self.im.user.answers.user_id, "abcdefg...")
+                .then(function() {
+                    return new EndState(name, {
+                        text: questions[name],
+                        next: "state_start"
+                    });
+                });
         });
 
         self.add("state_end_quiz_status", function(name) {
