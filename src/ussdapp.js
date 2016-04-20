@@ -33,7 +33,7 @@ go.app = function() {
                 $("Thank you for registering. You'll soon be receiving quizzes."),
 
             "state_end_quiz":
-                $("Thank you for completing your quiz."),
+                $("Thank you for completing your quiz. You correctly answered {{correct_answers}} of {{total_questions}} questions. Your score is {{score_percentage}}%"),
             "state_end_quiz_status":
                 $("Currently you've got no untaken quizzes."),
 
@@ -241,11 +241,15 @@ go.app = function() {
         });
 
         self.add("state_end_quiz", function(name) {
+            var quiz_summary = go.utils_project.get_quiz_summary(self.im.user.answers.quiz_status.questions_answered);
             return go.utils_project
                 .send_completion_text(self.im, self.im.user.answers.user_id, self.im.user.answers.sms_results_text)
                 .then(function() {
                     return new EndState(name, {
-                        text: questions[name],
+                        text: questions[name].context({
+                            correct_answers: quiz_summary.correct_answers,
+                            total_questions: quiz_summary.total_questions,
+                            score_percentage: quiz_summary.percentage}),
                         next: "state_start"
                     });
                 });
