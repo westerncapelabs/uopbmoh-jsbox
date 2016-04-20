@@ -529,14 +529,14 @@ go.utils_project = {
             });
     },
 
-    compile_reg_info: function(im) {
+    compile_reg_info: function(user_id, facility_code, gender, cadre, department) {
         var reg_info = {
-            user_id: im.user.answers.user_id,
+            "user_id": user_id,
             data: {
-                facility_code: im.user.answers.state_facility_code,
-                gender: im.user.answers.state_gender,
-                cadre: im.user.answers.state_cadre,
-                department: im.user.answers.state_department
+                "facility_code": facility_code,
+                "gender": gender,
+                "cadre": cadre,
+                "department": department 
             }
         };
 
@@ -544,7 +544,9 @@ go.utils_project = {
     },
 
     finish_registration: function(im) {
-        var reg_info = go.utils_project.compile_reg_info(im);
+        var reg_info = go.utils_project
+            .compile_reg_info(im.user.answers.user_id, im.user.answers.state_facility_code,
+                im.user.answers.state_gender, im.user.answers.state_cadre, im.user.answers.state_department);
         return go.utils_project
             .create_registration(im, reg_info)
             .then(function() {
