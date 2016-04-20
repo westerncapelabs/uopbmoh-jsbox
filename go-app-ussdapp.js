@@ -668,6 +668,25 @@ go.utils_project = {
             });
     },
 
+    // returns an object; first property represents the number of correct
+    // answers, and second the total number of questions asked, and the
+    // third the subsequent percentage of correct_answers out of questions asked
+    get_quiz_summary: function(questions_answered) {
+        var total_questions = questions_answered.length;
+        var correct_answers = 0;
+
+        var obj = questions_answered;
+        for (var x in obj) {
+            if (obj[x].correct) correct_answers++;
+        }
+
+        return {
+            "correct_answers": correct_answers,
+            "total_questions": total_questions,
+            "percentage": (correct_answers/total_questions).toFixed(2)*100
+        };
+    },
+
     "commas": "commas"
 
 };
@@ -707,7 +726,7 @@ go.app = function() {
                 $("Thank you for registering. You'll soon be receiving quizzes."),
 
             "state_end_quiz":
-                $("Thank you for completing your quiz."),
+                $("Thank you for completing your quiz. You correctly answered {{correct_answers}} of {{total_questions}} questions. Your score is {{score_percentage}}%"),
             "state_end_quiz_status":
                 $("Currently you've got no untaken quizzes."),
 
@@ -913,8 +932,13 @@ go.app = function() {
         });
 
         self.add("state_end_quiz", function(name) {
+            var quiz_summary = go.utils_project.get_quiz_summary(self.im.user.answers.quiz_status.questions_answered);
+
             return new EndState(name, {
-                text: questions[name],
+                text: questions[name].context({
+                    correct_answers: quiz_summary.correct_answers,
+                    total_questions: quiz_summary.total_questions,
+                    score_percentage: quiz_summary.percentage}),
                 next: "state_start"
             });
         });
