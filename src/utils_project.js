@@ -154,6 +154,22 @@ go.utils_project = {
             });
     },
 
+    // SMS HELPERS
+
+    send_text: function(im, user_id, sms_content) {
+        var payload = {
+            "identity": user_id,
+            "content": sms_content
+        };
+        return go.utils
+        .service_api_call("message_sender", "post", null, payload, 'outbound/', im)
+        .then(function(json_post_response) {
+            var outbound_response = json_post_response.data;
+            // Return the outbound id
+            return outbound_response.id;
+        });
+    },
+
     "commas": "commas"
 
 };
