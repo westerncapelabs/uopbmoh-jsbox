@@ -164,8 +164,7 @@ describe("UoP TB registration/quiz app", function() {
                     })
                     .run();
             });
-            // intentional skip of next test
-            it.skip("to state_quiz (after closed session)", function() {
+            it("to state_response (after closed session)", function() {
                 return tester
                     .setup.user.addr("0820000111")
                     .inputs(
@@ -175,8 +174,11 @@ describe("UoP TB registration/quiz app", function() {
                         , {session_event: "new"}
                     )
                     .check.interaction({
-                        state: "state_quiz",
-                        reply: "Thank you for completing your quiz."
+                        state: "state_response",
+                        reply: [
+                            "Incorrect! You need to open your eyes and see it's Nicki!",
+                            "1. Continue"
+                        ].join("\n")
                     })
                     .check(function(api) {
                         go.utils.check_fixtures_used(api,[0,6,9,13]);
