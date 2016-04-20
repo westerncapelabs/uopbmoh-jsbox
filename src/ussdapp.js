@@ -239,7 +239,7 @@ go.app = function() {
         });
 
         self.add("state_end_quiz", function(name) {
-            var quiz_summary = go.utils_project.get_quiz_summary(self.im);
+            var quiz_summary = go.utils_project.get_quiz_summary(self.im.user.answers.quiz_status.questions_answered);
 
             return new EndState(name, {
                 text: questions[name].context({

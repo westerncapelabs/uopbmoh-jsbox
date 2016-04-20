@@ -671,11 +671,11 @@ go.utils_project = {
     // returns an object; first property represents the number of correct
     // answers, and second the total number of questions asked, and the
     // third the subsequent percentage of correct_answers out of questions asked
-    get_quiz_summary: function(im) {
-        var total_questions = im.user.answers.quiz_status.questions_answered.length;
+    get_quiz_summary: function(questions_answered) {
+        var total_questions = questions_answered.length;
         var correct_answers = 0;
 
-        var obj = im.user.answers.quiz_status.questions_answered;
+        var obj = questions_answered;
         for (var x in obj) {
             if (obj[x].correct) correct_answers++;
         }
@@ -932,7 +932,7 @@ go.app = function() {
         });
 
         self.add("state_end_quiz", function(name) {
-            var quiz_summary = go.utils_project.get_quiz_summary(self.im);
+            var quiz_summary = go.utils_project.get_quiz_summary(self.im.user.answers.quiz_status.questions_answered);
 
             return new EndState(name, {
                 text: questions[name].context({
