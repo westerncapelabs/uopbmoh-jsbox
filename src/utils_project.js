@@ -127,10 +127,6 @@ go.utils_project = {
         return {"question": question, "correct": correct};
     },
 
-    is_quiz_completed: function(quiz_status) {
-        return quiz_status.completed;
-    },
-
     set_quiz_completed: function(im, user_id, quiz_status) {
         quiz_status.completed = true;
 

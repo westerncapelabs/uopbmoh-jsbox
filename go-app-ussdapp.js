@@ -641,10 +641,6 @@ go.utils_project = {
         return {"question": question, "correct": correct};
     },
 
-    is_quiz_completed: function(quiz_status) {
-        return quiz_status.completed;
-    },
-
     set_quiz_completed: function(im, user_id, quiz_status) {
         quiz_status.completed = true;
 
@@ -895,7 +891,7 @@ go.app = function() {
             return go.utils_project
                 .save_quiz_status(self.im)
                 .then(function() {
-                    if (go.utils_project.is_quiz_completed(self.im.user.answers.quiz_status)) {
+                    if (self.im.user.answers.quiz_status.completed) {
                         return self.states.create("state_end_quiz");
                     } else {
                         return self.states.create("state_quiz");

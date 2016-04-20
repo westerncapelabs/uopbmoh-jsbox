@@ -219,7 +219,7 @@ go.app = function() {
             return go.utils_project
                 .save_quiz_status(self.im)
                 .then(function() {
-                    if (go.utils_project.is_quiz_completed(self.im.user.answers.quiz_status)) {
+                    if (self.im.user.answers.quiz_status.completed) {
                         return self.states.create("state_end_quiz");
                     } else {
                         return self.states.create("state_quiz");
