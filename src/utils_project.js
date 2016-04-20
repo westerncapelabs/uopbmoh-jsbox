@@ -100,6 +100,8 @@ go.utils_project = {
         return choices;
     },
 
+    // takes an array of answer-objects with properties 'value', 'text', 'correct';
+    // returns the value of the correct answer
     get_correct_answer: function(possible_answers) {
         for (var i = 0; i < possible_answers.length; i++) {
             if (possible_answers[i].correct) {
