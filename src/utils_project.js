@@ -154,9 +154,10 @@ go.utils_project = {
             });
     },
 
-    // returns a 2-element array; first value represents the number of correct
-    // answers, and second value the total number of questions asked
-    get_quiz_score: function(im) {
+    // returns an object; first property represents the number of correct
+    // answers, and second the total number of questions asked, and the
+    // third the subsequent percentage of correct_answers out of questions asked
+    get_quiz_summary: function(im) {
         var total_questions = im.user.answers.quiz_status.questions_answered.length;
         var correct_answers = 0;
 
@@ -165,7 +166,11 @@ go.utils_project = {
             if (obj[x].correct) correct_answers++;
         }
 
-        return [correct_answers, total_questions];
+        return {
+            "correct_answers": correct_answers,
+            "total_questions": total_questions,
+            "percentage": (correct_answers/total_questions).toFixed(2)*100
+        };
     },
 
     "commas": "commas"

@@ -239,13 +239,13 @@ go.app = function() {
         });
 
         self.add("state_end_quiz", function(name) {
-            var score_array = go.utils_project.get_quiz_score(self.im);
+            var quiz_summary = go.utils_project.get_quiz_summary(self.im);
 
             return new EndState(name, {
                 text: questions[name].context({
-                    correct_answers: score_array[0],
-                    total_questions: score_array[1],
-                    score_percentage: (score_array[0]/score_array[1]).toFixed(2)*100}),
+                    correct_answers: quiz_summary.correct_answers,
+                    total_questions: quiz_summary.total_questions,
+                    score_percentage: quiz_summary.percentage}),
                 next: "state_start"
             });
         });

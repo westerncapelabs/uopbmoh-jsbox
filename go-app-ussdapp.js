@@ -668,9 +668,10 @@ go.utils_project = {
             });
     },
 
-    // returns a 2-element array; first value represents the number of correct
-    // answers, and second value the total number of questions asked
-    get_quiz_score: function(im) {
+    // returns an object; first property represents the number of correct
+    // answers, and second the total number of questions asked, and the
+    // third the subsequent percentage of correct_answers out of questions asked
+    get_quiz_summary: function(im) {
         var total_questions = im.user.answers.quiz_status.questions_answered.length;
         var correct_answers = 0;
 
@@ -679,7 +680,11 @@ go.utils_project = {
             if (obj[x].correct) correct_answers++;
         }
 
-        return [correct_answers, total_questions];
+        return {
+            "correct_answers": correct_answers,
+            "total_questions": total_questions,
+            "percentage": (correct_answers/total_questions).toFixed(2)*100
+        };
     },
 
     "commas": "commas"
@@ -927,13 +932,13 @@ go.app = function() {
         });
 
         self.add("state_end_quiz", function(name) {
-            var score_array = go.utils_project.get_quiz_score(self.im);
+            var quiz_summary = go.utils_project.get_quiz_summary(self.im);
 
             return new EndState(name, {
                 text: questions[name].context({
-                    correct_answers: score_array[0],
-                    total_questions: score_array[1],
-                    score_percentage: (score_array[0]/score_array[1]).toFixed(2)*100}),
+                    correct_answers: quiz_summary.correct_answers,
+                    total_questions: quiz_summary.total_questions,
+                    score_percentage: quiz_summary.percentage}),
                 next: "state_start"
             });
         });
