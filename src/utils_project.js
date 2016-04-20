@@ -22,7 +22,7 @@ go.utils_project = {
                 "facility_code": facility_code,
                 "gender": gender,
                 "cadre": cadre,
-                "department": department 
+                "department": department
             }
         };
 
@@ -47,10 +47,10 @@ go.utils_project = {
 // QUIZ HELPERS
 
     // returns an array of untaken quizzes
-    get_untaken_quizzes: function(im) {
+    get_untaken_quizzes: function(im, user_id) {
         var endpoint = "quiz/untaken";
         var params = {
-            "identity": im.user.answers.user_id
+            "identity": user_id
         };
         return go.utils
             .service_api_call("continuous-learning", "get", params, null, endpoint, im)

@@ -136,7 +136,7 @@ go.app = function() {
         // interstitial
         self.add("state_check_quiz_status", function(name) {
             return go.utils_project
-                .get_untaken_quizzes(self.im)
+                .get_untaken_quizzes(self.im, self.im.user.answers.user_id)
                 .then(function(untaken_quizzes) {
                     if (untaken_quizzes.length > 0) {
                         // get random quiz to take
