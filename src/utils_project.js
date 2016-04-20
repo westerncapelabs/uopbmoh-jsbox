@@ -66,8 +66,8 @@ go.utils_project = {
         });
     },
 
-    get_quiz_question: function(im) {
-        var endpoint = "question/"+im.user.answers.quiz_status.questions_remaining[0]+"/";
+    get_quiz_question: function(im, question_id) {
+        var endpoint = "question/"+question_id+"/";
         return go.utils
             .service_api_call("continuous-learning", "get", {}, null, endpoint, im)
             .then(function(json_get_response) {

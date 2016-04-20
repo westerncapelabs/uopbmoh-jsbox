@@ -580,8 +580,8 @@ go.utils_project = {
         });
     },
 
-    get_quiz_question: function(im) {
-        var endpoint = "question/"+im.user.answers.quiz_status.questions_remaining[0]+"/";
+    get_quiz_question: function(im, question_id) {
+        var endpoint = "question/"+question_id+"/";
         return go.utils
             .service_api_call("continuous-learning", "get", {}, null, endpoint, im)
             .then(function(json_get_response) {
@@ -724,8 +724,6 @@ go.app = function() {
     // START STATE
 
         self.add("state_start", function(name) {
-            // Reset user answers when restarting the app
-            self.im.user.answers = {};
             return self.states.create("state_check_registered");
         });
 
@@ -843,7 +841,7 @@ go.app = function() {
         self.add("state_quiz", function(name) {
             return go.utils_project
                 // get first question in the now random line-up
-                .get_quiz_question(self.im)
+                .get_quiz_question(self.im, self.im.user.answers.quiz_status.questions_remaining[0])
                 .then(function(quiz_question) {
                     var correct_answer = go.utils_project.get_correct_answer(quiz_question.answers);
                     return new ChoiceState(name, {
@@ -884,7 +882,6 @@ go.app = function() {
                                 return 'state_save_quiz_status';
                             });
                     }
-
                 }
             });
         });
