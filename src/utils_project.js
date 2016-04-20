@@ -154,6 +154,42 @@ go.utils_project = {
             });
     },
 
+    // SMS HELPERS
+
+    send_completion_text: function(im, user_id, text_to_add) {
+        var sms_content = "Your results from today's quiz:"+text_to_add;
+        var payload = {
+            "identity": user_id,
+            "content": sms_content
+        };
+        return go.utils
+        .service_api_call("message_sender", "post", null, payload, 'outbound/', im)
+        .then(function(json_post_response) {
+            var outbound_response = json_post_response.data;
+            // Return the outbound id
+            return outbound_response.id;
+        });
+    },
+
+    // returns an object; first property represents the number of correct
+    // answers, and second the total number of questions asked, and the
+    // third the subsequent percentage of correct_answers out of questions asked
+    get_quiz_summary: function(questions_answered) {
+        var total_questions = questions_answered.length;
+        var correct_answers = 0;
+
+        var obj = questions_answered;
+        for (var x in obj) {
+            if (obj[x].correct) correct_answers++;
+        }
+
+        return {
+            "correct_answers": correct_answers,
+            "total_questions": total_questions,
+            "percentage": (correct_answers/total_questions).toFixed(2)*100
+        };
+    },
+
     "commas": "commas"
 
 };

@@ -34,6 +34,10 @@ describe("UoP TB registration/quiz app", function() {
                             api_token: 'test_token_quizzes',
                             url: "http://localhost:8003/api/v1/"
                         },
+                        "message_sender": {
+                            api_token: 'test_token_message_sender',
+                            url: "http://localhost:8004/api/v1/"
+                        }
                     },
                 })
                 .setup(function(api) {
@@ -302,10 +306,10 @@ describe("UoP TB registration/quiz app", function() {
                     )
                     .check.interaction({
                         state: "state_end_quiz",
-                        reply: "Thank you for completing your quiz."
+                        reply: "Thank you for completing your quiz. You correctly answered 3 of 3 questions. Your score is 100%"
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27,28]);
                     })
                     .run();
             });
@@ -342,10 +346,10 @@ describe("UoP TB registration/quiz app", function() {
                     )
                     .check.interaction({
                         state: "state_end_quiz",
-                        reply: "Thank you for completing your quiz."
+                        reply: "Thank you for completing your quiz. You correctly answered 1 of 3 questions. Your score is 33%"
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27,29]);
                     })
                     .run();
             });
@@ -363,10 +367,10 @@ describe("UoP TB registration/quiz app", function() {
                     )
                     .check.interaction({
                         state: "state_end_quiz",
-                        reply: "Thank you for completing your quiz."
+                        reply: "Thank you for completing your quiz. You correctly answered 1 of 3 questions. Your score is 33%"
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27,30]);
                     })
                     .run();
             });
