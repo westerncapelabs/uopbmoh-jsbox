@@ -206,7 +206,7 @@ go.app = function() {
                         return 'state_save_quiz_status';
                     } else {
                         return go.utils_project
-                            .set_quiz_completed(self.im)
+                            .set_quiz_completed(self.im, self.im.user.answers.user_id, self.im.user.answers.quiz_status)
                             .then(function() {
                                 return 'state_save_quiz_status';
                             });
@@ -219,7 +219,7 @@ go.app = function() {
             return go.utils_project
                 .save_quiz_status(self.im)
                 .then(function() {
-                    if (go.utils_project.is_quiz_completed(self.im)) {
+                    if (go.utils_project.is_quiz_completed(self.im.user.answers.quiz_status)) {
                         return self.states.create("state_end_quiz");
                     } else {
                         return self.states.create("state_quiz");

@@ -641,17 +641,17 @@ go.utils_project = {
         return {"question": question, "correct": correct};
     },
 
-    is_quiz_completed: function(im) {
-        return im.user.answers.quiz_status.completed;
+    is_quiz_completed: function(quiz_status) {
+        return quiz_status.completed;
     },
 
-    set_quiz_completed: function(im) {
-        im.user.answers.quiz_status.completed = true;
+    set_quiz_completed: function(im, user_id, quiz_status) {
+        quiz_status.completed = true;
 
         var endpoint = "completed/";
         var payload = {
-            "identity": im.user.answers.user_id,
-            "quiz": im.user.answers.quiz_status.quiz
+            "identity": user_id,
+            "quiz": quiz_status.quiz
         };
 
         return go.utils
@@ -882,7 +882,7 @@ go.app = function() {
                         return 'state_save_quiz_status';
                     } else {
                         return go.utils_project
-                            .set_quiz_completed(self.im)
+                            .set_quiz_completed(self.im, self.im.user.answers.user_id, self.im.user.answers.quiz_status)
                             .then(function() {
                                 return 'state_save_quiz_status';
                             });
@@ -895,7 +895,7 @@ go.app = function() {
             return go.utils_project
                 .save_quiz_status(self.im)
                 .then(function() {
-                    if (go.utils_project.is_quiz_completed(self.im)) {
+                    if (go.utils_project.is_quiz_completed(self.im.user.answers.quiz_status)) {
                         return self.states.create("state_end_quiz");
                     } else {
                         return self.states.create("state_quiz");

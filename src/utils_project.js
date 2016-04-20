@@ -127,17 +127,17 @@ go.utils_project = {
         return {"question": question, "correct": correct};
     },
 
-    is_quiz_completed: function(im) {
-        return im.user.answers.quiz_status.completed;
+    is_quiz_completed: function(quiz_status) {
+        return quiz_status.completed;
     },
 
-    set_quiz_completed: function(im) {
-        im.user.answers.quiz_status.completed = true;
+    set_quiz_completed: function(im, user_id, quiz_status) {
+        quiz_status.completed = true;
 
         var endpoint = "completed/";
         var payload = {
-            "identity": im.user.answers.user_id,
-            "quiz": im.user.answers.quiz_status.quiz
+            "identity": user_id,
+            "quiz": quiz_status.quiz
         };
 
         return go.utils
