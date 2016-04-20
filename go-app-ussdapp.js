@@ -634,13 +634,6 @@ go.utils_project = {
         return {"quiz": quiz, "questions_remaining": questions_array, "questions_answered": [], "completed": false};
     },
 
-    // returns object to update the questions and answer part of user's quiz status
-    //  -- questions_answered will contain the question id against true/false
-    //  -- depending on whether that specific answer was correct/incorrect
-    update_quiz_status: function(question, correct) {
-        return {"question": question, "correct": correct};
-    },
-
     set_quiz_completed: function(im, user_id, quiz_status) {
         quiz_status.completed = true;
 
@@ -889,10 +882,11 @@ go.app = function() {
                                 var response_text = "";
                                 if (choice.value === correct_answer) {
                                     response_text = quiz_question.response_correct;
-                                    self.im.user.answers.quiz_status.questions_answered.push(go.utils_project.update_quiz_status(quiz_question.question, true));
+
+                                    self.im.user.answers.quiz_status.questions_answered.push({"question": quiz_question.question, "correct": true});
                                 } else {
                                     response_text = quiz_question.response_incorrect;
-                                    self.im.user.answers.quiz_status.questions_answered.push(go.utils_project.update_quiz_status(quiz_question.question, false));
+                                    self.im.user.answers.quiz_status.questions_answered.push({"question": quiz_question.question, "correct": false});
                                 }
 
                                 return  {
