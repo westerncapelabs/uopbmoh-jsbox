@@ -626,12 +626,12 @@ go.utils_project = {
         }
     },
 
-    // initializes object of arrays necessary to keep track of user's quiz status
-    init_quiz_status: function(im, quiz, questions_array) {
-        // set quiz_status with quiz uuid, an array of outstanding questions to
-        // be answered, an array of questions answered, and a flag to indicate
+    // returns object to keep track of user's quiz status
+    init_quiz_status: function(quiz, questions_array) {
+        // to set quiz_status with quiz uuid, an array of outstanding questions
+        // to be answered, an array of questions answered, and a flag to indicate
         // whether quiz is completed or not
-        im.user.set_answer("quiz_status", {"quiz": quiz, "questions_remaining": questions_array, "questions_answered": [], "completed": false});
+        return {"quiz": quiz, "questions_remaining": questions_array, "questions_answered": [], "completed": false};
     },
 
     // update the questions and answer part of user's quiz status
@@ -835,7 +835,8 @@ go.app = function() {
                         ? _.shuffle(quiz.questions)
                         : quiz.questions;
 
-                    go.utils_project.init_quiz_status(self.im, quiz_id, random_questions);
+                    var quiz_status = go.utils_project.init_quiz_status(quiz_id, random_questions);
+                    self.im.user.set_answer("quiz_status", quiz_status);
 
                     return self.states.create("state_quiz");
                 });

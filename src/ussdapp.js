@@ -159,7 +159,8 @@ go.app = function() {
                         ? _.shuffle(quiz.questions)
                         : quiz.questions;
 
-                    go.utils_project.init_quiz_status(self.im, quiz_id, random_questions);
+                    var quiz_status = go.utils_project.init_quiz_status(quiz_id, random_questions);
+                    self.im.user.set_answer("quiz_status", quiz_status);
 
                     return self.states.create("state_quiz");
                 });
