@@ -66,8 +66,8 @@ go.utils_project = {
         });
     },
 
-    get_quiz_question: function(im) {
-        var endpoint = "question/"+im.user.answers.questions_remaining[0]+"/";
+    get_quiz_question: function(im, question_id) {
+        var endpoint = "question/"+question_id+"/";
         return go.utils
             .service_api_call("continuous-learning", "get", {}, null, endpoint, im)
             .then(function(json_get_response) {
@@ -100,29 +100,29 @@ go.utils_project = {
         return choices;
     },
 
-    is_answer_to_question_correct: function(im, answer) {
-        return go.utils_project
-            .get_quiz_question(im)
-            .then(function(quiz_question) {
-                for (var i = 0; i < quiz_question.answers.length; i++) {
-                    if ((quiz_question.answers[i].value === answer) && quiz_question.answers[i].correct) {
-                        return true;
-                    }
-                }
-                return false;
-            });
+    // takes an array of answer-objects with properties 'value', 'text', 'correct';
+    // returns the value of the correct answer
+    get_correct_answer: function(possible_answers) {
+        for (var i = 0; i < possible_answers.length; i++) {
+            if (possible_answers[i].correct) {
+                return possible_answers[i].value;
+            }
+        }
     },
 
     // initializes object of arrays necessary to keep track of user's quiz status
-    init_quiz_status: function(im, quiz) {
-        im.user.set_answer("quiz_status", {"quiz": quiz, "questions_answered": [], "completed": false});
+    init_quiz_status: function(im, quiz, questions_array) {
+        // set quiz_status with quiz uuid, an array of outstanding questions to
+        // be answered, an array of questions answered, and a flag to indicate
+        // whether quiz is completed or not
+        im.user.set_answer("quiz_status", {"quiz": quiz, "questions_remaining": questions_array, "questions_answered": [], "completed": false});
     },
 
-    // update the questions and answer part of user's quiz status
+    // returns object to update the questions and answer part of user's quiz status
     //  -- questions_answered will contain the question id against true/false
     //  -- depending on whether that specific answer was correct/incorrect
-    update_quiz_status: function(im, question, correct) {
-        im.user.answers.quiz_status.questions_answered.push({"question": question, "correct": correct});
+    update_quiz_status: function(question, correct) {
+        return {"question": question, "correct": correct};
     },
 
     is_quiz_completed: function(im) {
