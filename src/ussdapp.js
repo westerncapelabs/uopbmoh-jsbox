@@ -134,7 +134,7 @@ go.app = function() {
         // interstitial
         self.add("state_check_quiz_status", function(name) {
             return go.utils_project
-                .get_untaken_quizzes(self.im)
+                .get_untaken_quizzes(self.im, self.im.user.answers.user_id)
                 .then(function(untaken_quizzes) {
                     if (untaken_quizzes.length > 0) {
                         // get random quiz to take
@@ -159,8 +159,8 @@ go.app = function() {
                         ? _.shuffle(quiz.questions)
                         : quiz.questions;
 
-                    go.utils_project.init_quiz_status(self.im, quiz_id, random_questions);
-
+                    var quiz_status = go.utils_project.init_quiz_status(quiz_id, random_questions);
+                    self.im.user.set_answer("quiz_status", quiz_status);
                     self.im.user.set_answer("sms_results_text", "");
 
                     return self.states.create("state_quiz");
@@ -181,10 +181,10 @@ go.app = function() {
                                 var response_text = "";
                                 if (choice.value === correct_answer) {
                                     response_text = quiz_question.response_correct;
-                                    self.im.user.answers.quiz_status.questions_answered.push(go.utils_project.update_quiz_status(quiz_question.question, true));
+                                    self.im.user.answers.quiz_status.questions_answered.push({"question": quiz_question.question, "correct": true});
                                 } else {
                                     response_text = quiz_question.response_incorrect;
-                                    self.im.user.answers.quiz_status.questions_answered.push(go.utils_project.update_quiz_status(quiz_question.question, false));
+                                    self.im.user.answers.quiz_status.questions_answered.push({"question": quiz_question.question, "correct": false});
                                 }
 
                                 return  {
@@ -213,7 +213,7 @@ go.app = function() {
                         return 'state_save_quiz_status';
                     } else {
                         return go.utils_project
-                            .set_quiz_completed(self.im)
+                            .set_quiz_completed(self.im, self.im.user.answers.user_id, self.im.user.answers.quiz_status)
                             .then(function() {
                                 return 'state_save_quiz_status';
                             });
@@ -226,7 +226,7 @@ go.app = function() {
             return go.utils_project
                 .save_quiz_status(self.im)
                 .then(function() {
-                    if (go.utils_project.is_quiz_completed(self.im)) {
+                    if (self.im.user.answers.quiz_status.completed) {
                         return self.states.create("state_end_quiz");
                     } else {
                         return self.states.create("state_quiz");

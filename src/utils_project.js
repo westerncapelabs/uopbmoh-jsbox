@@ -15,14 +15,14 @@ go.utils_project = {
             });
     },
 
-    compile_reg_info: function(im) {
+    compile_reg_info: function(user_id, facility_code, gender, cadre, department) {
         var reg_info = {
-            user_id: im.user.answers.user_id,
+            "user_id": user_id,
             data: {
-                facility_code: im.user.answers.state_facility_code,
-                gender: im.user.answers.state_gender,
-                cadre: im.user.answers.state_cadre,
-                department: im.user.answers.state_department
+                "facility_code": facility_code,
+                "gender": gender,
+                "cadre": cadre,
+                "department": department
             }
         };
 
@@ -30,7 +30,9 @@ go.utils_project = {
     },
 
     finish_registration: function(im) {
-        var reg_info = go.utils_project.compile_reg_info(im);
+        var reg_info = go.utils_project
+            .compile_reg_info(im.user.answers.user_id, im.user.answers.state_facility_code,
+                im.user.answers.state_gender, im.user.answers.state_cadre, im.user.answers.state_department);
         return go.utils_project
             .create_registration(im, reg_info)
             .then(function() {
@@ -45,10 +47,10 @@ go.utils_project = {
 // QUIZ HELPERS
 
     // returns an array of untaken quizzes
-    get_untaken_quizzes: function(im) {
+    get_untaken_quizzes: function(im, user_id) {
         var endpoint = "quiz/untaken";
         var params = {
-            "identity": im.user.answers.user_id
+            "identity": user_id
         };
         return go.utils
             .service_api_call("continuous-learning", "get", params, null, endpoint, im)
@@ -110,32 +112,21 @@ go.utils_project = {
         }
     },
 
-    // initializes object of arrays necessary to keep track of user's quiz status
-    init_quiz_status: function(im, quiz, questions_array) {
-        // set quiz_status with quiz uuid, an array of outstanding questions to
-        // be answered, an array of questions answered, and a flag to indicate
+    // returns object to keep track of user's quiz status
+    init_quiz_status: function(quiz, questions_array) {
+        // to set quiz_status with quiz uuid, an array of outstanding questions
+        // to be answered, an array of questions answered, and a flag to indicate
         // whether quiz is completed or not
-        im.user.set_answer("quiz_status", {"quiz": quiz, "questions_remaining": questions_array, "questions_answered": [], "completed": false});
+        return {"quiz": quiz, "questions_remaining": questions_array, "questions_answered": [], "completed": false};
     },
 
-    // returns object to update the questions and answer part of user's quiz status
-    //  -- questions_answered will contain the question id against true/false
-    //  -- depending on whether that specific answer was correct/incorrect
-    update_quiz_status: function(question, correct) {
-        return {"question": question, "correct": correct};
-    },
-
-    is_quiz_completed: function(im) {
-        return im.user.answers.quiz_status.completed;
-    },
-
-    set_quiz_completed: function(im) {
-        im.user.answers.quiz_status.completed = true;
+    set_quiz_completed: function(im, user_id, quiz_status) {
+        quiz_status.completed = true;
 
         var endpoint = "completed/";
         var payload = {
-            "identity": im.user.answers.user_id,
-            "quiz": im.user.answers.quiz_status.quiz
+            "identity": user_id,
+            "quiz": quiz_status.quiz
         };
 
         return go.utils
