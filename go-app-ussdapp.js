@@ -632,11 +632,11 @@ go.utils_project = {
         im.user.set_answer("quiz_status", {"quiz": quiz, "questions_remaining": questions_array, "questions_answered": [], "completed": false});
     },
 
-    // update the questions and answer part of user's quiz status
+    // returns object to update the questions and answer part of user's quiz status
     //  -- questions_answered will contain the question id against true/false
     //  -- depending on whether that specific answer was correct/incorrect
-    update_quiz_status: function(im, question, correct) {
-        im.user.answers.quiz_status.questions_answered.push({"question": question, "correct": correct});
+    update_quiz_status: function(question, correct) {
+        return {"question": question, "correct": correct};
     },
 
     is_quiz_completed: function(im) {
@@ -850,9 +850,14 @@ go.app = function() {
                         question: quiz_question.question,
                         choices: go.utils_project.construct_choices(quiz_question.answers),
                         next: function(choice) {
-                                var response_text = (choice.value === correct_answer)
-                                    ? quiz_question.response_correct
-                                    : quiz_question.response_incorrect;
+                                var response_text = "";
+                                if (choice.value === correct_answer) {
+                                    response_text = quiz_question.response_correct;
+                                    self.im.user.answers.quiz_status.questions_answered.push(go.utils_project.update_quiz_status(quiz_question.question, true));
+                                } else {
+                                    response_text = quiz_question.response_incorrect;
+                                    self.im.user.answers.quiz_status.questions_answered.push(go.utils_project.update_quiz_status(quiz_question.question, false));
+                                }
 
                                 return  {
                                     name: "state_response",
