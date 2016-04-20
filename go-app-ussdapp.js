@@ -670,7 +670,8 @@ go.utils_project = {
 
     // SMS HELPERS
 
-    send_completion_text: function(im, user_id, sms_content) {
+    send_completion_text: function(im, user_id, text_to_add) {
+        var sms_content = "Your results from today's quiz:"+text_to_add;
         var payload = {
             "identity": user_id,
             "content": sms_content
@@ -853,6 +854,7 @@ go.app = function() {
                         ? _.shuffle(quiz.questions)
                         : quiz.questions;
                     self.im.user.set_answer("questions_remaining", random_questions);
+                    self.im.user.set_answer("sms_results_text", "");
                     return self.states.create("state_quiz");
                 });
         });
@@ -888,6 +890,7 @@ go.app = function() {
 
         // ChoiceState
         self.add("state_response", function(name, response_text) {
+            self.im.user.answers.sms_results_text += " "+response_text;
             return new ChoiceState(name, {
                 question: response_text,
                 choices: [
@@ -930,7 +933,7 @@ go.app = function() {
 
         self.add("state_end_quiz", function(name) {
             return go.utils_project
-                .send_completion_text(self.im, self.im.user.answers.user_id, "abcdefg...")
+                .send_completion_text(self.im, self.im.user.answers.user_id, self.im.user.answers.sms_results_text)
                 .then(function() {
                     return new EndState(name, {
                         text: questions[name],
