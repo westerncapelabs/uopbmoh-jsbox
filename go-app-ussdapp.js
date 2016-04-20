@@ -882,7 +882,6 @@ go.app = function() {
                                 var response_text = "";
                                 if (choice.value === correct_answer) {
                                     response_text = quiz_question.response_correct;
-
                                     self.im.user.answers.quiz_status.questions_answered.push({"question": quiz_question.question, "correct": true});
                                 } else {
                                     response_text = quiz_question.response_incorrect;
