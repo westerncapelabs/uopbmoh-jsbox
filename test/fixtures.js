@@ -1009,5 +1009,65 @@ return [
         }
     },
 
+    // 28: send sms for identity cb245673-aa41-4302-ac47-00000000111
+    {
+        "request": {
+            "method": "POST",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8004/api/v1/outbound/",
+            "data":  {
+                "identity": "cb245673-aa41-4302-ac47-000000000111",
+                "content": "Your results from today's quiz: Correct! That's why only he bangs his head on the lamp! Correct! That's why only he bangs his head on the lamp! Correct! He goes to the gym often! Correct! He goes to the gym often! Correct! That's why he's got the final say! Correct! That's why he's got the final say!"
+            }
+        },
+        "response": {
+            "code": 201,
+            "data": {}
+        }
+    },
+
+    // 29: send sms for identity cb245673-aa41-4302-ac47-00000000111
+    {
+        "request": {
+            "method": "POST",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8004/api/v1/outbound/",
+            "data":  {
+                "identity": "cb245673-aa41-4302-ac47-000000000111",
+                "content": "Your results from today's quiz: Incorrect! You need to open your eyes and see it's Nicki! Incorrect! You need to open your eyes and see it's Nicki! Correct! He goes to the gym often! Correct! He goes to the gym often! Incorrect! You need to open your eyes and see it's Mike! Incorrect! You need to open your eyes and see it's Mike!"
+            }
+        },
+        "response": {
+            "code": 201,
+            "data": {}
+        }
+    },
+
+    // 30: send sms for identity cb245673-aa41-4302-ac47-00000000111
+    {
+        "request": {
+            "method": "POST",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8004/api/v1/outbound/",
+            "data":  {
+                "identity": "cb245673-aa41-4302-ac47-000000000111",
+                "content": "Your results from today's quiz: Incorrect! You need to open your eyes and see it's Nicki! Incorrect! You need to open your eyes and see it's Nicki! Incorrect! You need to open your eyes and see it's George! Incorrect! You need to open your eyes and see it's George! Correct! That's why he's got the final say! Correct! That's why he's got the final say!"
+            }
+        },
+        "response": {
+            "code": 201,
+            "data": {}
+        }
+    },
+
 ];
 };
