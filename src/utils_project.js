@@ -67,7 +67,7 @@ go.utils_project = {
     },
 
     get_quiz_question: function(im) {
-        var endpoint = "question/"+im.user.answers.questions_remaining[0]+"/";
+        var endpoint = "question/"+im.user.answers.quiz_status.questions_remaining[0]+"/";
         return go.utils
             .service_api_call("continuous-learning", "get", {}, null, endpoint, im)
             .then(function(json_get_response) {
@@ -100,22 +100,20 @@ go.utils_project = {
         return choices;
     },
 
-    is_answer_to_question_correct: function(im, answer) {
-        return go.utils_project
-            .get_quiz_question(im)
-            .then(function(quiz_question) {
-                for (var i = 0; i < quiz_question.answers.length; i++) {
-                    if ((quiz_question.answers[i].value === answer) && quiz_question.answers[i].correct) {
-                        return true;
-                    }
-                }
-                return false;
-            });
+    get_correct_answer: function(possible_answers) {
+        for (var i = 0; i < possible_answers.length; i++) {
+            if (possible_answers[i].correct) {
+                return possible_answers[i].value;
+            }
+        }
     },
 
     // initializes object of arrays necessary to keep track of user's quiz status
-    init_quiz_status: function(im, quiz) {
-        im.user.set_answer("quiz_status", {"quiz": quiz, "questions_answered": [], "completed": false});
+    init_quiz_status: function(im, quiz, questions_array) {
+        // set quiz_status with quiz uuid, an array of outstanding questions to
+        // be answered, an array of questions answered, and a flag to indicate
+        // whether quiz is completed or not
+        im.user.set_answer("quiz_status", {"quiz": quiz, "questions_remaining": questions_array, "questions_answered": [], "completed": false});
     },
 
     // update the questions and answer part of user's quiz status

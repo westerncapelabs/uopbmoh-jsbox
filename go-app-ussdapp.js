@@ -581,7 +581,7 @@ go.utils_project = {
     },
 
     get_quiz_question: function(im) {
-        var endpoint = "question/"+im.user.answers.questions_remaining[0]+"/";
+        var endpoint = "question/"+im.user.answers.quiz_status.questions_remaining[0]+"/";
         return go.utils
             .service_api_call("continuous-learning", "get", {}, null, endpoint, im)
             .then(function(json_get_response) {
@@ -614,22 +614,20 @@ go.utils_project = {
         return choices;
     },
 
-    is_answer_to_question_correct: function(im, answer) {
-        return go.utils_project
-            .get_quiz_question(im)
-            .then(function(quiz_question) {
-                for (var i = 0; i < quiz_question.answers.length; i++) {
-                    if ((quiz_question.answers[i].value === answer) && quiz_question.answers[i].correct) {
-                        return true;
-                    }
-                }
-                return false;
-            });
+    get_correct_answer: function(possible_answers) {
+        for (var i = 0; i < possible_answers.length; i++) {
+            if (possible_answers[i].correct) {
+                return possible_answers[i].value;
+            }
+        }
     },
 
     // initializes object of arrays necessary to keep track of user's quiz status
-    init_quiz_status: function(im, quiz) {
-        im.user.set_answer("quiz_status", {"quiz": quiz, "questions_answered": [], "completed": false});
+    init_quiz_status: function(im, quiz, questions_array) {
+        // set quiz_status with quiz uuid, an array of outstanding questions to
+        // be answered, an array of questions answered, and a flag to indicate
+        // whether quiz is completed or not
+        im.user.set_answer("quiz_status", {"quiz": quiz, "questions_remaining": questions_array, "questions_answered": [], "completed": false});
     },
 
     // update the questions and answer part of user's quiz status
@@ -818,8 +816,6 @@ go.app = function() {
                             ? untaken_quizzes[Math.floor(Math.random() * untaken_quizzes.length)]
                             : untaken_quizzes[0];
 
-                        go.utils_project.init_quiz_status(self.im, quiz_to_take.id);
-
                         return self.states.create("state_get_quiz_questions", quiz_to_take.id);
                     } else {
                         return self.states.create("state_end_quiz_status");
@@ -836,7 +832,9 @@ go.app = function() {
                     var random_questions = self.im.config.randomize_questions
                         ? _.shuffle(quiz.questions)
                         : quiz.questions;
-                    self.im.user.set_answer("questions_remaining", random_questions);
+
+                    go.utils_project.init_quiz_status(self.im, quiz_id, random_questions);
+
                     return self.states.create("state_quiz");
                 });
         });
@@ -847,24 +845,19 @@ go.app = function() {
                 // get first question in the now random line-up
                 .get_quiz_question(self.im)
                 .then(function(quiz_question) {
+                    var correct_answer = go.utils_project.get_correct_answer(quiz_question.answers);
                     return new ChoiceState(name, {
                         question: quiz_question.question,
                         choices: go.utils_project.construct_choices(quiz_question.answers),
                         next: function(choice) {
-                                return go.utils_project
-                                    .is_answer_to_question_correct(self.im, choice.value)
-                                    .then(function(answer_correct) {
-                                        var response_text = answer_correct
-                                            ? quiz_question.response_correct
-                                            : quiz_question.response_incorrect;
+                                var response_text = (choice.value === correct_answer)
+                                    ? quiz_question.response_correct
+                                    : quiz_question.response_incorrect;
 
-                                        go.utils_project.update_quiz_status(self.im, quiz_question.id, answer_correct);
-
-                                        return  {
-                                            name: "state_response",
-                                            creator_opts: response_text
-                                        };
-                                    });
+                                return  {
+                                    name: "state_response",
+                                    creator_opts: response_text
+                                };
                         }
                     });
                 });
@@ -879,15 +872,12 @@ go.app = function() {
                 ],
                 next: function(choice) {
                     // remove first item of question array as question has been answered
-                    //  -- after removal user.answers.questions_remaining will contain
+                    //  -- after removal questions_remaining will contain the
                     //  -- remaining questions of specific quiz to be asked
-                    self.im.user.answers.questions_remaining.shift();
-                    if (self.im.user.answers.questions_remaining.length !== 0) {
+                    self.im.user.answers.quiz_status.questions_remaining.shift();
+                    if (self.im.user.answers.quiz_status.questions_remaining.length !== 0) {
                         return 'state_save_quiz_status';
                     } else {
-                        // delete questions_remaining from answers object as it
-                        // has outlived its scope of use
-                        delete self.im.user.answers.questions_remaining;
                         return go.utils_project
                             .set_quiz_completed(self.im)
                             .then(function() {
