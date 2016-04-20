@@ -120,11 +120,11 @@ go.utils_project = {
         return {"quiz": quiz, "questions_remaining": questions_array, "questions_answered": [], "completed": false};
     },
 
-    // update the questions and answer part of user's quiz status
+    // returns object to update the questions and answer part of user's quiz status
     //  -- questions_answered will contain the question id against true/false
     //  -- depending on whether that specific answer was correct/incorrect
-    update_quiz_status: function(im, question, correct) {
-        im.user.answers.quiz_status.questions_answered.push({"question": question, "correct": correct});
+    update_quiz_status: function(question, correct) {
+        return {"question": question, "correct": correct};
     },
 
     is_quiz_completed: function(im) {
