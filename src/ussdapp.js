@@ -240,7 +240,11 @@ go.app = function() {
                 .save_quiz_status(self.im)
                 .then(function() {
                     if (self.im.user.answers.quiz_status.completed) {
-                        return self.states.create("state_end_quiz");
+                        return go.utils_project
+                            .close_tracker(self.im, self.im.user.answers.tracker)
+                            .then(function() {
+                                return self.states.create("state_end_quiz");
+                            });
                     } else {
                         return self.states.create("state_quiz");
                     }

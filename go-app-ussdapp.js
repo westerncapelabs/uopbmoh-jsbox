@@ -710,6 +710,20 @@ go.utils_project = {
         });
     },
 
+    close_tracker: function(im, tracker_id) {
+        var endpoint = "tracker/"+tracker_id+"/";
+        var payload = {
+            "complete": "True",
+            "completed_at": go.utils.get_today(im.config)
+        };
+
+        return go.utils
+            .service_api_call("continuous-learning", "patch", null, payload, endpoint, im)
+            .then(function(json_post_response) {
+                return json_post_response.data;
+        });
+    },
+
     // SMS HELPERS
 
     send_completion_text: function(im, user_id, text_to_add) {
@@ -975,7 +989,11 @@ go.app = function() {
                 .save_quiz_status(self.im)
                 .then(function() {
                     if (self.im.user.answers.quiz_status.completed) {
-                        return self.states.create("state_end_quiz");
+                        return go.utils_project
+                            .close_tracker(self.im, self.im.user.answers.tracker)
+                            .then(function() {
+                                return self.states.create("state_end_quiz");
+                            });
                     } else {
                         return self.states.create("state_quiz");
                     }

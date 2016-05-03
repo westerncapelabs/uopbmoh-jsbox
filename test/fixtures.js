@@ -1244,5 +1244,25 @@ return [
         }
     },
 
+    // 38: patch tracker cb245673-aa41-4302-ac47-t00000111111 with completed status
+    {
+        "request": {
+            "method": "PATCH",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8003/api/v1/tracker/cb245673-aa41-4302-ac47-t00000111111/",
+            "data":  {
+                "complete": "True",
+                "completed_at": "2016-04-04T22:00:00.000Z"
+            }
+        },
+        "response": {
+            "code": 200,
+            "data": {}
+        }
+    },
+
 ];
 };

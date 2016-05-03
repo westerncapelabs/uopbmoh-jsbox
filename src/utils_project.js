@@ -196,6 +196,20 @@ go.utils_project = {
         });
     },
 
+    close_tracker: function(im, tracker_id) {
+        var endpoint = "tracker/"+tracker_id+"/";
+        var payload = {
+            "complete": "True",
+            "completed_at": go.utils.get_today(im.config)
+        };
+
+        return go.utils
+            .service_api_call("continuous-learning", "patch", null, payload, endpoint, im)
+            .then(function(json_post_response) {
+                return json_post_response.data;
+        });
+    },
+
     // SMS HELPERS
 
     send_completion_text: function(im, user_id, text_to_add) {
