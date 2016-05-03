@@ -145,7 +145,8 @@ go.app = function() {
                         return go.utils_project
                             .init_tracker(self.im, self.im.user.answers.user_id, quiz_to_take.id)
                             .then(function(tracker_id) {
-                                return self.states.create("state_get_quiz_questions", {"quiz": quiz_to_take.id, "tracker": tracker_id});
+                                self.im.user.set_answer("tracker", tracker_id);
+                                return self.states.create("state_get_quiz_questions", quiz_to_take.id);
                             });
                     } else {
                         return self.states.create("state_end_quiz_status");
@@ -154,20 +155,18 @@ go.app = function() {
 
         });
 
-        self.add("state_get_quiz_questions", function(name, creator_opts) {
+        self.add("state_get_quiz_questions", function(name, quiz_id) {
             return go.utils_project
-                .get_quiz(self.im, creator_opts.quiz)
+                .get_quiz(self.im, quiz_id)
                 .then(function(quiz) {
                     // creates a random line-up of questions
                     var random_questions = self.im.config.randomize_questions
                         ? _.shuffle(quiz.questions)
                         : quiz.questions;
 
-                    var quiz_status = go.utils_project.init_quiz_status(creator_opts.quiz, random_questions);
+                    var quiz_status = go.utils_project.init_quiz_status(quiz_id, random_questions);
                     self.im.user.set_answer("quiz_status", quiz_status);
                     self.im.user.set_answer("sms_results_text", "");
-
-                    self.im.user.set_answer("tracker", creator_opts.tracker);
 
                     return self.states.create("state_quiz");
                 });
