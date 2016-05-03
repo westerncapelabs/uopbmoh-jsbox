@@ -165,6 +165,14 @@ go.utils = {
 
 // DATE HELPERS
 
+    get_now: function(config) {
+        if (config.testing_today) {
+            return new moment(config.testing_today).format('YYYY-MM-DD HH:mm:ss');
+        } else {
+            return new moment().format('YYYY-MM-DD HH:mm:ss');
+        }
+    },
+
     get_today: function(config) {
         if (config.testing_today) {
             return new moment(config.testing_today, 'YYYY-MM-DD');
@@ -659,23 +667,6 @@ go.utils_project = {
             });
     },
 
-    // SMS HELPERS
-
-    send_completion_text: function(im, user_id, text_to_add) {
-        var sms_content = "Your results from today's quiz:"+text_to_add;
-        var payload = {
-            "identity": user_id,
-            "content": sms_content
-        };
-        return go.utils
-        .service_api_call("message_sender", "post", null, payload, 'outbound/', im)
-        .then(function(json_post_response) {
-            var outbound_response = json_post_response.data;
-            // Return the outbound id
-            return outbound_response.id;
-        });
-    },
-
     // returns an object; first property represents the number of correct
     // answers, and second the total number of questions asked, and the
     // third the subsequent percentage of correct_answers out of questions asked
@@ -694,6 +685,71 @@ go.utils_project = {
             "percentage": (correct_answers/total_questions).toFixed(2)*100
         };
     },
+
+    // taking identity_uuid and quiz_uuid, returns tracker_uuid
+    init_tracker: function(im, identity_id, quiz_id) {
+        var payload = {
+            "identity": identity_id,
+            "quiz": quiz_id
+        };
+
+        return go.utils
+            .service_api_call("continuous-learning", "post", null, payload, 'tracker/', im)
+            .then(function(json_post_response) {
+                return json_post_response.data.tracker_id;
+        });
+    },
+
+    log_quiz_answer: function(im, quiz_question, answer_value, answer_text, answer_correct, response, tracker_id) {
+        var payload = {
+            "question": quiz_question.id,
+            "question_text": quiz_question.question,
+            "answer_value": answer_value,
+            "answer_text": answer_text,
+            "answer_correct": answer_correct,
+            "response_sent": response,
+            "tracker": tracker_id
+        };
+
+        return go.utils
+            .service_api_call("continuous-learning", "post", null, payload, 'answer/', im)
+            .then(function(json_post_response) {
+                return json_post_response.data;
+        });
+    },
+
+    close_tracker: function(im, tracker_id) {
+        var endpoint = "tracker/"+tracker_id+"/";
+        var payload = {
+            "complete": true,
+            "completed_at": go.utils.get_now(im.config)
+        };
+
+        return go.utils
+            .service_api_call("continuous-learning", "patch", null, payload, endpoint, im)
+            .then(function(json_post_response) {
+                return json_post_response.data;
+        });
+    },
+
+    // SMS HELPERS
+
+    send_completion_text: function(im, user_id, text_to_add) {
+        var sms_content = "Your results from today's quiz:"+text_to_add;
+        var payload = {
+            "identity": user_id,
+            "content": sms_content
+        };
+        return go.utils
+        .service_api_call("message_sender", "post", null, payload, 'outbound/', im)
+        .then(function(json_post_response) {
+            var outbound_response = json_post_response.data;
+            // Return the outbound id
+            return outbound_response.id;
+        });
+    },
+
+
 
     "commas": "commas"
 
@@ -843,7 +899,12 @@ go.app = function() {
                             ? untaken_quizzes[Math.floor(Math.random() * untaken_quizzes.length)]
                             : untaken_quizzes[0];
 
-                        return self.states.create("state_get_quiz_questions", quiz_to_take.id);
+                        return go.utils_project
+                            .init_tracker(self.im, self.im.user.answers.user_id, quiz_to_take.id)
+                            .then(function(tracker_id) {
+                                self.im.user.set_answer("tracker", tracker_id);
+                                return self.states.create("state_get_quiz_questions", quiz_to_take.id);
+                            });
                     } else {
                         return self.states.create("state_end_quiz_status");
                     }
@@ -875,12 +936,14 @@ go.app = function() {
                 .get_quiz_question(self.im, self.im.user.answers.quiz_status.questions_remaining[0])
                 .then(function(quiz_question) {
                     var correct_answer = go.utils_project.get_correct_answer(quiz_question.answers);
+
                     return new ChoiceState(name, {
                         question: quiz_question.question,
                         choices: go.utils_project.construct_choices(quiz_question.answers),
                         next: function(choice) {
                                 var response_text = "";
-                                if (choice.value === correct_answer) {
+                                var correct = choice.value === correct_answer;
+                                if (correct) {
                                     response_text = quiz_question.response_correct;
                                     self.im.user.answers.quiz_status.questions_answered.push({"question": quiz_question.question, "correct": true});
                                 } else {
@@ -888,10 +951,14 @@ go.app = function() {
                                     self.im.user.answers.quiz_status.questions_answered.push({"question": quiz_question.question, "correct": false});
                                 }
 
-                                return  {
-                                    name: "state_response",
-                                    creator_opts: response_text
-                                };
+                                return go.utils_project
+                                    .log_quiz_answer(self.im, quiz_question, choice.value, choice.label, correct, response_text, self.im.user.answers.tracker)
+                                    .then(function() {
+                                        return {
+                                            name: "state_response",
+                                            creator_opts: response_text
+                                        };
+                                    });
                         }
                     });
                 });
@@ -928,7 +995,11 @@ go.app = function() {
                 .save_quiz_status(self.im)
                 .then(function() {
                     if (self.im.user.answers.quiz_status.completed) {
-                        return self.states.create("state_end_quiz");
+                        return go.utils_project
+                            .close_tracker(self.im, self.im.user.answers.tracker)
+                            .then(function() {
+                                return self.states.create("state_end_quiz");
+                            });
                     } else {
                         return self.states.create("state_quiz");
                     }

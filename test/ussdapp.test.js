@@ -18,7 +18,7 @@ describe("UoP TB registration/quiz app", function() {
                     name: 'ussd-app-test',
                     country_code: '267',  // botswana
                     channel: '*120*8864*0000#',
-                    testing_today: '2016-04-05',
+                    testing_today: '2016-04-05 15:30:02',
                     randomize_quizzes: false,
                     randomize_questions: false,
                     services: {
@@ -160,7 +160,7 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,31]);
                     })
                     .run();
             });
@@ -198,7 +198,7 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,31,32]);
                     })
                     .run();
             });
@@ -220,7 +220,7 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,25,26]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,25,26,31,32]);
                     })
                     .run();
             });
@@ -241,7 +241,7 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,25,26]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,25,26,31,32,34]);
                     })
                     .run();
             });
@@ -265,7 +265,7 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,31,32,34]);
                     })
                     .run();
             });
@@ -288,7 +288,7 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,31,32,34,36]);
                     })
                     .run();
             });
@@ -309,7 +309,7 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Thank you for completing your quiz. You correctly answered 3 of 3 questions. Your score is 100%"
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27,28]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27,28,31,32,34,36,38]);
                     })
                     .run();
             });
@@ -349,7 +349,7 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Thank you for completing your quiz. You correctly answered 1 of 3 questions. Your score is 33%"
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27,29]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27,29,31,33,34,37,38]);
                     })
                     .run();
             });
@@ -370,7 +370,7 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Thank you for completing your quiz. You correctly answered 1 of 3 questions. Your score is 33%"
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27,30]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27,30,31,33,35,36,38]);
                     })
                     .run();
             });

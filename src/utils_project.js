@@ -145,23 +145,6 @@ go.utils_project = {
             });
     },
 
-    // SMS HELPERS
-
-    send_completion_text: function(im, user_id, text_to_add) {
-        var sms_content = "Your results from today's quiz:"+text_to_add;
-        var payload = {
-            "identity": user_id,
-            "content": sms_content
-        };
-        return go.utils
-        .service_api_call("message_sender", "post", null, payload, 'outbound/', im)
-        .then(function(json_post_response) {
-            var outbound_response = json_post_response.data;
-            // Return the outbound id
-            return outbound_response.id;
-        });
-    },
-
     // returns an object; first property represents the number of correct
     // answers, and second the total number of questions asked, and the
     // third the subsequent percentage of correct_answers out of questions asked
@@ -180,6 +163,71 @@ go.utils_project = {
             "percentage": (correct_answers/total_questions).toFixed(2)*100
         };
     },
+
+    // taking identity_uuid and quiz_uuid, returns tracker_uuid
+    init_tracker: function(im, identity_id, quiz_id) {
+        var payload = {
+            "identity": identity_id,
+            "quiz": quiz_id
+        };
+
+        return go.utils
+            .service_api_call("continuous-learning", "post", null, payload, 'tracker/', im)
+            .then(function(json_post_response) {
+                return json_post_response.data.tracker_id;
+        });
+    },
+
+    log_quiz_answer: function(im, quiz_question, answer_value, answer_text, answer_correct, response, tracker_id) {
+        var payload = {
+            "question": quiz_question.id,
+            "question_text": quiz_question.question,
+            "answer_value": answer_value,
+            "answer_text": answer_text,
+            "answer_correct": answer_correct,
+            "response_sent": response,
+            "tracker": tracker_id
+        };
+
+        return go.utils
+            .service_api_call("continuous-learning", "post", null, payload, 'answer/', im)
+            .then(function(json_post_response) {
+                return json_post_response.data;
+        });
+    },
+
+    close_tracker: function(im, tracker_id) {
+        var endpoint = "tracker/"+tracker_id+"/";
+        var payload = {
+            "complete": true,
+            "completed_at": go.utils.get_now(im.config)
+        };
+
+        return go.utils
+            .service_api_call("continuous-learning", "patch", null, payload, endpoint, im)
+            .then(function(json_post_response) {
+                return json_post_response.data;
+        });
+    },
+
+    // SMS HELPERS
+
+    send_completion_text: function(im, user_id, text_to_add) {
+        var sms_content = "Your results from today's quiz:"+text_to_add;
+        var payload = {
+            "identity": user_id,
+            "content": sms_content
+        };
+        return go.utils
+        .service_api_call("message_sender", "post", null, payload, 'outbound/', im)
+        .then(function(json_post_response) {
+            var outbound_response = json_post_response.data;
+            // Return the outbound id
+            return outbound_response.id;
+        });
+    },
+
+
 
     "commas": "commas"
 

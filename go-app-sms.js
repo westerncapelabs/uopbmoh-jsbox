@@ -165,6 +165,14 @@ go.utils = {
 
 // DATE HELPERS
 
+    get_now: function(config) {
+        if (config.testing_today) {
+            return new moment(config.testing_today).format('YYYY-MM-DD HH:mm:ss');
+        } else {
+            return new moment().format('YYYY-MM-DD HH:mm:ss');
+        }
+    },
+
     get_today: function(config) {
         if (config.testing_today) {
             return new moment(config.testing_today, 'YYYY-MM-DD');
