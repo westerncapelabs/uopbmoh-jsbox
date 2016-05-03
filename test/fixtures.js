@@ -1108,7 +1108,7 @@ return [
                 "question_text": "Who is tallest?",
                 "answer_value": "nicki",
                 "answer_text": "Nicki",
-                "answer_correct": "True",
+                "answer_correct": true,
                 "response_sent": "Correct! That's why only he bangs his head on the lamp!",
                 "tracker": "cb245673-aa41-4302-ac47-t00000111111"
             }
@@ -1133,7 +1133,7 @@ return [
                 "question_text": "Who is tallest?",
                 "answer_value": "mike",
                 "answer_text": "Mike",
-                "answer_correct": "False",
+                "answer_correct": false,
                 "response_sent": "Incorrect! You need to open your eyes and see it's Nicki!",
                 "tracker": "cb245673-aa41-4302-ac47-t00000111111"
             }
@@ -1158,7 +1158,7 @@ return [
                 "question_text": "Who is fittest?",
                 "answer_value": "george",
                 "answer_text": "George",
-                "answer_correct": "True",
+                "answer_correct": true,
                 "response_sent": "Correct! He goes to the gym often!",
                 "tracker": "cb245673-aa41-4302-ac47-t00000111111"
             }
@@ -1183,7 +1183,7 @@ return [
                 "question_text": "Who is fittest?",
                 "answer_value": "nicki",
                 "answer_text": "Nicki",
-                "answer_correct": "False",
+                "answer_correct": false,
                 "response_sent": "Incorrect! You need to open your eyes and see it's George!",
                 "tracker": "cb245673-aa41-4302-ac47-t00000111111"
             }
@@ -1208,7 +1208,7 @@ return [
                 "question_text": "Who is the boss?",
                 "answer_value": "mike",
                 "answer_text": "Mike",
-                "answer_correct": "True",
+                "answer_correct": true,
                 "response_sent": "Correct! That's why he's got the final say!",
                 "tracker": "cb245673-aa41-4302-ac47-t00000111111"
             }
@@ -1233,7 +1233,7 @@ return [
                 "question_text": "Who is the boss?",
                 "answer_value": "nicki",
                 "answer_text": "Nicki",
-                "answer_correct": "False",
+                "answer_correct": false,
                 "response_sent": "Incorrect! You need to open your eyes and see it's Mike!",
                 "tracker": "cb245673-aa41-4302-ac47-t00000111111"
             }
@@ -1254,7 +1254,7 @@ return [
             },
             "url": "http://localhost:8003/api/v1/tracker/cb245673-aa41-4302-ac47-t00000111111/",
             "data":  {
-                "complete": "True",
+                "complete": true,
                 "completed_at": "2016-04-04T22:00:00.000Z"
             }
         },

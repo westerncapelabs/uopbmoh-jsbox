@@ -199,7 +199,7 @@ go.utils_project = {
     close_tracker: function(im, tracker_id) {
         var endpoint = "tracker/"+tracker_id+"/";
         var payload = {
-            "complete": "True",
+            "complete": true,
             "completed_at": go.utils.get_today(im.config)
         };
 

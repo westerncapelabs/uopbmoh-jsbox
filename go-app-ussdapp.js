@@ -713,7 +713,7 @@ go.utils_project = {
     close_tracker: function(im, tracker_id) {
         var endpoint = "tracker/"+tracker_id+"/";
         var payload = {
-            "complete": "True",
+            "complete": true,
             "completed_at": go.utils.get_today(im.config)
         };
 
@@ -944,8 +944,7 @@ go.app = function() {
                                 }
 
                                 return go.utils_project
-                                    .log_quiz_answer(self.im, quiz_question, choice.value, choice.label,
-                                        correct ? "True" : "False", response_text, self.im.user.answers.tracker)
+                                    .log_quiz_answer(self.im, quiz_question, choice.value, choice.label, correct, response_text, self.im.user.answers.tracker)
                                     .then(function() {
                                         return {
                                             name: "state_response",
