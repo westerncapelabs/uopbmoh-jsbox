@@ -142,7 +142,9 @@ go.app = function() {
                             ? untaken_quizzes[Math.floor(Math.random() * untaken_quizzes.length)]
                             : untaken_quizzes[0];
 
-                        return self.states.create("state_get_quiz_questions", quiz_to_take.id);
+                        var tracker_id = go.utils_project.init_tracker(self.im, self.im.user.answers.user_id, quiz_to_take.id);
+
+                        return self.states.create("state_get_quiz_questions", {"quiz": quiz_to_take.id, "tracker": tracker_id});
                     } else {
                         return self.states.create("state_end_quiz_status");
                     }
@@ -150,30 +152,31 @@ go.app = function() {
 
         });
 
-        self.add("state_get_quiz_questions", function(name, quiz_id) {
+        self.add("state_get_quiz_questions", function(name, creator_opts) {
             return go.utils_project
-                .get_quiz(self.im, quiz_id)
+                .get_quiz(self.im, creator_opts.quiz)
                 .then(function(quiz) {
                     // creates a random line-up of questions
                     var random_questions = self.im.config.randomize_questions
                         ? _.shuffle(quiz.questions)
                         : quiz.questions;
 
-                    var quiz_status = go.utils_project.init_quiz_status(quiz_id, random_questions);
+                    var quiz_status = go.utils_project.init_quiz_status(creator_opts.quiz, random_questions);
                     self.im.user.set_answer("quiz_status", quiz_status);
                     self.im.user.set_answer("sms_results_text", "");
 
-                    return self.states.create("state_quiz");
+                    return self.states.create("state_quiz", creator_opts.tracker);
                 });
         });
 
         // ChoiceState
-        self.add("state_quiz", function(name) {
+        self.add("state_quiz", function(name, tracker_id) {
             return go.utils_project
                 // get first question in the now random line-up
                 .get_quiz_question(self.im, self.im.user.answers.quiz_status.questions_remaining[0])
                 .then(function(quiz_question) {
                     var correct_answer = go.utils_project.get_correct_answer(quiz_question.answers);
+
                     return new ChoiceState(name, {
                         question: quiz_question.question,
                         choices: go.utils_project.construct_choices(quiz_question.answers),
@@ -186,7 +189,6 @@ go.app = function() {
                                     response_text = quiz_question.response_incorrect;
                                     self.im.user.answers.quiz_status.questions_answered.push({"question": quiz_question.question, "correct": false});
                                 }
-
                                 return  {
                                     name: "state_response",
                                     creator_opts: response_text

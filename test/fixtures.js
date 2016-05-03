@@ -1069,5 +1069,29 @@ return [
         }
     },
 
+    // 31: create tracker for
+    // identity cb245673-aa41-4302-ac47-000000000111,
+    // quiz cb245673-aa41-4302-ac47-q00000000111
+    {
+        "request": {
+            "method": "POST",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8003/api/v1/tracker/",
+            "data":  {
+                "identity": "cb245673-aa41-4302-ac47-000000000111",
+                "quiz": "cb245673-aa41-4302-ac47-q00000000111"
+            }
+        },
+        "response": {
+            "code": 201,
+            "data": {
+                "tracker_id": "cb245673-aa41-4302-ac47-t00000111111"
+            }
+        }
+    },
+
 ];
 };
