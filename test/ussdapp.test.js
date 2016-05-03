@@ -18,7 +18,7 @@ describe("UoP TB registration/quiz app", function() {
                     name: 'ussd-app-test',
                     country_code: '267',  // botswana
                     channel: '*120*8864*0000#',
-                    testing_today: '2016-04-05',
+                    testing_today: '2016-04-05 15:30:02',
                     randomize_quizzes: false,
                     randomize_questions: false,
                     services: {

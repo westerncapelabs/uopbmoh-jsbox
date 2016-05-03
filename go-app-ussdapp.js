@@ -165,6 +165,14 @@ go.utils = {
 
 // DATE HELPERS
 
+    get_now: function(config) {
+        if (config.testing_today) {
+            return new moment(config.testing_today).format('YYYY-MM-DD HH:mm:ss');
+        } else {
+            return new moment().format('YYYY-MM-DD HH:mm:ss');
+        }
+    },
+
     get_today: function(config) {
         if (config.testing_today) {
             return new moment(config.testing_today, 'YYYY-MM-DD');
@@ -714,7 +722,7 @@ go.utils_project = {
         var endpoint = "tracker/"+tracker_id+"/";
         var payload = {
             "complete": true,
-            "completed_at": go.utils.get_today(im.config).format("YYYY-MM-DD")
+            "completed_at": go.utils.get_now(im.config)
         };
 
         return go.utils
