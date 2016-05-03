@@ -142,9 +142,11 @@ go.app = function() {
                             ? untaken_quizzes[Math.floor(Math.random() * untaken_quizzes.length)]
                             : untaken_quizzes[0];
 
-                        var tracker_id = go.utils_project.init_tracker(self.im, self.im.user.answers.user_id, quiz_to_take.id);
-
-                        return self.states.create("state_get_quiz_questions", {"quiz": quiz_to_take.id, "tracker": tracker_id});
+                        return go.utils_project
+                            .init_tracker(self.im, self.im.user.answers.user_id, quiz_to_take.id)
+                            .then(function(tracker_id) {
+                                return self.states.create("state_get_quiz_questions", {"quiz": quiz_to_take.id, "tracker": tracker_id});
+                            });
                     } else {
                         return self.states.create("state_end_quiz_status");
                     }
@@ -165,12 +167,14 @@ go.app = function() {
                     self.im.user.set_answer("quiz_status", quiz_status);
                     self.im.user.set_answer("sms_results_text", "");
 
-                    return self.states.create("state_quiz", creator_opts.tracker);
+                    self.im.user.set_answer("tracker", creator_opts.tracker);
+
+                    return self.states.create("state_quiz");
                 });
         });
 
         // ChoiceState
-        self.add("state_quiz", function(name, tracker_id) {
+        self.add("state_quiz", function(name) {
             return go.utils_project
                 // get first question in the now random line-up
                 .get_quiz_question(self.im, self.im.user.answers.quiz_status.questions_remaining[0])
@@ -182,17 +186,24 @@ go.app = function() {
                         choices: go.utils_project.construct_choices(quiz_question.answers),
                         next: function(choice) {
                                 var response_text = "";
-                                if (choice.value === correct_answer) {
+                                var correct = choice.value === correct_answer;
+                                if (correct) {
                                     response_text = quiz_question.response_correct;
                                     self.im.user.answers.quiz_status.questions_answered.push({"question": quiz_question.question, "correct": true});
                                 } else {
                                     response_text = quiz_question.response_incorrect;
                                     self.im.user.answers.quiz_status.questions_answered.push({"question": quiz_question.question, "correct": false});
                                 }
-                                return  {
-                                    name: "state_response",
-                                    creator_opts: response_text
-                                };
+
+                                return go.utils_project
+                                    .log_quiz_answer(self.im, quiz_question, choice.value, choice.label,
+                                        correct ? "True" : "False", response_text, self.im.user.answers.tracker)
+                                    .then(function() {
+                                        return {
+                                            name: "state_response",
+                                            creator_opts: response_text
+                                        };
+                                    });
                         }
                     });
                 });

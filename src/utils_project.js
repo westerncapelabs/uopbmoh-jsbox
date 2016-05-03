@@ -174,6 +174,24 @@ go.utils_project = {
         return go.utils
             .service_api_call("continuous-learning", "post", null, payload, 'tracker/', im)
             .then(function(json_post_response) {
+                return json_post_response.data.tracker_id;
+        });
+    },
+
+    log_quiz_answer: function(im, quiz_question, answer_value, answer_text, answer_correct, response, tracker_id) {
+        var payload = {
+            "question": quiz_question.id,
+            "question_text": quiz_question.question,
+            "answer_value": answer_value,
+            "answer_text": answer_text,
+            "answer_correct": answer_correct,
+            "response_sent": response,
+            "tracker": tracker_id
+        };
+
+        return go.utils
+            .service_api_call("continuous-learning", "post", null, payload, 'answer/', im)
+            .then(function(json_post_response) {
                 return json_post_response.data;
         });
     },
