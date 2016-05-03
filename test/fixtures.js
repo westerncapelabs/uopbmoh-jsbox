@@ -1255,7 +1255,7 @@ return [
             "url": "http://localhost:8003/api/v1/tracker/cb245673-aa41-4302-ac47-t00000111111/",
             "data":  {
                 "complete": true,
-                "completed_at": "2016-04-04T22:00:00.000Z"
+                "completed_at": "2016-04-05"
             }
         },
         "response": {

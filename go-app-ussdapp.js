@@ -714,7 +714,7 @@ go.utils_project = {
         var endpoint = "tracker/"+tracker_id+"/";
         var payload = {
             "complete": true,
-            "completed_at": go.utils.get_today(im.config)
+            "completed_at": go.utils.get_today(im.config).format("YYYY-MM-DD")
         };
 
         return go.utils
