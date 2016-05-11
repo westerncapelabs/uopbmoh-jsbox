@@ -52,8 +52,6 @@ go.app = function() {
     // START STATE
 
         self.add("state_start", function(name) {
-            // Reset user answers when restarting the app
-            self.im.user.answers = {};
             return self.states.create("state_check_registered");
         });
 
@@ -136,7 +134,7 @@ go.app = function() {
         // interstitial
         self.add("state_check_quiz_status", function(name) {
             return go.utils_project
-                .get_untaken_quizzes(self.im)
+                .get_untaken_quizzes(self.im, self.im.user.answers.user_id)
                 .then(function(untaken_quizzes) {
                     if (untaken_quizzes.length > 0) {
                         // get random quiz to take
@@ -144,9 +142,12 @@ go.app = function() {
                             ? untaken_quizzes[Math.floor(Math.random() * untaken_quizzes.length)]
                             : untaken_quizzes[0];
 
-                        go.utils_project.init_quiz_status(self.im, quiz_to_take.id);
-
-                        return self.states.create("state_get_quiz_questions", quiz_to_take.id);
+                        return go.utils_project
+                            .init_tracker(self.im, self.im.user.answers.user_id, quiz_to_take.id)
+                            .then(function(tracker_id) {
+                                self.im.user.set_answer("tracker", tracker_id);
+                                return self.states.create("state_get_quiz_questions", quiz_to_take.id);
+                            });
                     } else {
                         return self.states.create("state_end_quiz_status");
                     }
@@ -162,8 +163,11 @@ go.app = function() {
                     var random_questions = self.im.config.randomize_questions
                         ? _.shuffle(quiz.questions)
                         : quiz.questions;
-                    self.im.user.set_answer("questions_remaining", random_questions);
+
+                    var quiz_status = go.utils_project.init_quiz_status(quiz_id, random_questions);
+                    self.im.user.set_answer("quiz_status", quiz_status);
                     self.im.user.set_answer("sms_results_text", "");
+
                     return self.states.create("state_quiz");
                 });
         });
@@ -172,22 +176,28 @@ go.app = function() {
         self.add("state_quiz", function(name) {
             return go.utils_project
                 // get first question in the now random line-up
-                .get_quiz_question(self.im)
+                .get_quiz_question(self.im, self.im.user.answers.quiz_status.questions_remaining[0])
                 .then(function(quiz_question) {
+                    var correct_answer = go.utils_project.get_correct_answer(quiz_question.answers);
+
                     return new ChoiceState(name, {
                         question: quiz_question.question,
                         choices: go.utils_project.construct_choices(quiz_question.answers),
                         next: function(choice) {
+                                var response_text = "";
+                                var correct = choice.value === correct_answer;
+                                if (correct) {
+                                    response_text = quiz_question.response_correct;
+                                    self.im.user.answers.quiz_status.questions_answered.push({"question": quiz_question.id, "correct": true});
+                                } else {
+                                    response_text = quiz_question.response_incorrect;
+                                    self.im.user.answers.quiz_status.questions_answered.push({"question": quiz_question.id, "correct": false});
+                                }
+
                                 return go.utils_project
-                                    .is_answer_to_question_correct(self.im, choice.value)
-                                    .then(function(answer_correct) {
-                                        var response_text = answer_correct
-                                            ? quiz_question.response_correct
-                                            : quiz_question.response_incorrect;
-
-                                        go.utils_project.update_quiz_status(self.im, quiz_question.id, answer_correct);
-
-                                        return  {
+                                    .log_quiz_answer(self.im, quiz_question, choice.value, choice.label, correct, response_text, self.im.user.answers.tracker)
+                                    .then(function() {
+                                        return {
                                             name: "state_response",
                                             creator_opts: response_text
                                         };
@@ -207,22 +217,18 @@ go.app = function() {
                 ],
                 next: function(choice) {
                     // remove first item of question array as question has been answered
-                    //  -- after removal user.answers.questions_remaining will contain
+                    //  -- after removal questions_remaining will contain the
                     //  -- remaining questions of specific quiz to be asked
-                    self.im.user.answers.questions_remaining.shift();
-                    if (self.im.user.answers.questions_remaining.length !== 0) {
+                    self.im.user.answers.quiz_status.questions_remaining.shift();
+                    if (self.im.user.answers.quiz_status.questions_remaining.length !== 0) {
                         return 'state_save_quiz_status';
                     } else {
-                        // delete questions_remaining from answers object as it
-                        // has outlived its scope of use
-                        delete self.im.user.answers.questions_remaining;
                         return go.utils_project
-                            .set_quiz_completed(self.im)
+                            .set_quiz_completed(self.im, self.im.user.answers.user_id, self.im.user.answers.quiz_status)
                             .then(function() {
                                 return 'state_save_quiz_status';
                             });
                     }
-
                 }
             });
         });
@@ -231,8 +237,12 @@ go.app = function() {
             return go.utils_project
                 .save_quiz_status(self.im)
                 .then(function() {
-                    if (go.utils_project.is_quiz_completed(self.im)) {
-                        return self.states.create("state_end_quiz");
+                    if (self.im.user.answers.quiz_status.completed) {
+                        return go.utils_project
+                            .close_tracker(self.im, self.im.user.answers.tracker)
+                            .then(function() {
+                                return self.states.create("state_end_quiz");
+                            });
                     } else {
                         return self.states.create("state_quiz");
                     }

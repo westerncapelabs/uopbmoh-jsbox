@@ -18,7 +18,7 @@ describe("UoP TB registration/quiz app", function() {
                     name: 'ussd-app-test',
                     country_code: '267',  // botswana
                     channel: '*120*8864*0000#',
-                    testing_today: '2016-04-05',
+                    testing_today: '2016-04-05 15:30:02',
                     randomize_quizzes: false,
                     randomize_questions: false,
                     services: {
@@ -160,7 +160,7 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,31]);
                     })
                     .run();
             });
@@ -179,7 +179,7 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,31,32]);
                     })
                     .run();
             });
@@ -201,7 +201,7 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,25,26]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,25,26,31,32]);
                     })
                     .run();
             });
@@ -222,7 +222,7 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,25,26]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,25,26,31,32,34]);
                     })
                     .run();
             });
@@ -246,7 +246,7 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,31,32,34]);
                     })
                     .run();
             });
@@ -269,7 +269,7 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,31,32,34,36]);
                     })
                     .run();
             });
@@ -290,7 +290,7 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Thank you for completing your quiz. You correctly answered 3 of 3 questions. Your score is 100%"
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27,28]);
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27,28,31,32,34,36,38]);
                     })
                     .run();
             });
@@ -311,119 +311,6 @@ describe("UoP TB registration/quiz app", function() {
                     .run();
             });
 
-            describe("Quiz timeout testing", function() {
-                it("to state_response (after closed session - answered one question)", function() {
-                    return tester
-                        .setup.user.addr("0820000111")
-                        .inputs(
-                            {session_event: "new"}  // dial in
-                            , "1"  // state_quiz
-                            , {session_event: "close"}
-                            , {session_event: "new"}
-                        )
-                        .check.interaction({
-                            state: "state_response",
-                            reply: [
-                                "Incorrect! You need to open your eyes and see it's Nicki!",
-                                "1. Continue"
-                            ].join("\n")
-                        })
-                        .check(function(api) {
-                            go.utils.check_fixtures_used(api,[0,6,9,13]);
-                        })
-                        .run();
-                });
-                it("to state_quiz (after closed session - answered one question)", function() {
-                    return tester
-                        .setup.user.addr("0820000111")
-                        .inputs(
-                            {session_event: "new"}  // dial in
-                            , "1"  // state_quiz - incorrect
-                            , "1"  // state_response - continue
-                            , {session_event: "close"}
-                            , {session_event: "new"}
-                        )
-                        .check.interaction({
-                            state: "state_quiz",
-                            reply: [
-                                "Who is fittest?",
-                                "1. Mike",
-                                "2. Nicki",
-                                "3. George"
-                            ].join('\n')
-                        })
-                        .check.user.answers({
-                            "questions_remaining": [
-                                "cb245673-aa41-4302-ac47-qq000000002",
-                                "cb245673-aa41-4302-ac47-qq000000003"
-                            ],
-                            "quiz_status": {
-                                "completed": false,
-                                "questions_answered": [
-                                    {
-                                        "correct": false,
-                                        "question": "cb245673-aa41-4302-ac47-qq000000001"
-                                    }
-                                ],
-                                "quiz": "cb245673-aa41-4302-ac47-q00000000111"
-                            },
-                            "sms_results_text": " Incorrect! You need to open your eyes and see it's Nicki! Incorrect! You need to open your eyes and see it's Nicki!",
-                            "state_quiz": "mike",
-                            "state_response": "continue",
-                            "user_id": "cb245673-aa41-4302-ac47-000000000111"})
-                        .check(function(api) {
-                            go.utils.check_fixtures_used(api,[0,6,9,13,14,25,26]);
-                        })
-                        .run();
-                });
-                it("to state_response (after closed session - answered two questions)", function() {
-                    return tester
-                        .setup.user.addr("0820000111")
-                        .inputs(
-                            {session_event: "new"}  // dial in
-                            , "1"  // state_quiz - incorrect
-                            , "1"  // state_response - continue
-                            , "3"  // state_quiz - correct
-                            , {session_event: "close"}
-                            , {session_event: "new"}
-                        )
-                        .check.interaction({
-                            state: "state_response",
-                            reply: [
-                                "Correct! He goes to the gym often!",
-                                "1. Continue"
-                            ].join("\n")
-                        })
-                        .check.user.answers({
-                            "questions_remaining": [
-                                "cb245673-aa41-4302-ac47-qq000000002",
-                                "cb245673-aa41-4302-ac47-qq000000003"
-                            ],
-                            "quiz_status": {
-                                "completed": false,
-                                "questions_answered": [
-                                    {
-                                        "correct": false,
-                                        "question": "cb245673-aa41-4302-ac47-qq000000001"
-                                    },
-                                    {
-                                        "correct": true,
-                                        "question": "cb245673-aa41-4302-ac47-qq000000002"
-                                    }
-                                ],
-                                "quiz": "cb245673-aa41-4302-ac47-q00000000111"
-                            },
-                            "sms_results_text": " Incorrect! You need to open your eyes and see it's Nicki! Incorrect! You need to open your eyes and see it's Nicki! Correct! He goes to the gym often! Correct! He goes to the gym often! Correct! He goes to the gym often!",
-                            "state_quiz": "george",
-                            "state_response": "continue",
-                            "user_id": "cb245673-aa41-4302-ac47-000000000111"})
-                        .check(function(api) {
-                            go.utils.check_fixtures_used(api,[0,6,9,13,14,25,26]);
-                        })
-                        .run();
-                });
-            });
-
             describe("Complete flows - more combinations", function() {
                 it(" incorrect, correct, incorrect", function() {
                     return tester
@@ -442,12 +329,12 @@ describe("UoP TB registration/quiz app", function() {
                             reply: "Thank you for completing your quiz. You correctly answered 1 of 3 questions. Your score is 33%"
                         })
                         .check(function(api) {
-                            go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27,29]);
+                            go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27,29,31,33,34,37,38]);
                         })
                         .run();
-                });
-                it(" incorrect, incorrect, correct", function() {
-                    return tester
+                    });
+                    it(" incorrect, incorrect, correct", function() {
+                        return tester
                         .setup.user.addr("0820000111")
                         .inputs(
                             {session_event: "new"}  // dial in
@@ -463,10 +350,125 @@ describe("UoP TB registration/quiz app", function() {
                             reply: "Thank you for completing your quiz. You correctly answered 1 of 3 questions. Your score is 33%"
                         })
                         .check(function(api) {
-                            go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27,30]);
+                            go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,27,30,31,33,35,36,38]);
                         })
                         .run();
-                });
+                    });
+            });
+        });
+
+        describe("Quiz timeout testing", function() {
+            it("to state_response (after closed session - answered one question)", function() {
+                return tester
+                    .setup.user.addr("0820000111")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                        , "1"  // state_quiz
+                        , {session_event: "close"}
+                        , {session_event: "new"}
+                    )
+                    .check.interaction({
+                        state: "state_response",
+                        reply: [
+                            "Incorrect! You need to open your eyes and see it's Nicki!",
+                            "1. Continue"
+                        ].join("\n")
+                    })
+                    .check(function(api) {
+                        go.utils.check_fixtures_used(api,[0,6,9,13,31,33]);
+                    })
+                    .run();
+            });
+            it("to state_quiz (after closed session - answered one question)", function() {
+                return tester
+                    .setup.user.addr("0820000111")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                        , "1"  // state_quiz - incorrect
+                        , "1"  // state_response - continue
+                        , {session_event: "close"}
+                        , {session_event: "new"}
+                    )
+                    .check.interaction({
+                        state: "state_quiz",
+                        reply: [
+                            "Who is fittest?",
+                            "1. Mike",
+                            "2. Nicki",
+                            "3. George"
+                        ].join('\n')
+                    })
+                    .check.user.answers({
+                        "quiz_status": {
+                            "completed": false,
+                            "questions_answered": [
+                                {
+                                    "correct": false,
+                                    "question": "cb245673-aa41-4302-ac47-qq000000001"
+                                }
+                            ],
+                            "questions_remaining": [
+                                "cb245673-aa41-4302-ac47-qq000000002",
+                                "cb245673-aa41-4302-ac47-qq000000003"
+                            ],
+                            "quiz": "cb245673-aa41-4302-ac47-q00000000111"
+                        },
+                        "sms_results_text": " Incorrect! You need to open your eyes and see it's Nicki! Incorrect! You need to open your eyes and see it's Nicki!",
+                        "state_quiz": "mike",
+                        "state_response": "continue",
+                        "tracker": "cb245673-aa41-4302-ac47-t00000111111",
+                        "user_id": "cb245673-aa41-4302-ac47-000000000111"})
+                    .check(function(api) {
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,25,26,31,33]);
+                    })
+                    .run();
+            });
+            it("to state_response (after closed session - answered two questions)", function() {
+                return tester
+                    .setup.user.addr("0820000111")
+                    .inputs(
+                        {session_event: "new"}  // dial in
+                        , "1"  // state_quiz - incorrect
+                        , "1"  // state_response - continue
+                        , "3"  // state_quiz - correct
+                        , {session_event: "close"}
+                        , {session_event: "new"}
+                    )
+                    .check.interaction({
+                        state: "state_response",
+                        reply: [
+                            "Correct! He goes to the gym often!",
+                            "1. Continue"
+                        ].join("\n")
+                    })
+                    .check.user.answers({
+                        "quiz_status": {
+                            "completed": false,
+                            "questions_answered": [
+                                {
+                                    "correct": false,
+                                    "question": "cb245673-aa41-4302-ac47-qq000000001"
+                                },
+                                {
+                                    "correct": true,
+                                    "question": "cb245673-aa41-4302-ac47-qq000000002"
+                                }
+                            ],
+                            "questions_remaining": [
+                                "cb245673-aa41-4302-ac47-qq000000002",
+                                "cb245673-aa41-4302-ac47-qq000000003"
+                            ],
+                            "quiz": "cb245673-aa41-4302-ac47-q00000000111"
+                        },
+                        "sms_results_text": " Incorrect! You need to open your eyes and see it's Nicki! Incorrect! You need to open your eyes and see it's Nicki! Correct! He goes to the gym often! Correct! He goes to the gym often! Correct! He goes to the gym often!",
+                        "state_quiz": "george",
+                        "state_response": "continue",
+                        "tracker": "cb245673-aa41-4302-ac47-t00000111111",
+                        "user_id": "cb245673-aa41-4302-ac47-000000000111"})
+                    .check(function(api) {
+                        go.utils.check_fixtures_used(api,[0,6,9,13,14,25,26,31,33,34]);
+                    })
+                    .run();
             });
         });
 

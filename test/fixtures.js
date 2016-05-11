@@ -1069,5 +1069,200 @@ return [
         }
     },
 
+    // 31: create tracker for
+    // identity cb245673-aa41-4302-ac47-000000000111,
+    // quiz cb245673-aa41-4302-ac47-q00000000111
+    {
+        "request": {
+            "method": "POST",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8003/api/v1/tracker/",
+            "data":  {
+                "identity": "cb245673-aa41-4302-ac47-000000000111",
+                "quiz": "cb245673-aa41-4302-ac47-q00000000111"
+            }
+        },
+        "response": {
+            "code": 201,
+            "data": {
+                "tracker_id": "cb245673-aa41-4302-ac47-t00000111111"
+            }
+        }
+    },
+
+
+    // 32: log answer for question cb245673-aa41-4302-ac47-qq000000001, answered correctly
+    {
+        "request": {
+            "method": "POST",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8003/api/v1/answer/",
+            "data":  {
+                "question": "cb245673-aa41-4302-ac47-qq000000001",
+                "question_text": "Who is tallest?",
+                "answer_value": "nicki",
+                "answer_text": "Nicki",
+                "answer_correct": true,
+                "response_sent": "Correct! That's why only he bangs his head on the lamp!",
+                "tracker": "cb245673-aa41-4302-ac47-t00000111111"
+            }
+        },
+        "response": {
+            "code": 201,
+            "data": {}
+        }
+    },
+
+    // 33: log answer for question cb245673-aa41-4302-ac47-qq000000001, answered incorrectly
+    {
+        "request": {
+            "method": "POST",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8003/api/v1/answer/",
+            "data":  {
+                "question": "cb245673-aa41-4302-ac47-qq000000001",
+                "question_text": "Who is tallest?",
+                "answer_value": "mike",
+                "answer_text": "Mike",
+                "answer_correct": false,
+                "response_sent": "Incorrect! You need to open your eyes and see it's Nicki!",
+                "tracker": "cb245673-aa41-4302-ac47-t00000111111"
+            }
+        },
+        "response": {
+            "code": 201,
+            "data": {}
+        }
+    },
+
+    // 34: log answer for question cb245673-aa41-4302-ac47-qq000000002, answered correctly
+    {
+        "request": {
+            "method": "POST",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8003/api/v1/answer/",
+            "data":  {
+                "question": "cb245673-aa41-4302-ac47-qq000000002",
+                "question_text": "Who is fittest?",
+                "answer_value": "george",
+                "answer_text": "George",
+                "answer_correct": true,
+                "response_sent": "Correct! He goes to the gym often!",
+                "tracker": "cb245673-aa41-4302-ac47-t00000111111"
+            }
+        },
+        "response": {
+            "code": 201,
+            "data": {}
+        }
+    },
+
+    // 35: log answer for question cb245673-aa41-4302-ac47-qq000000002, answered incorrectly
+    {
+        "request": {
+            "method": "POST",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8003/api/v1/answer/",
+            "data":  {
+                "question": "cb245673-aa41-4302-ac47-qq000000002",
+                "question_text": "Who is fittest?",
+                "answer_value": "nicki",
+                "answer_text": "Nicki",
+                "answer_correct": false,
+                "response_sent": "Incorrect! You need to open your eyes and see it's George!",
+                "tracker": "cb245673-aa41-4302-ac47-t00000111111"
+            }
+        },
+        "response": {
+            "code": 201,
+            "data": {}
+        }
+    },
+
+    // 36: log answer for question cb245673-aa41-4302-ac47-qq000000003, answered correctly
+    {
+        "request": {
+            "method": "POST",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8003/api/v1/answer/",
+            "data":  {
+                "question": "cb245673-aa41-4302-ac47-qq000000003",
+                "question_text": "Who is the boss?",
+                "answer_value": "mike",
+                "answer_text": "Mike",
+                "answer_correct": true,
+                "response_sent": "Correct! That's why he's got the final say!",
+                "tracker": "cb245673-aa41-4302-ac47-t00000111111"
+            }
+        },
+        "response": {
+            "code": 201,
+            "data": {}
+        }
+    },
+
+    // 37: log answer for question cb245673-aa41-4302-ac47-qq000000003, answered incorrectly
+    {
+        "request": {
+            "method": "POST",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8003/api/v1/answer/",
+            "data":  {
+                "question": "cb245673-aa41-4302-ac47-qq000000003",
+                "question_text": "Who is the boss?",
+                "answer_value": "nicki",
+                "answer_text": "Nicki",
+                "answer_correct": false,
+                "response_sent": "Incorrect! You need to open your eyes and see it's Mike!",
+                "tracker": "cb245673-aa41-4302-ac47-t00000111111"
+            }
+        },
+        "response": {
+            "code": 201,
+            "data": {}
+        }
+    },
+
+    // 38: patch tracker cb245673-aa41-4302-ac47-t00000111111 with completed status
+    {
+        "request": {
+            "method": "PATCH",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8003/api/v1/tracker/cb245673-aa41-4302-ac47-t00000111111/",
+            "data":  {
+                "complete": true,
+                "completed_at": "2016-04-05 15:30:02"
+            }
+        },
+        "response": {
+            "code": 200,
+            "data": {}
+        }
+    },
+
 ];
 };
