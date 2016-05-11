@@ -188,10 +188,10 @@ go.app = function() {
                                 var correct = choice.value === correct_answer;
                                 if (correct) {
                                     response_text = quiz_question.response_correct;
-                                    self.im.user.answers.quiz_status.questions_answered.push({"question": quiz_question.question, "correct": true});
+                                    self.im.user.answers.quiz_status.questions_answered.push({"question": quiz_question.id, "correct": true});
                                 } else {
                                     response_text = quiz_question.response_incorrect;
-                                    self.im.user.answers.quiz_status.questions_answered.push({"question": quiz_question.question, "correct": false});
+                                    self.im.user.answers.quiz_status.questions_answered.push({"question": quiz_question.id, "correct": false});
                                 }
 
                                 return go.utils_project
