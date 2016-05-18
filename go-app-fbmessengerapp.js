@@ -787,7 +787,6 @@ go.app = function() {
     var vumigo = require("vumigo_v02");
     var App = vumigo.App;
     var Choice = vumigo.states.Choice;
-    var ChoiceState = vumigo.states.ChoiceState;
     var EndState = vumigo.states.EndState;
     var FreeText = vumigo.states.FreeText;
     var MessengerChoiceState = go.states.MessengerChoiceState;
@@ -967,7 +966,7 @@ go.app = function() {
                 .then(function(quiz_question) {
                     var correct_answer = go.utils_project.get_correct_answer(quiz_question.answers);
 
-                    return new ChoiceState(name, {
+                    return new MessengerChoiceState(name, {
                         question: quiz_question.question,
                         choices: go.utils_project.construct_choices(quiz_question.answers),
                         next: function(choice) {
@@ -997,7 +996,7 @@ go.app = function() {
         // ChoiceState
         self.add("state_response", function(name, response_text) {
             self.im.user.answers.sms_results_text += " "+response_text;
-            return new ChoiceState(name, {
+            return new MessengerChoiceState(name, {
                 question: response_text,
                 choices: [
                     new Choice('continue', 'Continue')
