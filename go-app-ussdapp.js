@@ -670,22 +670,6 @@ go.utils_project = {
         return {"quiz": quiz, "questions_remaining": questions_array, "questions_answered": [], "completed": false};
     },
 
-    set_quiz_completed: function(im, user_id, quiz_status) {
-        quiz_status.completed = true;
-
-        var endpoint = "completed/";
-        var payload = {
-            "identity": user_id,
-            "quiz": quiz_status.quiz
-        };
-
-        return go.utils
-            .service_api_call("continuous-learning", "post", {}, payload, endpoint, im)
-            .then(function(json_get_response) {
-                return json_get_response.data;
-        });
-    },
-
     // update the questions and answer part of user's quiz status
     save_quiz_status: function(im) {
         return go.utils
@@ -1008,11 +992,8 @@ go.app = function() {
                     if (self.im.user.answers.quiz_status.questions_remaining.length !== 0) {
                         return 'state_save_quiz_status';
                     } else {
-                        return go.utils_project
-                            .set_quiz_completed(self.im, self.im.user.answers.user_id, self.im.user.answers.quiz_status)
-                            .then(function() {
-                                return 'state_save_quiz_status';
-                            });
+                        self.im.user.answers.quiz_status.completed = true;
+                        return 'state_save_quiz_status';
                     }
                 }
             });

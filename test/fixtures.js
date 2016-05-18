@@ -1003,6 +1003,7 @@ return [
 
     // 27: mark quiz cb245673-aa41-4302-ac47-q0000000111 as completed
     //         for identity cb245673-aa41-4302-ac47-00000000111
+    // not used now
     {
         "request": {
             "method": "POST",

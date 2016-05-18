@@ -96,22 +96,6 @@ go.utils_project = {
         return {"quiz": quiz, "questions_remaining": questions_array, "questions_answered": [], "completed": false};
     },
 
-    set_quiz_completed: function(im, user_id, quiz_status) {
-        quiz_status.completed = true;
-
-        var endpoint = "completed/";
-        var payload = {
-            "identity": user_id,
-            "quiz": quiz_status.quiz
-        };
-
-        return go.utils
-            .service_api_call("continuous-learning", "post", {}, payload, endpoint, im)
-            .then(function(json_get_response) {
-                return json_get_response.data;
-        });
-    },
-
     // update the questions and answer part of user's quiz status
     save_quiz_status: function(im) {
         return go.utils

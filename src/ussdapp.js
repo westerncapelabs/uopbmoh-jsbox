@@ -223,11 +223,8 @@ go.app = function() {
                     if (self.im.user.answers.quiz_status.questions_remaining.length !== 0) {
                         return 'state_save_quiz_status';
                     } else {
-                        return go.utils_project
-                            .set_quiz_completed(self.im, self.im.user.answers.user_id, self.im.user.answers.quiz_status)
-                            .then(function() {
-                                return 'state_save_quiz_status';
-                            });
+                        self.im.user.answers.quiz_status.completed = true;
+                        return 'state_save_quiz_status';
                     }
                 }
             });
