@@ -2,11 +2,64 @@
 var vumigo = require('vumigo_v02');
 var moment = require('moment');
 var assert = require('assert');
+var _ = require('lodash');
 var JsonApi = vumigo.http.api.JsonApi;
 var Choice = vumigo.states.Choice;
+var ChoiceState = vumigo.states.ChoiceState;
+
+go.states = {
+    MessengerChoiceState: ChoiceState.extend(function(self, name, opts) {
+        /*
+        Automatically add the necessary helper metadata for
+        ChoiceStates when using the Messenger transport
+        */
+
+        opts = _.defaults(opts || {}, {
+            helper_metadata: function () {
+                // disable for now
+                if(true) {
+                    return {};
+                }
+
+                var i18n = self.im.user.i18n;
+                return {
+                    messenger: {
+                        template_type: 'generic',
+                        title: i18n(opts.title),
+                        subtitle: i18n(opts.question),
+                        image_url: opts.image_url || '',
+                        buttons: opts.choices.map(function(choice, index) {
+                            return {
+                                title: i18n(choice.label),
+                                payload: {
+                                    content: (index + 1) + '',
+                                    in_reply_to: self.im.msg.message_id || null,
+                                }
+                            };
+                        })
+                    }
+                };
+            }
+        });
+
+        ChoiceState.call(self, name, opts);
+
+    }),
+
+    "trailing": "comma"
+};
+
 
 // GENERIC UTILS
 go.utils = {
+
+  // FB HELPERS
+
+    get_user_profile: function(msg) {
+        return msg.helper_metadata.messenger || {};
+    },
+
+
 
 // FIXTURES HELPERS
 
@@ -267,7 +320,6 @@ go.utils = {
         var params = {};
         var search_string = 'details__addresses__' + address_type;
         params[search_string] = address_val;
-
         return im
             .log('Getting identity for: ' + JSON.stringify(params))
             .then(function() {
@@ -306,12 +358,12 @@ go.utils = {
         };
         // compile base payload
         if (address) {
-            var address_type = Object.keys(address);
+            var address_type = Object.keys(address)[0];
             var addresses = {};
             addresses[address_type] = {};
             addresses[address_type][address[address_type]] = {};
             payload.details = {
-                "default_addr_type": "msisdn",
+                "default_addr_type": address_type,
                 "addresses": addresses
             };
         }

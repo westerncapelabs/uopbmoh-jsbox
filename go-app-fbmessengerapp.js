@@ -790,6 +790,7 @@ go.app = function() {
     var ChoiceState = vumigo.states.ChoiceState;
     var EndState = vumigo.states.EndState;
     var FreeText = vumigo.states.FreeText;
+    var MessengerChoiceState = go.states.MessengerChoiceState;
     var _ = require('lodash');
 
 
@@ -843,7 +844,7 @@ go.app = function() {
         // interstitial to check registration status
         self.add("state_check_registered", function(name) {
             return go.utils
-                .get_or_create_identity({"msisdn": self.im.user.addr}, self.im, null)
+                .get_or_create_identity({"facebook_messenger": self.im.user.addr}, self.im, null)
                 .then(function(identity) {
                     self.im.user.set_answer("user_id", identity.id);
                     if(identity.details && !identity.details.registered) {
@@ -874,7 +875,8 @@ go.app = function() {
 
         // ChoiceState st-02
         self.add("state_gender", function(name) {
-            return new ChoiceState(name, {
+            return new MessengerChoiceState(name, {
+                title: 'Registration',
                 question: questions[name],
                 choices: [
                     new Choice("male", $("Male")),

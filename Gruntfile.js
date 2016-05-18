@@ -9,7 +9,8 @@ module.exports = function (grunt) {
             src: {
                 app: {
                     smsapp: 'src/smsapp.js',
-                    ussdapp: 'src/ussdapp.js'
+                    ussdapp: 'src/ussdapp.js',
+                    fbmessengerapp: 'src/fbmessengerapp.js'
                 },
                 smsapp: [
                     'src/index.js',
@@ -24,13 +25,21 @@ module.exports = function (grunt) {
                     '<%= paths.src.app.ussdapp %>',
                     'src/init.js'
                 ],
+                fbmessengerapp: [
+                    'src/index.js',
+                    'src/utils.js',
+                    'src/utils_project.js',
+                    '<%= paths.src.app.fbmessengerapp %>',
+                    'src/init.js'
+                ],
                 all: [
                     'src/**/*.js'
                 ]
             },
             dest: {
                 smsapp: 'go-app-sms.js',
-                ussdapp: 'go-app-ussdapp.js'
+                ussdapp: 'go-app-ussdapp.js',
+                fbmessengerapp: 'go-app-fbmessengerapp.js'
             },
             test: {
                 smsapp: [
@@ -45,6 +54,13 @@ module.exports = function (grunt) {
                     'src/utils_project.js',
                     '<%= paths.src.app.ussdapp %>',
                     'test/ussdapp.test.js'
+                ],
+                fbmessengerapp: [
+                    'test/setup.js',
+                    'src/utils.js',
+                    'src/utils_project.js',
+                    '<%= paths.src.app.fbmessengerapp %>',
+                    'test/fbmessengerapp.test.js'
                 ]
             }
         },
@@ -85,6 +101,10 @@ module.exports = function (grunt) {
             ussdapp: {
                 src: ['<%= paths.src.ussdapp %>'],
                 dest: '<%= paths.dest.ussdapp %>'
+            },
+            fbmessengerapp: {
+                src: ['<%= paths.src.fbmessengerapp %>'],
+                dest: '<%= paths.dest.fbmessengerapp %>'
             }
 
         },
@@ -98,6 +118,9 @@ module.exports = function (grunt) {
             },
             test_ussdapp: {
                 src: ['<%= paths.test.ussdapp %>']
+            },
+            test_fbmessengerapp: {
+                src: ['<%= paths.test.fbmessengerapp %>']
             }
         }
     });
