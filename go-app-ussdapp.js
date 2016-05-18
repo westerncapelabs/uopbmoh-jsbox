@@ -724,7 +724,7 @@ go.utils_project = {
         return go.utils
             .service_api_call("continuous-learning", "post", null, payload, 'tracker/', im)
             .then(function(json_post_response) {
-                return json_post_response.data.tracker_id;
+                return json_post_response.data.id;
         });
     },
 
