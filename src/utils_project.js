@@ -7,40 +7,16 @@ go.utils_project = {
 
 // REGISTRATION HELPERS
 
-    create_registration: function(im, reg_info) {
-        return go.utils
-            .service_api_call("hub", "post", null, reg_info, "registration/", im)
-            .then(function(result) {
-                return result.id;
-            });
-    },
-
-    compile_reg_info: function(user_id, facility_code, gender, cadre, department) {
-        var reg_info = {
-            "user_id": user_id,
-            data: {
-                "facility_code": facility_code,
-                "gender": gender,
-                "cadre": cadre,
-                "department": department
-            }
-        };
-
-        return reg_info;
-    },
-
     finish_registration: function(im) {
-        var reg_info = go.utils_project
-            .compile_reg_info(im.user.answers.user_id, im.user.answers.state_facility_code,
-                im.user.answers.state_gender, im.user.answers.state_cadre, im.user.answers.state_department);
-        return go.utils_project
-            .create_registration(im, reg_info)
-            .then(function() {
-                return go.utils
-                    .get_identity(im.user.answers.user_id, im)
-                    .then(function(identity) {
-                        return go.utils.update_identity(im, identity);
-                    });
+        return go.utils
+            .get_identity(im.user.answers.user_id, im)
+            .then(function(identity) {
+                identity.details.registered = true;
+                identity.details.facility_code = im.user.answers.state_facility_code;
+                identity.details.gender = im.user.answers.state_gender;
+                identity.details.cadre = im.user.answers.state_cadre;
+                identity.details.department = im.user.answers.state_department;
+                return go.utils.update_identity(im, identity);
             });
     },
 
@@ -120,22 +96,6 @@ go.utils_project = {
         return {"quiz": quiz, "questions_remaining": questions_array, "questions_answered": [], "completed": false};
     },
 
-    set_quiz_completed: function(im, user_id, quiz_status) {
-        quiz_status.completed = true;
-
-        var endpoint = "completed/";
-        var payload = {
-            "identity": user_id,
-            "quiz": quiz_status.quiz
-        };
-
-        return go.utils
-            .service_api_call("continuous-learning", "post", {}, payload, endpoint, im)
-            .then(function(json_get_response) {
-                return json_get_response.data;
-        });
-    },
-
     // update the questions and answer part of user's quiz status
     save_quiz_status: function(im) {
         return go.utils
@@ -174,7 +134,7 @@ go.utils_project = {
         return go.utils
             .service_api_call("continuous-learning", "post", null, payload, 'tracker/', im)
             .then(function(json_post_response) {
-                return json_post_response.data.tracker_id;
+                return json_post_response.data.id;
         });
     },
 

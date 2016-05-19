@@ -2,9 +2,9 @@ go.app = function() {
     var vumigo = require("vumigo_v02");
     var App = vumigo.App;
     var Choice = vumigo.states.Choice;
-    var ChoiceState = vumigo.states.ChoiceState;
     var EndState = vumigo.states.EndState;
     var FreeText = vumigo.states.FreeText;
+    var MessengerChoiceState = go.states.MessengerChoiceState;
     var _ = require('lodash');
 
 
@@ -58,7 +58,7 @@ go.app = function() {
         // interstitial to check registration status
         self.add("state_check_registered", function(name) {
             return go.utils
-                .get_or_create_identity({"msisdn": self.im.user.addr}, self.im, null)
+                .get_or_create_identity({"facebook_messenger": self.im.user.addr}, self.im, null)
                 .then(function(identity) {
                     self.im.user.set_answer("user_id", identity.id);
                     if(identity.details && !identity.details.registered) {
@@ -89,7 +89,8 @@ go.app = function() {
 
         // ChoiceState st-02
         self.add("state_gender", function(name) {
-            return new ChoiceState(name, {
+            return new MessengerChoiceState(name, {
+                title: 'Registration',
                 question: questions[name],
                 choices: [
                     new Choice("male", $("Male")),
@@ -180,7 +181,7 @@ go.app = function() {
                 .then(function(quiz_question) {
                     var correct_answer = go.utils_project.get_correct_answer(quiz_question.answers);
 
-                    return new ChoiceState(name, {
+                    return new MessengerChoiceState(name, {
                         question: quiz_question.question,
                         choices: go.utils_project.construct_choices(quiz_question.answers),
                         next: function(choice) {
@@ -210,7 +211,7 @@ go.app = function() {
         // ChoiceState
         self.add("state_response", function(name, response_text) {
             self.im.user.answers.sms_results_text += " "+response_text;
-            return new ChoiceState(name, {
+            return new MessengerChoiceState(name, {
                 question: response_text,
                 choices: [
                     new Choice('continue', 'Continue')

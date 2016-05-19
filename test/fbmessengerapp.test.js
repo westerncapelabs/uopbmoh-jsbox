@@ -4,7 +4,7 @@ var assert = require('assert');
 var AppTester = vumigo.AppTester;
 
 describe("UoP TB registration/quiz app", function() {
-    describe("for ussd use", function() {
+    describe("for fb messenger use", function() {
         var app;
         var tester;
 
@@ -15,7 +15,7 @@ describe("UoP TB registration/quiz app", function() {
             tester
                 .setup.char_limit(182)
                 .setup.config.app({
-                    name: 'ussd-app-test',
+                    name: 'fb-app-test',
                     country_code: '267',  // botswana
                     channel: '*120*8864*0000#',
                     testing_today: '2016-04-05 15:30:02',
@@ -51,24 +51,30 @@ describe("UoP TB registration/quiz app", function() {
         describe("Registration testing", function() {
             it("to state_facility_code", function() {
                 return tester
-                    .setup.user.addr("0820000222")
+                    .setup.user.addr("1131683583510001")
                     .inputs(
-                        {session_event: "new"}  // dial in
+                        {
+                          session_event: null, // dial in
+                          from_addr_type: "facebook_messenger"
+                        }
                     )
                     .check.interaction({
                         state: "state_facility_code",
                         reply: "Please enter your facility code"
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api, [1,2]);
+                        go.utils.check_fixtures_used(api, [39,40]);
                     })
                     .run();
             });
             it("to state_gender", function() {
                 return tester
-                    .setup.user.addr("0820000222")
+                    .setup.user.addr("1131683583510001")
                     .inputs(
-                        {session_event: "new"}  // dial in
+                      {
+                        session_event: null, // dial in
+                        from_addr_type: "facebook_messenger"
+                      }
                         , "12345"  // state_facility_code
                     )
                     .check.interaction({
@@ -80,13 +86,13 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api, [1,2]);
+                        go.utils.check_fixtures_used(api, [39,40]);
                     })
                     .run();
             });
             it("to state_cadre", function() {
                 return tester
-                    .setup.user.addr("0820000222")
+                    .setup.user.addr("1131683583510001")
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "12345"  // state_facility_code
@@ -97,13 +103,13 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Please enter your cadre"
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api, [1,2]);
+                        go.utils.check_fixtures_used(api, [39,40]);
                     })
                     .run();
             });
             it("to state_department", function() {
                 return tester
-                    .setup.user.addr("0820000222")
+                    .setup.user.addr("1131683583510001")
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "12345"  // state_facility_code
@@ -115,13 +121,13 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Please enter your department name"
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api, [1,2]);
+                        go.utils.check_fixtures_used(api, [39,40]);
                     })
                     .run();
             });
             it("to state_end_registration", function() {
                 return tester
-                    .setup.user.addr("0820000222")
+                    .setup.user.addr("1131683583510001")
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "12345"  // state_facility_code
@@ -134,7 +140,7 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Thank you for registering. You'll soon be receiving quizzes."
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api, [1,2,4,5]);
+                        go.utils.check_fixtures_used(api, [3,39,40,43]);
                     })
                     .check.reply.ends_session()
                     .run();
@@ -146,7 +152,7 @@ describe("UoP TB registration/quiz app", function() {
         describe("Quiz testing", function() {
             it("to state_quiz", function() {
                 return tester
-                    .setup.user.addr("0820000111")
+                    .setup.user.addr("1131683583510002")
                     .inputs(
                         {session_event: "new"}  // dial in
                     )
@@ -160,14 +166,14 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,31]);
+                        go.utils.check_fixtures_used(api,[6,9,13,31,41]);
                     })
                     .run();
             });
             // intentional skip of next test
             it.skip("to state_quiz (after closed session)", function() {
                 return tester
-                    .setup.user.addr("0820000111")
+                    .setup.user.addr("1131683583510002")
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "1"  // state_quiz
@@ -179,13 +185,13 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Thank you for completing your quiz."
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13]);
+                        go.utils.check_fixtures_used(api,[6,9,13,41]);
                     })
                     .run();
             });
             it("to state_response (after having answered one question)", function() {
                 return tester
-                    .setup.user.addr("0820000111")
+                    .setup.user.addr("1131683583510002")
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "2"  // state_quiz - right answer
@@ -198,13 +204,13 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,31,32]);
+                        go.utils.check_fixtures_used(api,[6,9,13,31,32,41]);
                     })
                     .run();
             });
             it("to state_quiz (after having answered one question)", function() {
                 return tester
-                    .setup.user.addr("0820000111")
+                    .setup.user.addr("1131683583510002")
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "2"  // state_quiz
@@ -220,13 +226,13 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,25,26,31,32]);
+                        go.utils.check_fixtures_used(api,[6,9,13,14,25,26,31,32,41]);
                     })
                     .run();
             });
             it("to state_response (after having answered two questions)", function() {
                 return tester
-                    .setup.user.addr("0820000111")
+                    .setup.user.addr("1131683583510002")
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "2"  // state_quiz - right answer
@@ -241,13 +247,13 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,25,26,31,32,34]);
+                        go.utils.check_fixtures_used(api,[6,9,13,14,25,26,31,32,34,41]);
                     })
                     .run();
             });
             it("to state_quiz (after having answered two questions)", function() {
                 return tester
-                    .setup.user.addr("0820000111")
+                    .setup.user.addr("1131683583510002")
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "2"  // state_quiz
@@ -265,13 +271,13 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,31,32,34]);
+                        go.utils.check_fixtures_used(api,[6,9,13,14,15,25,26,31,32,34,41]);
                     })
                     .run();
             });
             it("to state_response (after having answered three questions)", function() {
                 return tester
-                    .setup.user.addr("0820000111")
+                    .setup.user.addr("1131683583510002")
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "2"  // state_quiz
@@ -288,13 +294,13 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,31,32,34,36]);
+                        go.utils.check_fixtures_used(api,[6,9,13,14,15,25,26,31,32,34,36,41]);
                     })
                     .run();
             });
             it("to state_quiz (after having answered three questions)", function() {
                 return tester
-                    .setup.user.addr("0820000111")
+                    .setup.user.addr("1131683583510002")
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "2"  // state_quiz
@@ -309,13 +315,13 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Thank you for completing your quiz. You correctly answered 3 of 3 questions. Your score is 100%"
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,28,31,32,34,36,38]);
+                        go.utils.check_fixtures_used(api,[6,9,13,14,15,25,26,28,31,32,34,36,38,41]);
                     })
                     .run();
             });
             it("to state_end_quiz_status", function() {
                 return tester
-                    .setup.user.addr("0820000333")
+                    .setup.user.addr("1131683583510003")
                     .inputs(
                         {session_event: "new"}  // dial in
                     )
@@ -324,7 +330,7 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Currently you've got no untaken quizzes."
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api, [7,8]);
+                        go.utils.check_fixtures_used(api, [8,42]);
                     })
                     .check.reply.ends_session()
                     .run();
@@ -334,7 +340,7 @@ describe("UoP TB registration/quiz app", function() {
         describe("Complete flows - more combinations", function() {
             it(" incorrect, correct, incorrect", function() {
                 return tester
-                    .setup.user.addr("0820000111")
+                    .setup.user.addr("1131683583510002")
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "1"  // state_quiz - incorrect
@@ -349,13 +355,13 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Thank you for completing your quiz. You correctly answered 1 of 3 questions. Your score is 33%"
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,29,31,33,34,37,38]);
+                        go.utils.check_fixtures_used(api,[6,9,13,14,15,25,26,29,31,33,34,37,38,41]);
                     })
                     .run();
             });
             it(" incorrect, incorrect, correct", function() {
                 return tester
-                    .setup.user.addr("0820000111")
+                    .setup.user.addr("1131683583510002")
                     .inputs(
                         {session_event: "new"}  // dial in
                         , "1"  // state_quiz - incorrect
@@ -370,7 +376,7 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Thank you for completing your quiz. You correctly answered 1 of 3 questions. Your score is 33%"
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[0,6,9,13,14,15,25,26,30,31,33,35,36,38]);
+                        go.utils.check_fixtures_used(api,[6,9,13,14,15,25,26,30,31,33,35,36,38,41]);
                     })
                     .run();
             });
