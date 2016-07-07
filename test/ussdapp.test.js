@@ -34,9 +34,9 @@ describe("UoP TB registration/quiz app", function() {
                             api_token: 'test_token_quizzes',
                             url: "http://localhost:8003/api/v1/"
                         },
-                        "message_sender": {
-                            api_token: 'test_token_message_sender',
-                            url: "http://localhost:8004/api/v1/"
+                        "junebug": {
+                            api_token: 'test_token_junebug',
+                            url: "http://localhost:8004/jb/channels/uuid/"
                         }
                     },
                 })

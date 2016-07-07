@@ -172,18 +172,18 @@ go.utils_project = {
 
     // SMS HELPERS
 
-    send_completion_text: function(im, user_id, text_to_add) {
+    send_completion_text: function(im, to_addr, text_to_add) {
         var sms_content = "Your results from today's quiz:"+text_to_add;
         var payload = {
-            "identity": user_id,
+            "to": to_addr,
             "content": sms_content
         };
         return go.utils
-        .service_api_call("message_sender", "post", null, payload, 'outbound/', im)
+        .service_api_call("junebug", "post", null, payload, 'messages/', im)
         .then(function(json_post_response) {
             var outbound_response = json_post_response.data;
             // Return the outbound id
-            return outbound_response.id;
+            return outbound_response.result.message_id;
         });
     },
 

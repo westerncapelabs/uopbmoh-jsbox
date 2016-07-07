@@ -1031,15 +1031,29 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8004/api/v1/outbound/",
+            "url": "http://localhost:8004/jb/channels/uuid/messages/",
             "data":  {
-                "identity": "cb245673-aa41-4302-ac47-000000000111",
+                "to": "0820000111",
                 "content": "Your results from today's quiz: Correct! That's why only he bangs his head on the lamp! Correct! That's why only he bangs his head on the lamp! Correct! He goes to the gym often! Correct! He goes to the gym often! Correct! That's why he's got the final say! Correct! That's why he's got the final say!"
             }
         },
         "response": {
-            "code": 201,
-            "data": {}
+            "code": 200,
+            "data": {
+              "status": 200,
+              "code": "OK",
+              "description": "message sent",
+              "result": {
+                "channel_data": {},
+                "from": null,
+                "channel_id": "uuid",
+                "timestamp": "2016-07-07 19:04:46.595907",
+                "content": "Your results from today's quiz: Correct! That's why only he bangs his head on the lamp! Correct! That's why only he bangs his head on the lamp! Correct! He goes to the gym often! Correct! He goes to the gym often! Correct! That's why he's got the final say! Correct! That's why he's got the final say!",
+                "to": "0820000111",
+                "reply_to": null,
+                "message_id": "84ee8c2f4005403080a5ab061ece7b01"
+              }
+            }
         }
     },
 
@@ -1051,15 +1065,29 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8004/api/v1/outbound/",
+            "url": "http://localhost:8004/jb/channels/uuid/messages/",
             "data":  {
-                "identity": "cb245673-aa41-4302-ac47-000000000111",
+                "to": "0820000111",
                 "content": "Your results from today's quiz: Incorrect! You need to open your eyes and see it's Nicki! Incorrect! You need to open your eyes and see it's Nicki! Correct! He goes to the gym often! Correct! He goes to the gym often! Incorrect! You need to open your eyes and see it's Mike! Incorrect! You need to open your eyes and see it's Mike!"
             }
         },
         "response": {
-            "code": 201,
-            "data": {}
+            "code": 200,
+            "data": {
+              "status": 200,
+              "code": "OK",
+              "description": "message sent",
+              "result": {
+                "channel_data": {},
+                "from": null,
+                "channel_id": "uuid",
+                "timestamp": "2016-07-10 19:04:46.595907",
+                "content": "Your results from today's quiz: Incorrect! You need to open your eyes and see it's Nicki! Incorrect! You need to open your eyes and see it's Nicki! Correct! He goes to the gym often! Correct! He goes to the gym often! Incorrect! You need to open your eyes and see it's Mike! Incorrect! You need to open your eyes and see it's Mike!",
+                "to": "0820000111",
+                "reply_to": null,
+                "message_id": "84ee8c2f4005403080a5ab061ece7b01"
+              }
+            }
         }
     },
 
@@ -1071,15 +1099,29 @@ return [
                 "Authorization": ["Token test_key"],
                 "Content-Type": ["application/json"]
             },
-            "url": "http://localhost:8004/api/v1/outbound/",
+            "url": "http://localhost:8004/jb/channels/uuid/messages/",
             "data":  {
-                "identity": "cb245673-aa41-4302-ac47-000000000111",
+                "to": "0820000111",
                 "content": "Your results from today's quiz: Incorrect! You need to open your eyes and see it's Nicki! Incorrect! You need to open your eyes and see it's Nicki! Incorrect! You need to open your eyes and see it's George! Incorrect! You need to open your eyes and see it's George! Correct! That's why he's got the final say! Correct! That's why he's got the final say!"
             }
         },
         "response": {
-            "code": 201,
-            "data": {}
+            "code": 200,
+            "data": {
+              "status": 200,
+              "code": "OK",
+              "description": "message sent",
+              "result": {
+                "channel_data": {},
+                "from": null,
+                "channel_id": "uuid",
+                "timestamp": "2016-07-10 19:04:46.595907",
+                "content": "Your results from today's quiz: Incorrect! You need to open your eyes and see it's Nicki! Incorrect! You need to open your eyes and see it's Nicki! Incorrect! You need to open your eyes and see it's George! Incorrect! You need to open your eyes and see it's George! Correct! That's why he's got the final say! Correct! That's why he's got the final say!",
+                "to": "0820000111",
+                "reply_to": null,
+                "message_id": "84ee8c2f4005403080a5ab061ece7b01"
+              }
+            }
         }
     },
 
@@ -1444,6 +1486,108 @@ return [
               },
               "created_at": "2016-05-10T06:13:29.693272Z",
               "updated_at": "2016-05-10T06:13:29.693298Z"
+            }
+        }
+    },
+
+    // 44: send sms for identity cb245673-aa41-4302-ac47-00000000111
+    {
+        "request": {
+            "method": "POST",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8004/jb/channels/uuid/messages/",
+            "data":  {
+                "to": "1131683583510002",
+                "content": "Your results from today's quiz: Correct! That's why only he bangs his head on the lamp! Correct! That's why only he bangs his head on the lamp! Correct! He goes to the gym often! Correct! He goes to the gym often! Correct! That's why he's got the final say! Correct! That's why he's got the final say!"
+            }
+        },
+        "response": {
+            "code": 200,
+            "data": {
+              "status": 200,
+              "code": "OK",
+              "description": "message sent",
+              "result": {
+                "channel_data": {},
+                "from": null,
+                "channel_id": "uuid",
+                "timestamp": "2016-07-07 19:04:46.595907",
+                "content": "Your results from today's quiz: Correct! That's why only he bangs his head on the lamp! Correct! That's why only he bangs his head on the lamp! Correct! He goes to the gym often! Correct! He goes to the gym often! Correct! That's why he's got the final say! Correct! That's why he's got the final say!",
+                "to": "1131683583510002",
+                "reply_to": null,
+                "message_id": "84ee8c2f4005403080a5ab061ece7b01"
+              }
+            }
+        }
+    },
+
+    // 45: send sms for identity cb245673-aa41-4302-ac47-00000000111
+    {
+        "request": {
+            "method": "POST",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8004/jb/channels/uuid/messages/",
+            "data":  {
+                "to": "1131683583510002",
+                "content": "Your results from today's quiz: Incorrect! You need to open your eyes and see it's Nicki! Incorrect! You need to open your eyes and see it's Nicki! Correct! He goes to the gym often! Correct! He goes to the gym often! Incorrect! You need to open your eyes and see it's Mike! Incorrect! You need to open your eyes and see it's Mike!"
+            }
+        },
+        "response": {
+            "code": 200,
+            "data": {
+              "status": 200,
+              "code": "OK",
+              "description": "message sent",
+              "result": {
+                "channel_data": {},
+                "from": null,
+                "channel_id": "uuid",
+                "timestamp": "2016-07-10 19:04:46.595907",
+                "content": "Your results from today's quiz: Incorrect! You need to open your eyes and see it's Nicki! Incorrect! You need to open your eyes and see it's Nicki! Correct! He goes to the gym often! Correct! He goes to the gym often! Incorrect! You need to open your eyes and see it's Mike! Incorrect! You need to open your eyes and see it's Mike!",
+                "to": "1131683583510002",
+                "reply_to": null,
+                "message_id": "84ee8c2f4005403080a5ab061ece7b01"
+              }
+            }
+        }
+    },
+
+    // 46: send sms for identity cb245673-aa41-4302-ac47-00000000111
+    {
+        "request": {
+            "method": "POST",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8004/jb/channels/uuid/messages/",
+            "data":  {
+                "to": "1131683583510002",
+                "content": "Your results from today's quiz: Incorrect! You need to open your eyes and see it's Nicki! Incorrect! You need to open your eyes and see it's Nicki! Incorrect! You need to open your eyes and see it's George! Incorrect! You need to open your eyes and see it's George! Correct! That's why he's got the final say! Correct! That's why he's got the final say!"
+            }
+        },
+        "response": {
+            "code": 200,
+            "data": {
+              "status": 200,
+              "code": "OK",
+              "description": "message sent",
+              "result": {
+                "channel_data": {},
+                "from": null,
+                "channel_id": "uuid",
+                "timestamp": "2016-07-10 19:04:46.595907",
+                "content": "Your results from today's quiz: Incorrect! You need to open your eyes and see it's Nicki! Incorrect! You need to open your eyes and see it's Nicki! Incorrect! You need to open your eyes and see it's George! Incorrect! You need to open your eyes and see it's George! Correct! That's why he's got the final say! Correct! That's why he's got the final say!",
+                "to": "1131683583510002",
+                "reply_to": null,
+                "message_id": "84ee8c2f4005403080a5ab061ece7b01"
+              }
             }
         }
     },

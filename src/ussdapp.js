@@ -250,7 +250,7 @@ go.app = function() {
         self.add("state_end_quiz", function(name) {
             var quiz_summary = go.utils_project.get_quiz_summary(self.im.user.answers.quiz_status.questions_answered);
             return go.utils_project
-                .send_completion_text(self.im, self.im.user.answers.user_id, self.im.user.answers.sms_results_text)
+                .send_completion_text(self.im, self.im.user.addr, self.im.user.answers.sms_results_text)
                 .then(function() {
                     return new EndState(name, {
                         text: questions[name].context({

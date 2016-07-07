@@ -34,9 +34,9 @@ describe("UoP TB registration/quiz app", function() {
                             api_token: 'test_token_quizzes',
                             url: "http://localhost:8003/api/v1/"
                         },
-                        "message_sender": {
+                        "junebug": {
                             api_token: 'test_token_message_sender',
-                            url: "http://localhost:8004/api/v1/"
+                            url: "http://localhost:8004/jb/channels/uuid/"
                         }
                     },
                 })
@@ -315,7 +315,7 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Thank you for completing your quiz. You correctly answered 3 of 3 questions. Your score is 100%"
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[6,9,13,14,15,25,26,28,31,32,34,36,38,41]);
+                        go.utils.check_fixtures_used(api,[6,9,13,14,15,25,26,31,32,34,36,38,41,44]);
                     })
                     .run();
             });
@@ -355,7 +355,7 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Thank you for completing your quiz. You correctly answered 1 of 3 questions. Your score is 33%"
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[6,9,13,14,15,25,26,29,31,33,34,37,38,41]);
+                        go.utils.check_fixtures_used(api,[6,9,13,14,15,25,26,31,33,34,37,38,41,45]);
                     })
                     .run();
             });
@@ -376,7 +376,7 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Thank you for completing your quiz. You correctly answered 1 of 3 questions. Your score is 33%"
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api,[6,9,13,14,15,25,26,30,31,33,35,36,38,41]);
+                        go.utils.check_fixtures_used(api,[6,9,13,14,15,25,26,31,33,35,36,38,41,46]);
                     })
                     .run();
             });
