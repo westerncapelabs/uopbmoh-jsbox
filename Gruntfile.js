@@ -65,13 +65,13 @@ module.exports = function (grunt) {
             }
         },
 
-        jshint: {
-            options: {jshintrc: '.jshintrc'},
-            all: [
-                'Gruntfile.js',
-                '<%= paths.src.all %>'
-            ]
-        },
+        // jshint: {
+        //     options: {jshintrc: '.jshintrc'},
+        //     all: [
+        //         'Gruntfile.js',
+        //         '<%= paths.src.all %>'
+        //     ]
+        // },
 
         watch: {
             src: {
@@ -126,7 +126,7 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('test', [
-        'jshint',
+        // 'jshint',
         'build',
         'mochaTest'
     ]);

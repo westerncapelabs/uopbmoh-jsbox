@@ -75,7 +75,7 @@ describe("UoP TB registration/quiz app", function() {
                         session_event: null, // dial in
                         from_addr_type: "facebook_messenger"
                       }
-                        , "12345"  // state_facility_code
+                        , "1"  // state_facility_code
                     )
                     .check.interaction({
                         state: "state_gender",
@@ -95,7 +95,7 @@ describe("UoP TB registration/quiz app", function() {
                     .setup.user.addr("1131683583510001")
                     .inputs(
                         {session_event: "new"}  // dial in
-                        , "12345"  // state_facility_code
+                        , "1"  // state_facility_code
                         , "1"  // state_gender - male
                     )
                     .check.interaction({
@@ -112,7 +112,7 @@ describe("UoP TB registration/quiz app", function() {
                     .setup.user.addr("1131683583510001")
                     .inputs(
                         {session_event: "new"}  // dial in
-                        , "12345"  // state_facility_code
+                        , "1"  // state_facility_code
                         , "1"  // state_gender - male
                         , "Xpress"  // state_cadre
                     )
@@ -130,7 +130,7 @@ describe("UoP TB registration/quiz app", function() {
                     .setup.user.addr("1131683583510001")
                     .inputs(
                         {session_event: "new"}  // dial in
-                        , "12345"  // state_facility_code
+                        , "UB 244G"  // state_facility_code
                         , "1"  // state_gender
                         , "Xpress"  // state_cadre
                         , "Back-office"  // state_department

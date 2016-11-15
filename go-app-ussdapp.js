@@ -627,6 +627,24 @@ go.utils_project = {
         });
     },
 
+    get_facility_codes: function(im) {
+        var endpoint = "facilitycode/";
+        return go.utils
+            .service_api_call("hub", "get", {}, null, endpoint, im)
+            .then(function(json_get_response) {
+                return json_get_response.data.results;
+        });
+    },
+
+    construct_faccode_choices: function(facility_codes) {
+        var choices = [];
+
+        for (var i = 0; i < facility_codes.length; i++) {
+            choices.push(new Choice(facility_codes[i].code, facility_codes[i].code));
+        }
+        return choices;
+    },
+
     /* parameter to construct_choices function is an array of objects
        e.g. [
                 {
@@ -772,6 +790,7 @@ go.app = function() {
     var App = vumigo.App;
     var Choice = vumigo.states.Choice;
     var ChoiceState = vumigo.states.ChoiceState;
+    var PaginatedChoiceState = vumigo.states.PaginatedChoiceState;
     var EndState = vumigo.states.EndState;
     var FreeText = vumigo.states.FreeText;
     var _ = require('lodash');
@@ -791,7 +810,7 @@ go.app = function() {
                 $("You are already registered for this service. Contact your administrator if you have any queries"),
 
             "state_facility_code":
-                $("Please enter your facility code"),
+                $("Please choose your facility code:"),
             "state_gender":
                 $("Please enter your gender:"),
             "state_cadre":
@@ -808,6 +827,12 @@ go.app = function() {
 
             "state_end_thank_you":
                 $("Thank you for using our service."),
+        };
+
+        var errors = {
+            "state_facility_code":
+                $("Invalid facility code. Please choose your facility code:"),
+
         };
 
         // override normal state adding
@@ -850,6 +875,23 @@ go.app = function() {
 
         // FreeText st-01
         self.add("state_facility_code", function(name) {
+          return go.utils_project
+              // get first question in the now random line-up
+              .get_facility_codes(self.im)
+              .then(function(facility_codes) {
+                  var choices = go.utils_project.construct_faccode_choices(facility_codes);
+                  return new PaginatedChoiceState(name, {
+                      question: questions[name],
+                      error: errors[name],
+                      characters_per_page: 160,
+                      options_per_page: null,
+                      more: $('More'),
+                      back: $('Back'),
+                      choices: choices,
+                      next: "state_gender"
+                  });
+              });
+
             return new FreeText(name, {
                 question: questions[name],
                 next: "state_gender"

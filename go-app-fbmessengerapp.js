@@ -627,6 +627,24 @@ go.utils_project = {
         });
     },
 
+    get_facility_codes: function(im) {
+        var endpoint = "facilitycode/";
+        return go.utils
+            .service_api_call("hub", "get", {}, null, endpoint, im)
+            .then(function(json_get_response) {
+                return json_get_response.data.results;
+        });
+    },
+
+    construct_faccode_choices: function(facility_codes) {
+        var choices = [];
+
+        for (var i = 0; i < facility_codes.length; i++) {
+            choices.push(new Choice(facility_codes[i].code, facility_codes[i].code));
+        }
+        return choices;
+    },
+
     /* parameter to construct_choices function is an array of objects
        e.g. [
                 {

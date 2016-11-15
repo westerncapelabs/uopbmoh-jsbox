@@ -57,10 +57,14 @@ describe("UoP TB registration/quiz app", function() {
                     )
                     .check.interaction({
                         state: "state_facility_code",
-                        reply: "Please enter your facility code"
+                        reply: [
+                          "Please choose your facility code:",
+                          "1. UB 244G",
+                          "2. 214 Office"
+                        ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api, [1,2]);
+                        go.utils.check_fixtures_used(api, [1,2,47]);
                     })
                     .run();
             });
@@ -69,7 +73,7 @@ describe("UoP TB registration/quiz app", function() {
                     .setup.user.addr("0820000222")
                     .inputs(
                         {session_event: "new"}  // dial in
-                        , "12345"  // state_facility_code
+                        , "1"  // state_facility_code
                     )
                     .check.interaction({
                         state: "state_gender",
@@ -80,7 +84,7 @@ describe("UoP TB registration/quiz app", function() {
                         ].join('\n')
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api, [1,2]);
+                        go.utils.check_fixtures_used(api, [1,2,47]);
                     })
                     .run();
             });
@@ -89,7 +93,7 @@ describe("UoP TB registration/quiz app", function() {
                     .setup.user.addr("0820000222")
                     .inputs(
                         {session_event: "new"}  // dial in
-                        , "12345"  // state_facility_code
+                        , "1"  // state_facility_code
                         , "1"  // state_gender - male
                     )
                     .check.interaction({
@@ -97,7 +101,7 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Please enter your cadre"
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api, [1,2]);
+                        go.utils.check_fixtures_used(api, [1,2,47]);
                     })
                     .run();
             });
@@ -106,7 +110,7 @@ describe("UoP TB registration/quiz app", function() {
                     .setup.user.addr("0820000222")
                     .inputs(
                         {session_event: "new"}  // dial in
-                        , "12345"  // state_facility_code
+                        , "1"  // state_facility_code
                         , "1"  // state_gender - male
                         , "Xpress"  // state_cadre
                     )
@@ -115,7 +119,7 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Please enter your department name"
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api, [1,2]);
+                        go.utils.check_fixtures_used(api, [1,2,47]);
                     })
                     .run();
             });
@@ -124,7 +128,7 @@ describe("UoP TB registration/quiz app", function() {
                     .setup.user.addr("0820000222")
                     .inputs(
                         {session_event: "new"}  // dial in
-                        , "12345"  // state_facility_code
+                        , "1"  // state_facility_code
                         , "1"  // state_gender
                         , "Xpress"  // state_cadre
                         , "Back-office"  // state_department
@@ -134,7 +138,7 @@ describe("UoP TB registration/quiz app", function() {
                         reply: "Thank you for registering. You'll soon be receiving quizzes."
                     })
                     .check(function(api) {
-                        go.utils.check_fixtures_used(api, [1,2,4,5]);
+                        go.utils.check_fixtures_used(api, [1,2,4,5,47]);
                     })
                     .check.reply.ends_session()
                     .run();

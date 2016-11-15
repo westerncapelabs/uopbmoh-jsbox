@@ -128,7 +128,7 @@ return [
                         }
                     },
                     "registered": true,
-                    "facility_code": "12345",
+                    "facility_code": "UB 244G",
                     "gender": "male",
                     "cadre": "Xpress",
                     "department": "Back-office"
@@ -188,7 +188,7 @@ return [
                         }
                     },
                     "registered": true,
-                    "facility_code": "12345",
+                    "facility_code": "UB 244G",
                     "gender": "male",
                     "cadre": "Xpress",
                     "department": "Back-office"
@@ -1591,6 +1591,36 @@ return [
             }
         }
     },
+
+    // 47: get facility_codes
+    {
+        'repeatable': true,
+        "request": {
+            "method": "GET",
+            "headers": {
+                "Authorization": ["Token test_key"],
+                "Content-Type": ["application/json"]
+            },
+            "url": "http://localhost:8002/api/v1/facilitycode/"
+        },
+        "response": {
+            "code": 200,
+            "data": {
+                "count": 2,
+                "next": null,
+                "previous": null,
+                "results": [
+                  {
+                      "code": "UB 244G"
+                  },
+                  {
+                      "code": "214 Office"
+                  }
+                ]
+            }
+        }
+    },
+
 
 ];
 };
